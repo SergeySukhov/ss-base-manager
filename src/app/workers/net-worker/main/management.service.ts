@@ -2,7 +2,7 @@
 import { MessageHandler } from "../message-services/message-handler.service";
 
 export enum CommandNames {
-  GetEcho = "echo",
+  Echo = "Echo",
 }
 
 export enum RequestName {
@@ -33,12 +33,13 @@ export class ManagementSystem {
   }
 
   private sendRequest(requestName: RequestName, request: NetWorkerRequest) {
+    console.log("!! | file: management.service.ts | request", request)
     const sender = new XMLHttpRequest();
 
     sender.open("POST", "http://localhost:5000/" + requestName, true);
     sender.setRequestHeader('Content-Type', 'application/json');
 
-    sender.onreadystatechange = (e) => {
+    sender.onreadystatechange = () => {
       if (sender.readyState == XMLHttpRequest.DONE && sender.status == 200) {
         const response: NetWorkerResponse = {
           guid: request.guid,

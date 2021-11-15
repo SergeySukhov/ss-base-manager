@@ -1,0 +1,6 @@
+<div *ngIf="!!optionsList?.length" class="wrapper">
+    <div *ngFor="let option of optionsList" [ngClass]="{'selected' : option.guid === currentOption?.guid}"
+        (click)="onOptionClicked(option)">
+        {{option.title}}
+    </div>
+</div>

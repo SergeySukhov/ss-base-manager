@@ -1,10 +1,27 @@
 <div class="wrapper">
-    <div class="main-menu-title">Title main </div>
-    
-    <div class="main-menu-container">
-        <div class="main-menu-title">
-            <div class="menu-text">Menu</div>
-        </div>
-    </div>
+    <div class="main-menu-title">Title main</div>
+
+    <!-- <div class="main-menu-container">
+        <ss-list-selector [optionsList]="firstOptions" (selectedOption)="handleOptionClick($event)"></ss-list-selector>
+    </div> -->
+    <mat-stepper linear #stepper>
+        <!-- #docregion editable -->
+        <mat-step [editable]="isEditable">
+            <mat-form-field appearance="fill">
+                <mat-label>Name</mat-label>
+                <input matInput  placeholder="Last name, First name" required>
+              </mat-form-field>
+        </mat-step>
+        <mat-step [editable]="isEditable">
+
+        </mat-step>
+        <mat-step>
+            <p>You are now done.</p>
+            <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button (click)="stepper.reset()">Reset</button>
+            </div>
+        </mat-step>
+    </mat-stepper>
 
 </div>
