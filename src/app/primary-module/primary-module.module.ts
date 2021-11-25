@@ -67,7 +67,7 @@ const appRoutes: Routes = [
  
     MatIconModule,
     MatInputModule,
-
+    MatSelectModule,
 
     SecondaryModule,
     AuthModule,
