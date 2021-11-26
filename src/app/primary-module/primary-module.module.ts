@@ -42,6 +42,7 @@ import { AuthModule } from '../auth/auth.module';
 import { UserService } from '../core/common/services/user.service';
 import { EndpointService } from '../core/common/services/endpoint.service';
 import { FormsModule } from '@angular/forms';
+import { DndDirective } from "./main/directives/dnd.directive";
 
 
 // определение маршрутов
@@ -53,6 +54,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     MainComponent,
+    DndDirective
   ],
   exports: [
     MainComponent,
