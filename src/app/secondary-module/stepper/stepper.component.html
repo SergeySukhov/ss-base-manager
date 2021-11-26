@@ -1,0 +1,79 @@
+<div class="wrapper">
+    <mat-stepper orientation="vertical" [linear]="false" #stepper>
+        <mat-step [editable]="true">
+            <div class="step-container"></div>
+            <ng-template matStepLabel>Выбор вида НБ</ng-template>
+            <mat-form-field class="form-field" appearance="fill">
+                <mat-label>Доступные виды нормативных баз</mat-label>
+                <mat-select (selectionChange)="onSelectionChange($event); stepper.next()">
+                    <mat-option *ngFor="let type of baseTypes" [value]="type" [disabled]="!type.isAvailable">
+                        {{type.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <button class="step-button" mat-button (click)="stepper.next()">Вперед</button>
+        </mat-step>
+        <mat-step [editable]="isEditable">
+            <ng-template matStepLabel>Выбор НБ</ng-template>
+            <mat-form-field appearance="fill">
+                <mat-label>Установленные НБ</mat-label>
+                <mat-select (selectionChange)="onSelectionChange($event)">
+                    <mat-option (onSelectionChange)="onAddNewClick($event)">
+                        <img src="assets/icons/add.svg" />
+                    </mat-option>
+                    <mat-option *ngFor="let baseOption of availableBaseOptions" [value]="baseOption">
+                        {{baseOption.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <div *ngIf="showAddForm" class="addForm">
+                <mat-form-field appearance="fill">
+                    <mat-label>Идентификатор НБ</mat-label>
+                    <input matInput type="text" disabled="true" autocomplete="false" value="12345">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Наименование НБ</mat-label>
+                    <input matInput autocomplete="false" value="">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Добавление НБ</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let baseOption of availableBaseOptions" [value]="baseOption">
+                            {{baseOption.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Добавление НБ</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let baseOption of availableBaseOptions" [value]="baseOption">
+                            {{baseOption.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <button mat-button (click)="stepper.next()">Вперед</button>
+            <button mat-button (click)="stepper.previous()">Назад</button>
+
+        </mat-step>
+
+        <mat-step>
+            <ng-template matStepLabel>Выбор файла</ng-template>
+           
+            <ss-file-loader></ss-file-loader>
+
+        </mat-step>
+
+        <mat-step>
+            <ng-template matStepLabel>Отчет</ng-template>
+            <p>Готово</p>
+            <div>
+                <button mat-button (click)="stepper.previous()">Назад</button>
+                <button mat-button (click)="stepper.reset()">Заново</button>
+            </div>
+        </mat-step>
+    </mat-stepper>
+</div>
