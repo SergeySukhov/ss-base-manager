@@ -1,17 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MainStateService } from '../services/main-state.service';
+import { MainStateService } from './services/main-state.service';
 import { UserService } from '../../core/common/services/user.service';
 import { ListSelectorOption } from 'src/app/secondary-module/models/list-selector.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSelectChange } from "@angular/material/select";
-import { MatOptionSelectionChange } from "@angular/material/core";
-import { ThemeService } from "../services/theme.service";
-
-enum ParamsSetupStep {
-  step1 = "step1",
-  step2 = "step2",
-}
+import { ThemeService } from "./services/theme.service";
+import { ManagerContext } from '../models/common-enums';
 
 @Component({
   selector: 'app-main',
@@ -19,33 +12,40 @@ enum ParamsSetupStep {
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
-
-  isDarkMode: boolean = true;
-  showFiller = false;
-
-  constructor(private router: Router, private stateService: MainStateService,
-    private userService: UserService, private themeService: ThemeService,) {
-
+  public ManagerContext = ManagerContext;
+  public isDarkMode = true;
+  public menuOptions: ListSelectorOption[] = [{
+    title: "Нормативные базы",
+    available: true,
+    action: () => {
+      this.stateService.context = ManagerContext.base;
+    }
+  }, {
+    title: "Базы индексов",
+  }, {
+    title: "Базы поправок",
+    available: false,
+  }, {
+    title: "!!",
+    available: false,
+  }
+  ]
+  constructor(public stateService: MainStateService,
+    private userService: UserService, public themeService: ThemeService,) {
+      this.isDarkMode = themeService.isDarkMode();
   }
 
   ngOnInit(): void {
 
   }
 
-  onNewClick() {
-    this.router.navigateByUrl("/");
-  }
-
-  handleOptionClick(option: ListSelectorOption) {
-
+  toStart() {
+    this.stateService.context = ManagerContext.start;
   }
 
   toggleDarkMode() {
     this.isDarkMode = this.themeService.isDarkMode();
-
-    this.isDarkMode
-      ? this.themeService.update('light-mode')
-      : this.themeService.update('dark-mode');
+    this.themeService.update(this.themeService.isDarkMode() ? 'light-mode' : 'dark-mode')
   }
 
 

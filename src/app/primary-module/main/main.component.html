@@ -1,16 +1,25 @@
 <div class="wrapper">
-    <mat-toolbar color="primary">
+    <mat-toolbar class="main-tool-bar" color="primary">
         <mat-toolbar-row>
-            <span>My App</span>
+            <button mat-button (click)="toStart()"
+                 *ngIf="stateService.context !== ManagerContext.start"
+                class="back-arrow" color="accent">
+                <mat-icon>keyboard_backspace</mat-icon>
+            </button>
+            <span style="padding-left: 15px;">{{stateService.mainTitle}}</span>
             <span style="flex: 1 1 auto"></span>
-            <mat-slide-toggle (click)="toggleDarkMode()" [(ngModel)]="isDarkMode">Dark mode</mat-slide-toggle>
+            <mat-slide-toggle (click)="toggleDarkMode()" [checked]="isDarkMode">Темная тема</mat-slide-toggle>
         </mat-toolbar-row>
     </mat-toolbar>
 
-    <!-- <div class="main-menu-container">
-        <ss-list-selector [optionsList]="firstOptions" (selectedOption)="handleOptionClick($event)"></ss-list-selector>
-    </div> -->
-    <div class="stepper-wrapper">
-        <ss-stepper></ss-stepper>
+    <div [ngSwitch]="stateService.context" class="content-wrapper">
+        <div *ngSwitchCase="ManagerContext.start" class="content-container">
+            <ss-list-selector [optionsList]="menuOptions">
+            </ss-list-selector>
+        </div>
+
+        <div *ngSwitchCase="ManagerContext.base" class="content-container">
+            <ss-normative-base></ss-normative-base>
+        </div>
     </div>
 </div>

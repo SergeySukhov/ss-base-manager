@@ -35,14 +35,15 @@ import {MatTreeModule} from '@angular/material/tree';
 import {OverlayModule} from '@angular/cdk/overlay';
 
 import { MainComponent } from './main/main.component';
-import { MainStateService } from './services/main-state.service';
+import { MainStateService } from './main/services/main-state.service';
 import { RouterModule, Routes } from '@angular/router';
 import { SecondaryModule } from '../secondary-module/secondary-module.module';
 import { AuthModule } from '../auth/auth.module';
 import { UserService } from '../core/common/services/user.service';
 import { EndpointService } from '../core/common/services/endpoint.service';
 import { FormsModule } from '@angular/forms';
-import { ThemeService } from "./services/theme.service";
+import { ThemeService } from "./main/services/theme.service";
+import { NormativeBaseComponent } from './normative-base/normative-base.component';
 
 
 // определение маршрутов
@@ -54,6 +55,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     MainComponent,
+    NormativeBaseComponent,
   ],
   exports: [
     MainComponent,
@@ -67,6 +69,7 @@ const appRoutes: Routes = [
     MatButtonToggleModule,
     MatToolbarModule,
     MatSlideToggleModule,
+    MatIconModule,
     
     AuthModule,
     SecondaryModule,

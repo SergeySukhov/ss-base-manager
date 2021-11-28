@@ -1,7 +1,57 @@
-.wrapper {
+@use 'sass:map';
+@use '@angular/material' as mat;
 
+@mixin color($theme) {
+  $color-config: mat.get-color-config($theme);
+  $primary-palette: map.get($color-config, 'primary');
+  $accent-palette: map.get($color-config, 'accent');
+      
+  .selector {
+
+  }
+  .selector-opt {
+    background: mat.get-color-from-palette($primary-palette, 100);
+    margin-bottom: 5px;
+    border-radius: 2px;
+  }
+  .selector-opt:hover {
+    background: mat.get-color-from-palette($primary-palette, 500);
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}
+
+.dark-mode .mat-list-item-disabled {
+    background: #5a5656 !important;
+}
+.light-mode .mat-list-item-disabled {
+    background: #d1d1d1 !important;
+}
+.selector-container {
+    width: 50%;
+    max-width: 400px;
+    height: 50%;
+    min-height: 400px;
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+.wrapper {
+    height: 100%;
 }
 
 .selected {
     
 }
+
+.available {
+    // background-color: gray;
+}
+

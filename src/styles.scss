@@ -1,14 +1,19 @@
+@use './app/secondary-module/stepper/stepper.component.scss' as stepper;
+@use './app/secondary-module/list-selector/list-selector.component.scss' as list;
 @import "~@angular/material/theming";
 @include mat-core();
 
 $mat-primary-scheme: (
+  background: whitesmoke,
   100: #c5cae9,
+  300: #7b86c9,
   500: #61699a,
   700: #303f9f,
   contrast: (
-    100: rgba(0, 0, 0, 0.87),
-    500: #ffffff,
-    700: #ffffff,
+    100: red,
+    300: whitesmoke,
+    500: whitesmoke,
+    700: whitesmoke,
   ),
 );
 $mat-accent-scheme: (
@@ -16,26 +21,59 @@ $mat-accent-scheme: (
   500: #ff4081,
   700: #f50057,
   contrast: (
-    100: rgba(0, 0, 0, 0.87),
-    500: rgba(0, 0, 0, 0.87),
-    700: #ffffff,
+    100: red,
+    500: red, // rgba(0, 0, 0, 0.87),
+    700: red,
   ),
 );
+
+$mat-primary-scheme-dark: (
+  background: #424242,
+  100: #c5cae9,
+  300: #737dbe,
+  500: #4f5681,
+  700: #293586,
+  contrast: (
+    100: red,
+    300: whitesmoke,
+    500: whitesmoke,
+    700: whitesmoke,
+  ),
+);
+$warn: mat-palette($mat-blue);
+$background-color: green; // map_get($mat-blue-grey, 50);
+
 $mat-primary-palette: mat-palette($mat-primary-scheme);
 $mat-accent-palette: mat-palette($mat-accent-scheme);
+$mat-primary-palette-dark: mat-palette($mat-primary-scheme-dark);
+// $mat-accent-palette: mat-palette($mat-blue-grey, 700);
+// $mat-primary-palette:  mat-palette($mat-pink, 500, 900, A100);
 
 $app-light-theme: mat-light-theme($mat-primary-palette, $mat-accent-palette);
+$app-dark-theme: mat-dark-theme($mat-primary-palette-dark, $mat-accent-palette);
+
+$background: map-get($app-dark-theme, background);
+$background: map-merge($background, (background: $background-color));
+$app-dark-theme: map-merge($app-dark-theme, (background: $background));
 
 .light-mode {
   @include angular-material-theme($app-light-theme);
-}
+  @include stepper.theme($app-light-theme);
+  @include list.theme($app-light-theme);
+  img {
+      filter: brightness(0.5);
+  }
+  background-color: whitesmoke;
+  color: rgb(19, 19, 19);
 
-$app-dark-theme: mat-dark-theme($mat-primary-palette, $mat-accent-palette);
+}
 
 .dark-mode {
   @include angular-material-theme($app-dark-theme);
+  @include stepper.theme($app-dark-theme);
+  @include list.theme($app-dark-theme);
 
-  background-color: #333;
+  background-color: #424242;
   color: whitesmoke;
 }
 

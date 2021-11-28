@@ -10,6 +10,11 @@ import { StepperComponent } from "./stepper/stepper.component";
 import { FileLoaderComponent } from './file-loader/file-loader.component';
 import { DndDirective } from "./directives/dnd.directive";
 import { FormsModule } from "@angular/forms";
+import { MatRippleModule } from '@angular/material/core';
+import { MatListModule } from '@angular/material/list';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [
@@ -32,10 +37,15 @@ import { FormsModule } from "@angular/forms";
 
     MatStepperModule,
     MatButtonModule,
- 
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatToolbarModule,
+    MatSlideToggleModule,
     MatIconModule,
     MatInputModule,
     MatSelectModule,
+    MatRippleModule,
+    MatListModule,
   ],
   providers: [
   ]

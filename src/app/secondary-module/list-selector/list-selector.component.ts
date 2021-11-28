@@ -17,7 +17,7 @@ export class ListSelectorComponent implements OnInit {
   public get optionsList(): ListSelectorOption[] | null {
     return this.innerOptionsList;
   }
-
+  typesOfShoes: string[] = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
   public currentOption: ListSelectorOption | null = null;
 
 
