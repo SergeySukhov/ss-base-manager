@@ -5,8 +5,9 @@
             <ng-template matStepLabel>Выбор вида НБ</ng-template>
             <mat-form-field class="form-field" appearance="fill">
                 <mat-label>Доступные виды нормативных баз</mat-label>
-                <mat-select (selectionChange)="onSelectionChange($event); stepper.next()">
-                    <mat-option *ngFor="let type of baseTypes" [value]="type" [disabled]="!type.isAvailable">
+                <mat-select>
+                    <mat-option *ngFor="let type of baseTypes" [value]="type" [disabled]="!type.isAvailable"
+                    (onSelectionChange)="onSelectionChange($event); stepper.next()">
                         {{type.name}}
                     </mat-option>
                 </mat-select>
@@ -18,11 +19,12 @@
             <ng-template matStepLabel>Выбор НБ</ng-template>
             <mat-form-field appearance="fill">
                 <mat-label>Установленные НБ</mat-label>
-                <mat-select (selectionChange)="onSelectionChange($event)">
+                <mat-select>
                     <mat-option (onSelectionChange)="onAddNewClick($event)">
                         <img src="assets/icons/add.svg" />
                     </mat-option>
-                    <mat-option *ngFor="let baseOption of availableBaseOptions" [value]="baseOption">
+                    <mat-option *ngFor="let baseOption of availableBaseOptions" [value]="baseOption"
+                        (onSelectionChange)="onSelectionChange($event)">
                         {{baseOption.name}}
                     </mat-option>
                 </mat-select>
@@ -62,8 +64,9 @@
 
         <mat-step>
             <ng-template matStepLabel>Выбор файла</ng-template>
-           
-            <ss-file-loader></ss-file-loader>
+           <div class="loader-container">
+               <ss-file-loader></ss-file-loader>
+           </div>
 
         </mat-step>
 

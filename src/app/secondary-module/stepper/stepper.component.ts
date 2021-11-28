@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatOptionSelectionChange } from "@angular/material/core";
 import { MatSelectChange } from "@angular/material/select";
+import { StepperData } from './models/stepper-model';
 
 @Component({
   selector: 'ss-stepper',
@@ -8,10 +9,12 @@ import { MatSelectChange } from "@angular/material/select";
   styleUrls: ['./stepper.component.scss']
 })
 export class StepperComponent implements OnInit {
-  isEditable = false;
+
+  @Input() data: StepperData | null = null;
+
+  public isEditable = true;
   public baseTypes = [{ name: "ТСН МГЭ", isAvailable: true }, { name: "ФЕР", isAvailable: false },]
   public availableBaseOptions = [{ name: "Дополнение 55" }, { name: "Дополнение 56" },]
-
   public showAddForm = false;
   constructor() { }
 
@@ -19,7 +22,7 @@ export class StepperComponent implements OnInit {
   }
 
 
-  onSelectionChange(event: MatSelectChange) {
+  onSelectionChange(event: MatOptionSelectionChange) {
     console.log("!! | onSelectionChange | event", event)
     this.showAddForm = false;
 
