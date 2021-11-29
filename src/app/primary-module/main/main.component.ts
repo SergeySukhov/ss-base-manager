@@ -26,7 +26,7 @@ export class MainComponent implements OnInit {
     title: "Базы поправок",
     available: false,
   }, {
-    title: "!!",
+    title: "Базы формул",
     available: false,
   }
   ]
