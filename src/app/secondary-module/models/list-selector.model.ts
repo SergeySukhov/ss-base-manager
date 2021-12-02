@@ -1,5 +1,6 @@
 export class ListSelectorOption {
-    title = "";
+    title? = "";
     available? = false;
+    isDivider? = false;
     action? = () => {};
 }

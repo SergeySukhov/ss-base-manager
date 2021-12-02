@@ -32,7 +32,11 @@
 ::ng-deep .dark-mode .mat-form-field.mat-focused .mat-form-field-label {
     color: whitesmoke !important;
 }
-::ng-deep svg {stroke:red;fill:red}
+
+.light-mode .mat-stepper-horizontal, .light-mode .mat-stepper-vertical {
+  background-color: whitesmoke !important;
+}
+// ::ng-deep svg {stroke:red;fill:red}
 // ::ng-deep .ligth-mode .mat-primary .mat-option.mat-selected
 // ::ng-deep .ligth-mode .mat-form-field.mat-focused .mat-form-field-label {
 //     color: black !important;

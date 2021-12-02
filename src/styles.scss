@@ -1,13 +1,15 @@
 @use './app/secondary-module/stepper/stepper.component.scss' as stepper;
 @use './app/secondary-module/list-selector/list-selector.component.scss' as list;
+@use './app/secondary-module/file-loader/file-loader.component.scss' as fileLoader;
 @import "~@angular/material/theming";
 @include mat-core();
 
 $mat-primary-scheme: (
   background: whitesmoke,
-  100: #c5cae9,
-  300: #7b86c9,
-  500: #61699a,
+  100: #cacff1,
+  300: #c5cae9,
+  400: #6b7de4,
+  500: #4c59a6,
   700: #303f9f,
   contrast: (
     100: red,
@@ -17,6 +19,16 @@ $mat-primary-scheme: (
   ),
 );
 $mat-accent-scheme: (
+  100: #fa9cbb,
+  500: #ff83ad,
+  700: #f50057,
+  contrast: (
+    100: red,
+    500: red, // rgba(0, 0, 0, 0.87),
+    700: red,
+  ),
+);
+$mat-accent-schemee-dark: (
   100: #ff80ab,
   500: #ff4081,
   700: #f50057,
@@ -31,6 +43,7 @@ $mat-primary-scheme-dark: (
   background: #424242,
   100: #c5cae9,
   300: #737dbe,
+  400: #4f5681,
   500: #4f5681,
   700: #293586,
   contrast: (
@@ -45,26 +58,29 @@ $background-color: green; // map_get($mat-blue-grey, 50);
 
 $mat-primary-palette: mat-palette($mat-primary-scheme);
 $mat-accent-palette: mat-palette($mat-accent-scheme);
+$mat-accent-palettee-dark: mat-palette($mat-accent-schemee-dark);
 $mat-primary-palette-dark: mat-palette($mat-primary-scheme-dark);
 // $mat-accent-palette: mat-palette($mat-blue-grey, 700);
 // $mat-primary-palette:  mat-palette($mat-pink, 500, 900, A100);
 
 $app-light-theme: mat-light-theme($mat-primary-palette, $mat-accent-palette);
-$app-dark-theme: mat-dark-theme($mat-primary-palette-dark, $mat-accent-palette);
+$app-dark-theme: mat-dark-theme($mat-primary-palette-dark, $mat-accent-palettee-dark);
 
-$background: map-get($app-dark-theme, background);
-$background: map-merge($background, (background: $background-color));
-$app-dark-theme: map-merge($app-dark-theme, (background: $background));
+// $background: map-get($app-dark-theme, background);
+// $background: map-merge($background, (background: $background-color));
+// $app-dark-theme: map-merge($app-dark-theme, (background: $background));
 
 .light-mode {
   @include angular-material-theme($app-light-theme);
   @include stepper.theme($app-light-theme);
   @include list.theme($app-light-theme);
+  @include fileLoader.theme($app-light-theme);
+  
   img {
       filter: brightness(0.5);
   }
   background-color: whitesmoke;
-  color: rgb(19, 19, 19);
+  color: #363636;
 
 }
 
@@ -72,6 +88,7 @@ $app-dark-theme: map-merge($app-dark-theme, (background: $background));
   @include angular-material-theme($app-dark-theme);
   @include stepper.theme($app-dark-theme);
   @include list.theme($app-dark-theme);
+  @include fileLoader.theme($app-dark-theme);
 
   background-color: #424242;
   color: whitesmoke;

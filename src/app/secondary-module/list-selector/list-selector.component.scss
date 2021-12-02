@@ -5,17 +5,18 @@
   $color-config: mat.get-color-config($theme);
   $primary-palette: map.get($color-config, 'primary');
   $accent-palette: map.get($color-config, 'accent');
-      
-  .selector {
 
-  }
   .selector-opt {
-    background: mat.get-color-from-palette($primary-palette, 100);
+    background: mat.get-color-from-palette($primary-palette, 400);
     margin-bottom: 5px;
     border-radius: 2px;
   }
   .selector-opt:hover {
-    background: mat.get-color-from-palette($primary-palette, 500);
+    background: mat.get-color-from-palette($primary-palette, 300);
+  }
+  .divider {
+    background-color: mat.get-color-from-palette($primary-palette, 100) !important;
+    height: 2px !important;
   }
 }
 
@@ -46,12 +47,3 @@
 .wrapper {
     height: 100%;
 }
-
-.selected {
-    
-}
-
-.available {
-    // background-color: gray;
-}
-

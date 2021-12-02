@@ -28,11 +28,17 @@ export class MainComponent implements OnInit {
   }, {
     title: "Базы формул",
     available: false,
+  }, {
+    title: "",
+    isDivider: true,
+  }, {
+    title: "Конфигурация Minio",
+    available: true,
   }
   ]
   constructor(public stateService: MainStateService,
     private userService: UserService, public themeService: ThemeService,) {
-      this.isDarkMode = themeService.isDarkMode();
+    this.isDarkMode = themeService.isDarkMode();
   }
 
   ngOnInit(): void {
