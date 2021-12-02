@@ -6,51 +6,39 @@ export interface StepperData {
 export interface StepperDataSteps {
     stepLabel: string;
 
-    needNext?: boolean;
-    needPrev?: boolean;
-    needReset?: boolean;
+    needNextButton?: boolean;
+    needPrevButton?: boolean;
+    needResetButton?: boolean;
 
     fields: StepperDataField[];
 } 
 
 export enum OptionType {
-    select = "select",
+    selector = "selector",
     input = "input",
     label = "label",
 }
 
-export abstract class StepperOption {
+export abstract class StepperDataField {
     type: OptionType | undefined;
+    fieldLabel?: string;
+    onDataChange: ((value: any) => {}) | undefined;
+}
+
+export class StepperLabelField extends StepperDataField  {
+}
+
+export class StepperInputField extends StepperDataField  {
+}
+
+export class StepperSelectorField extends StepperDataField  {
+    fieldOptions: SelectorOption[] | undefined;
+}
+
+export class SelectorOption {
     imgSrc?: string;
     value: string | undefined;
-    onClickAction: ((value: StepperSelectOption) => {}) | undefined;
-}
+    isAvailable: boolean | undefined;
 
-export interface StepperDataField {
-    fieldLabel: string;
-    fieldSelectOptions?: StepperOption[]; 
-    fieldInputOptions?: StepperInputOption[]; 
-    fieldLabelOptions?: StepperLabelOption[]; 
-    onDataChange: (value: StepperOption) => { };
-}
-
-export class StepperSelectOption extends StepperOption {
-    constructor() {
-        super();
-        this.type = OptionType.select;
-    }
-}
-
-export class StepperInputOption extends StepperOption {
-    constructor() {
-        super();
-        this.type = OptionType.input;
-    }
-}
-
-export class StepperLabelOption extends StepperOption {
-    constructor() {
-        super();
-        this.type = OptionType.label;
-    }
+    action: ((value: any) => {}) | undefined;
 }

@@ -16,6 +16,8 @@ export class StepperComponent implements OnInit {
   public baseTypes = [{ name: "ТСН МГЭ", isAvailable: true }, { name: "ФЕР", isAvailable: false },]
   public availableBaseOptions = [{ name: "Дополнение 55" }, { name: "Дополнение 56" },]
   public showAddForm = false;
+
+  
   constructor() { }
 
   ngOnInit(): void {
