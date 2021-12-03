@@ -1,16 +1,16 @@
 
-export interface StepperData {
-    steps: StepperDataSteps[];
+export class StepperData {
+    steps: StepperDataSteps[] | undefined;
 } 
 
-export interface StepperDataSteps {
-    stepLabel: string;
+export class StepperDataSteps {
+    stepLabel: string | undefined;
 
     needNextButton?: boolean;
     needPrevButton?: boolean;
     needResetButton?: boolean;
 
-    fields: StepperDataField[];
+    fields: StepperDataField[] | undefined;
 } 
 
 export enum OptionType {
