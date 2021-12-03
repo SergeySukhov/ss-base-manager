@@ -1,16 +1,16 @@
 
 export class StepperData {
-    steps: StepperDataSteps[] | undefined;
+    steps: StepperDataSteps[] = [];
 } 
 
 export class StepperDataSteps {
-    stepLabel: string | undefined;
+    stepLabel: string = "";
 
     needNextButton?: boolean;
     needPrevButton?: boolean;
     needResetButton?: boolean;
 
-    fields: StepperDataField[] | undefined;
+    fields: StpFields[] = [];
 } 
 
 export enum OptionType {
@@ -19,19 +19,22 @@ export enum OptionType {
     label = "label",
 }
 
-export abstract class StepperDataField {
-    type: OptionType | undefined;
+export type StpFields = StepperLabelField | StepperInputField | StepperSelectorField;
+
+export abstract class StepperDataField<T extends OptionType> {
+    type: T | undefined;
     fieldLabel?: string;
     onDataChange: ((value: any) => {}) | undefined;
 }
 
-export class StepperLabelField extends StepperDataField  {
+export class StepperLabelField extends StepperDataField<OptionType.label>  {
+    kjmijmk: string="";
 }
 
-export class StepperInputField extends StepperDataField  {
+export class StepperInputField extends StepperDataField<OptionType.input>  {
 }
 
-export class StepperSelectorField extends StepperDataField  {
+export class StepperSelectorField extends StepperDataField<OptionType.selector>  {
     fieldOptions: SelectorOption[] | undefined;
 }
 

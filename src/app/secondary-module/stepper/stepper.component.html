@@ -9,9 +9,9 @@
             <mat-form-field *ngFor="let fieldModel of stepModel.fields" class="form-field" appearance="fill">
                 <mat-label>{{fieldModel.fieldLabel}}</mat-label>
 
-                <span *ngIf="fieldModel?.type === 'selector'">
+                <span *ngIf="fieldModel.type === 'selector'">
                     <mat-select>
-                        <mat-option *ngFor="let option of $any(fieldModel).fieldOptions" [value]="option"
+                        <mat-option *ngFor="let option of fieldModel.fieldOptions" [value]="option"
                             [disabled]="!option.isAvailable" (onSelectionChange)="option?.action(option.value)">
                             {{option.value}}
                         </mat-option>
@@ -21,13 +21,13 @@
                 <span *ngIf="fieldModel?.type === 'input'">
                     <mat-form-field appearance="fill">
                         <mat-label>{{fieldModel?.fieldLabel}}</mat-label>
-                        <input matInput autocomplete="false" (change)="$any(fieldModel)?.onDataChange($event)" value="">
+                        <input matInput autocomplete="false" (change)="fieldModel?.onDataChange($event)" value="">
                     </mat-form-field>
                 </span>
 
-                <span *ngIf="fieldModel?.type === 'label'">
+                <span *ngIf="fieldModel.type === 'label'">
                     <mat-form-field appearance="fill">
-                        <ng-template matStepLabel>{{fieldModel.fieldLabel}}</ng-template>
+                        <ng-template matStepLabel>{{fieldModel.kjmijmk}}</ng-template>
                     </mat-form-field>
                 </span>
             </mat-form-field>
