@@ -1,43 +1,45 @@
 <div class="wrapper">
     <mat-stepper #stepper orientation="vertical" [linear]="false">
 
-        <mat-step [editable]="true" *ngFor="let stepModel of data?.steps">
+        <mat-step [editable]="true" *ngFor="let stepModel of data?.steps" #stepp>
 
             <!-- <div class="step-container"></div> -->
             <ng-template matStepLabel>{{stepModel.stepLabel}}</ng-template>
+            <div class="addForm" *ngFor="let fieldModel of stepModel.fields">
+                <div *ngIf="fieldModel.type === 'selector'">
+                    <mat-form-field class="form-field" appearance="fill">
+                        <mat-label>{{fieldModel.fieldLabel}}</mat-label>
+                        <mat-select (selectionChange)="fieldModel.onDataChange($event, stepModel)">
+                            <mat-option *ngFor="let option of fieldModel.fieldOptions" [value]="option"
+                                [disabled]="!option.isAvailable" (onSelectionChange)="option.action(option, stepModel)">
+                                <img *ngIf="!!option.imgSrc" [src]="option.imgSrc" />
+                                {{option.value}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
 
-            <mat-form-field *ngFor="let fieldModel of stepModel.fields" class="form-field" appearance="fill">
-                <mat-label>{{fieldModel.fieldLabel}}</mat-label>
-
-                <span *ngIf="fieldModel.type === 'selector'">
-                    <mat-select>
-                        <mat-option *ngFor="let option of fieldModel.fieldOptions" [value]="option"
-                            [disabled]="!option.isAvailable" (onSelectionChange)="option?.action(option.value)">
-                            {{option.value}}
-                        </mat-option>
-                    </mat-select>
-                </span>
-
-                <span *ngIf="fieldModel?.type === 'input'">
+                <div *ngIf="fieldModel?.type === 'input'">
                     <mat-form-field appearance="fill">
                         <mat-label>{{fieldModel?.fieldLabel}}</mat-label>
-                        <input matInput autocomplete="false" (change)="fieldModel?.onDataChange($event)" value="">
+                        <input matInput autocomplete="false" (change)="fieldModel.onDataChange($event, stepModel)"
+                            value="">
                     </mat-form-field>
-                </span>
+                </div>
 
-                <span *ngIf="fieldModel.type === 'label'">
+                <div *ngIf="fieldModel.type === 'label'">
                     <mat-form-field appearance="fill">
-                        <ng-template matStepLabel>{{fieldModel.kjmijmk}}</ng-template>
+                        <ng-template matStepLabel>{{fieldModel.fieldLabel}}</ng-template>
+                        <input matInput type="text" disabled="true" autocomplete="false" value="12345">
                     </mat-form-field>
-                </span>
-            </mat-form-field>
+                </div>
+            </div>
+
             <div>
-                <button *ngIf="stepModel.needResetButton"
-                     mat-button (click)="stepper.reset()">Заново</button>
-                <button *ngIf="stepModel.needResetButton"
-                     mat-button (click)="stepper.previous()">Назад</button>
-                <button *ngIf="stepModel.needResetButton"
-                    class="step-button" mat-button (click)="stepper.next()">Вперед</button>
+                <button *ngIf="stepModel.needResetButton" mat-button (click)="stepper.reset()">Заново</button>
+                <button *ngIf="stepModel.needBackButton" mat-button (click)="stepper.previous()">Назад</button>
+                <button *ngIf="stepModel.needNextButton" class="step-button" mat-button
+                    (click)="stepper.next()">Вперед</button>
             </div>
         </mat-step>
     </mat-stepper>

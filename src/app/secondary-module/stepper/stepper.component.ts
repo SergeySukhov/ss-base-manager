@@ -13,8 +13,6 @@ export class StepperComponent implements OnInit {
   @Input() data: StepperData | null = null;
 
   public isEditable = true;
-  public baseTypes = [{ name: "ТСН МГЭ", isAvailable: true }, { name: "ФЕР", isAvailable: false },]
-  public availableBaseOptions = [{ name: "Дополнение 55" }, { name: "Дополнение 56" },]
   public showAddForm = false;
 
   
