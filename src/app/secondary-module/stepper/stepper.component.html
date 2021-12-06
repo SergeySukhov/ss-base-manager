@@ -5,7 +5,7 @@
 
             <!-- <div class="step-container"></div> -->
             <ng-template matStepLabel>{{stepModel.stepLabel}}</ng-template>
-            <div class="addForm" *ngFor="let fieldModel of stepModel.fields">
+            <div class="mat-container" *ngFor="let fieldModel of stepModel.fields">
                 <div *ngIf="fieldModel.type === 'selector'">
                     <mat-form-field class="form-field" appearance="fill">
                         <mat-label>{{fieldModel.fieldLabel}}</mat-label>
@@ -30,8 +30,15 @@
                 <div *ngIf="fieldModel.type === 'label'">
                     <mat-form-field appearance="fill">
                         <ng-template matStepLabel>{{fieldModel.fieldLabel}}</ng-template>
-                        <input matInput type="text" disabled="true" autocomplete="false" value="12345">
+                        <input matInput type="text" disabled="true" autocomplete="false" [value]="fieldModel.text">
                     </mat-form-field>
+                </div>
+
+                <div *ngIf="fieldModel.type === 'divider'" class="add-form">
+                </div>
+
+                <div *ngIf="fieldModel.type === 'fileLoader'" class="file-loader">
+                    <ss-file-loader></ss-file-loader>
                 </div>
             </div>
 

@@ -10,16 +10,18 @@ export class StepperDataStep {
     needBackButton?: boolean;
     needResetButton?: boolean;
 
-    fields: StpFields[] = [];
+    fields: StepFields[] = [];
 }
 
 export enum OptionType {
     selector = "selector",
     input = "input",
     label = "label",
+    divider = "divider",
+    fileLoader = "fileLoader",
 }
 
-export type StpFields = StepperLabelField | StepperInputField | StepperSelectorField;
+export type StepFields = StepperLabelField | StepperInputField | StepperSelectorField | StepperDividerField | StepperFileLoaderField;
 
 export abstract class StepperDataField<T extends OptionType> {
     type: T | undefined;
@@ -32,10 +34,17 @@ export class StepperLabelField extends StepperDataField<OptionType.label>  {
 }
 
 export class StepperInputField extends StepperDataField<OptionType.input>  {
+    placeHolder?: string = "";
 }
 
 export class StepperSelectorField extends StepperDataField<OptionType.selector>  {
     fieldOptions: SelectorOption[] | undefined;
+}
+
+export class StepperDividerField extends StepperDataField<OptionType.divider>  {
+}
+
+export class StepperFileLoaderField extends StepperDataField<OptionType.fileLoader>  {
 }
 
 export class SelectorOption {

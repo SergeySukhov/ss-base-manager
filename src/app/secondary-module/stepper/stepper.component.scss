@@ -6,17 +6,31 @@
   $primary-palette: map.get($color-config, 'primary');
   $accent-palette: map.get($color-config, 'accent');
 
-  .addForm {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+  .form-field {
+    min-width: 50%;
+  }
+
+  .add-form {
     border-top: solid mat.get-color-from-palette($accent-palette, 500) 1px;
     border-bottom: solid  mat.get-color-from-palette($accent-palette, 500) 1px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 0;
+  }
+
+  .mat-container {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     display: flex;
     flex-direction: column;
   }
 
+  .file-loader {
+    width: 60%;
+    margin: auto;
+  }
 }
 
 @mixin theme($theme) {
@@ -56,15 +70,7 @@
     flex-direction: column;
 }
 
-.form-field {
-    min-width: 50%;
-}
 
-.step-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
 
 .loader-container {
   margin: auto;

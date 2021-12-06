@@ -1,10 +1,12 @@
 import { Injectable } from "@angular/core";
-import { OptionType, SelectorOption, StepperData, StepperDataStep, StepperSelectorField, StpFields } from "src/app/secondary-module/stepper/models/stepper-model";
+import { OptionType, SelectorOption, StepperData, StepperDataStep, StepperSelectorField, StepFields } from "src/app/secondary-module/stepper/models/stepper-model";
 import { NormativeBaseComponent } from "../normative-base.component";
 import { NormativeBaseEndpointService } from "./normative-base.endpoint.service";
 
 @Injectable()
 export class NormativeBaseDeclarationService {
+
+    sm: StepperData | undefined;
 
     constructor(private endpoint: NormativeBaseEndpointService) {
 
@@ -14,13 +16,12 @@ export class NormativeBaseDeclarationService {
         const stepperModel: StepperData = {
             steps: [{
                 stepLabel: "Выбор вида НБ",
-                needNextButton: true,
+                needNextButton: false,
                 isAwaiting: false,
                 fields: [{
                     type: OptionType.selector,
                     fieldLabel: "Доступные виды нормативных баз",
                     onDataChange: async (value: string, step: StepperDataStep) => {
-                        console.log("!! | getStepperModel | value", value)
                         context.resultParams.baseType = value;
                         if (!step) {
                             return;
@@ -28,6 +29,7 @@ export class NormativeBaseDeclarationService {
                         step.isAwaiting = true;
                         const loadedBase = await this.endpoint.testGetData();
                         step.isAwaiting = false;
+                        step.needNextButton = true;
                         stepperModel.steps.push(this.getInstalledBase(context, loadedBase));
                     },
                     fieldOptions: [{
@@ -43,7 +45,7 @@ export class NormativeBaseDeclarationService {
             },
             ],
         };
-
+        this.sm = stepperModel;
 
         return stepperModel;
     }
@@ -52,23 +54,27 @@ export class NormativeBaseDeclarationService {
     private getInstalledBase(context: NormativeBaseComponent, availableBases: string[]): StepperDataStep {
         const a: StepperDataStep = {
             stepLabel: "Выбор НБ",
-            needNextButton: true,
-            needResetButton: true,
+            needNextButton: false,
+            // needResetButton: true,
+            needBackButton: true,
             fields: [{
                 type: OptionType.selector,
                 fieldLabel: "Установленные НБ",
                 onDataChange: (value: any, form?: StepperDataStep) => {
-                console.log("!! | getInstalledBase | value", value)
                     const selectedOption: SelectorOption = value.value;
                     const needAdd = !!selectedOption.imgSrc;
-                    this.setAddForm(needAdd, context, form)
+                    if (form) {
+                        form.needNextButton = true;
+                    }
+                    this.setAddForm(needAdd, context, form);
+                    this.sm?.steps.push(this.getFileLoader(context));
                 },
                 fieldOptions: [{ // опция создания нового микросервиса НБ
                     isAvailable: true,
                     value: "",
                     imgSrc: "assets/icons/add.svg",
                     action: (value: string, form: StepperDataStep) => {
-                     }
+                    }
                 },
                 // редактирование существующих НБ
                 ...this.toSelectOptions(availableBases, context)],
@@ -99,20 +105,27 @@ export class NormativeBaseDeclarationService {
             }
             if (!!form?.fields) {
                 form.fields.push({
+                    type: OptionType.divider,
+                    onDataChange: () => { }
+                }, {
                     type: OptionType.label,
                     text: context.resultParams.addBase.guid,
-                    fieldLabel: context.resultParams.addBase.guid,
+                    fieldLabel: "context.resultParams.addBase.guid",
                     onDataChange: () => { }
                 }, {
                     type: OptionType.input,
                     fieldLabel: "Наименование НБ",
+                    placeHolder: "",
                     onDataChange: (value) => {
                         console.log("!! | setAddForm | value", value)
                         if (context.resultParams.addBase) {
                             context.resultParams.addBase.name = value;
                         }
                     }
-                })
+                }, {
+                    type: OptionType.divider,
+                    onDataChange: () => { }
+                },)
             }
         } else {
             context.resultParams.addBase = undefined;
@@ -122,5 +135,24 @@ export class NormativeBaseDeclarationService {
         }
         return
 
+    }
+
+    private getFileLoader(context: NormativeBaseComponent,) {
+        const a: StepperDataStep = {
+            stepLabel: "Добавление файла",
+            needNextButton: false,
+            // needResetButton: true,
+            needBackButton: true,
+            fields: [{
+                type: OptionType.fileLoader,
+                fieldLabel: "",
+                onDataChange: (value: any, form?: StepperDataStep) => {
+                    console.log("!! | getFileLoader | value", value)
+                   
+                },
+            },
+            ],
+        }
+        return a;
     }
 }
