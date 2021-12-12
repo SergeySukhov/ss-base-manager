@@ -1,7 +1,7 @@
 ﻿// Необходимо для логирования
 import "reflect-metadata";
 
-import { MessageExchanger } from "./message-exchanger/message-exchanger.service";
+import { MessageExchanger } from "./message-services/message-exchanger.service";
 
 const messageExchanger = new MessageExchanger(self);
 

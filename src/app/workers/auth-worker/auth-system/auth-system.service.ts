@@ -1,7 +1,7 @@
 ﻿import Axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 import { AuthMessageType } from "../../../app/shared/modules/CoreModule/models/worker-messages/worker-message-types";
 import { AuthWorkerResponse } from "../../../app/shared/modules/CoreModule/models/worker-messages/worker-response";
-import { MessageExchanger } from "../message-exchanger/message-exchanger.service";
+import { MessageExchanger } from "../message-services/message-exchanger.service";
 import {
   IdentityResponse,
   IdentityRegistrationError,

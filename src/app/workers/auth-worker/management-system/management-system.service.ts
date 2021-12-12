@@ -1,23 +1,7 @@
-﻿import { MessageExchanger } from "../message-exchanger/message-exchanger.service";
-import { AuthWorkerMessageType, AuthMessageType } from "../../../app/shared/modules/CoreModule/models/worker-messages/worker-message-types";
-import { BehaviorSubject, Subject } from "rxjs";
-import { UnitOfWork } from "../indexed-db-service/unit-of-work.service";
-import { TokenService } from "../auth-system/token.service";
-import { AuthSystemService } from "../auth-system/auth-system.service";
-import { DbService } from "../../shared/indexed-db-v2/db.service";
-import { DatabaseType } from "../../shared/indexed-db-v2/models/db-manager";
-import { UpdateTokenData } from "../../../app/SMR/core/connection-to-workers-module/net-proxy-smr/models/worker-messages/worker-request-smr";
-import { Token } from "../../../app/sharedAll/base-connection-to-workers-module/models/token.model";
-import { AppType } from "../../../app/sharedAll/app-global-module/models/app-shared-types.model";
-import { WorkerId } from "../../../app/sharedAll/base-connection-to-workers-module/worker-channel/worker-id.model";
-import { WorkerServiceMessageType } from "../../../app/sharedAll/base-connection-to-workers-module/models/base-worker-message-type";
-import { AuthWorkerRequest, BaseWorkerRequest } from "../../../app/shared/modules/CoreModule/models/worker-messages/worker-request";
-import { AuthWorkerResponse } from "../../../app/shared/modules/CoreModule/models/worker-messages/worker-response";
+﻿import { BehaviorSubject, Subject } from "rxjs";
 
 /** Система верхнего уровня воркера. Принимает сообщения, перенаправляет их, инициализирует системы */
 export class ManagementSystem {
-  /** Сервис работы с данными из indexedDb */
-  public unitOfWork: UnitOfWork;
 
   /** Сервис для работы с токенами */
   public tokenService: TokenService;
@@ -57,60 +41,11 @@ export class ManagementSystem {
           );
           break;
 
-        case AuthMessageType.checkRegistration:
-          const isUserExistsResponse: AuthWorkerResponse = await this.authSystem.checkIfUserExists(request.data);
-          isUserExistsResponse.messageId = request.messageId;
-          this.messageExchanger.send(isUserExistsResponse);
-          break;
-
-        case AuthMessageType.registration:
-          const registrationResponse: AuthWorkerResponse = await this.authSystem.registration(request.data);
-          registrationResponse.messageId = request.messageId;
-          this.messageExchanger.send(registrationResponse);
-          break;
-
         case WorkerServiceMessageType.authorize:
           const authResponse: AuthWorkerResponse = await this.authSystem.login(request.data.login, request.data.password, request.data.isHash);
           authResponse.messageId = request.messageId;
           this.messageExchanger.send(authResponse);
           break;
-
-        case AuthMessageType.getAuthToken:
-          let tokenResp: AuthWorkerResponse<Token>;
-          let token = await this.tokenService.getAccessToken();
-
-          if (this.authSystem.isAuth && token && (await this.tokenService.isATAlive())) {
-            // Если токен есть и он живой, просто создаем сообщение с токеном и отправляем
-            tokenResp = {
-              type: WorkerServiceMessageType.updateToken,
-              data: token,
-            };
-          } else {
-            // В противном случае надо запросить токен с сервера, при этом исключив возможность параллельной отправки нескольких таких запросов
-            // Клонирование объекта необходимо, иначе при параллельных запросах один запрос может поменять id другого до отправки
-            tokenResp = JSON.parse(JSON.stringify(await this.getAuthTokenInner()));
-          }
-
-          tokenResp.messageId = request.messageId;
-          token = tokenResp.data;
-
-          // Рассылаем токен только если он изменился
-          if (!this.lastUpdatedToken || token.token !== this.lastUpdatedToken.token) {
-            this.lastUpdatedToken = token;
-            const isTokenNotEmpty = token.token !== "";
-            this.sendTokenToWorkers(token, isTokenNotEmpty, request.requesterId);
-          }
-
-          // Отвечаем в любом случае тому кто запросил токен напрямую
-          this.messageExchanger.send(tokenResp, request.requesterId);
-          break;
-
-        case WorkerServiceMessageType.unAuthorize:
-          const logoutResponse: AuthWorkerResponse = await this.authSystem.logout();
-          const emptyToken: Token = logoutResponse.data;
-          this.sendTokenToWorkers(emptyToken, false);
-          break;
-
         default:
           throw new Error("Не задан обработчик для сообщения с типом " + request.type);
       }
