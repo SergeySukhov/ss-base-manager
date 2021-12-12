@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'ss-file-loader',
@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./file-loader.component.scss']
 })
 export class FileLoaderComponent implements OnInit {
+
+  @Output() filesAdded = new EventEmitter<any>();
+
   public files: any[] = [];
 
   constructor() { }
@@ -16,6 +19,7 @@ export class FileLoaderComponent implements OnInit {
 
   onFileDropped($event: any) {
     this.prepareFilesList($event);
+    this.filesAdded.emit(this.files);
   }
 
 

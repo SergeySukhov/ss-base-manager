@@ -1,8 +1,8 @@
 <div class="wrapper">
-    <mat-stepper #stepper orientation="vertical" [linear]="false">
+    <mat-stepper #stepper orientation="vertical" [linear]="true">
 
-        <mat-step [editable]="true" *ngFor="let stepModel of data?.steps" #stepp>
-
+        <mat-step [editable]="true" [completed]="stepModel?.isCompleted" *ngFor="let stepModel of data?.steps" #stepp >
+            <form [ngFormOptions]="firstFormGroup">
             <!-- <div class="step-container"></div> -->
             <ng-template matStepLabel>{{stepModel.stepLabel}}</ng-template>
             <div class="mat-container" *ngFor="let fieldModel of stepModel.fields">
@@ -38,7 +38,7 @@
                 </div>
 
                 <div *ngIf="fieldModel.type === 'fileLoader'" class="file-loader">
-                    <ss-file-loader></ss-file-loader>
+                    <ss-file-loader (filesAdded)="fieldModel.onDataChange($event, stepModel)"></ss-file-loader>
                 </div>
             </div>
 
@@ -48,6 +48,8 @@
                 <button *ngIf="stepModel.needNextButton" class="step-button" mat-button
                     (click)="stepper.next()">Вперед</button>
             </div>
+        </form>
+
         </mat-step>
     </mat-stepper>
 

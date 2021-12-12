@@ -1,6 +1,7 @@
 
 export class StepperData {
     steps: StepperDataStep[] = [];
+    isLinear: boolean = false;
 }
 
 export class StepperDataStep {
@@ -9,7 +10,7 @@ export class StepperDataStep {
     needNextButton?: boolean;
     needBackButton?: boolean;
     needResetButton?: boolean;
-
+    isCompleted?: boolean;
     fields: StepFields[] = [];
 }
 
