@@ -51,8 +51,8 @@ export class ManagementSystem {
   }
 
   public async handleMessage(request: NetWorkerRequest) {
-        this.sendRequest(request);
-        switch (request.messageType) {
+    this.sendRequest(request);
+    switch (request.messageType) {
       // case NetMessageTypes.init:
       //   this.sendRequest(request);
       //   break;
@@ -64,25 +64,17 @@ export class ManagementSystem {
   // ================================================================================================================================
 
   private async sendRequest(request: AuthWorkerRequest) {
-    console.log("!! | sendRequest | request", request)
     const sender = new XMLHttpRequest();
-    const searchParams = new URLSearchParams();
-    searchParams.append("username", request.data.username);
-    searchParams.append("password", request.data.password);
-    searchParams.append("grant_type", "password");
-    // searchParams.append("grant_type", isHash ? "hash" : "password");
-    searchParams.append("scope", "offline_access");
 
-    const requestBody = searchParams.toString().replace("&", ",");
-    console.log("!! | sendRequest | requestBody", requestBody)
+    sender.withCredentials = false;
+    const requestBody = "username=sergey.suhov@smeta.ru&password=109901sekret&grant_type=password&scope=offline_access";
 
-    sender.open("POST", this.urlGetToken, true);
+    sender.open("POST", this.urlGetToken);
     sender.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    // sender.withCredentials = 
-    // { "Content-Type": "application/x-www-form-urlencoded" }
+    sender.setRequestHeader('Access-Control-Allow-Origin', '*');
     sender.onreadystatechange = () => {
-        console.log("!! sender resp", sender.response);
-        if (sender.readyState == XMLHttpRequest.DONE && sender.status == 200) {
+      console.log("!! sender resp", sender.response);
+      if (sender.readyState == XMLHttpRequest.DONE && sender.status == 200) {
         // this.messageHandler.toClient(response);
       }
     }
@@ -90,6 +82,6 @@ export class ManagementSystem {
       console.error("!! error onreadystatechange", e)
     }
 
-    sender.send(JSON.stringify(requestBody));
+    sender.send(requestBody);
   }
 }
