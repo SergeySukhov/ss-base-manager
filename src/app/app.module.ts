@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { PrimaryModule } from './primary-module/primary-module.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
+import { WorkerModule } from "./shared/workers-module/worker.module";
 
 @NgModule({
   declarations: [
@@ -15,7 +16,7 @@ import { FormsModule } from '@angular/forms';
     BrowserModule,
     AppRoutingModule,
     PrimaryModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

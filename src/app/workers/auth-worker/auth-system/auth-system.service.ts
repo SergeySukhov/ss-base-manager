@@ -61,7 +61,7 @@ export class AuthSystemService {
   public isAuth = false;
 
   /** Узел для получения токена */
-  private urlGetToken: string;
+  private urlGetToken: string = "";
 
   /** Объект http-клиента */
   private axios: AxiosInstance;

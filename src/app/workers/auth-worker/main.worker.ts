@@ -1,10 +1,7 @@
-﻿// Необходимо для логирования
-import "reflect-metadata";
+﻿import { MessageHandler } from "./message-services/message-handler.service";
 
-import { MessageExchanger } from "./message-services/message-exchanger.service";
+const messageHandler = new MessageHandler(self);
 
-const messageExchanger = new MessageExchanger(self);
-
-addEventListener("message", ($event: MessageEvent) => {
-  messageExchanger.fromClient($event.data);
+addEventListener('message', ({ data }) => {
+  messageHandler.toWorker(data);
 });

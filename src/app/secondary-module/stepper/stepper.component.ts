@@ -37,13 +37,11 @@ export class StepperComponent implements OnInit {
 
 
   onSelectionChange(event: MatOptionSelectionChange) {
-    console.log("!! | onSelectionChange | event", event)
     this.showAddForm = false;
 
   }
 
   onAddNewClick(event: MatOptionSelectionChange) {
-    console.log("!! | onAddNewClick | event", event)
     this.showAddForm = true;
   }
 

@@ -13,6 +13,7 @@ export class NormativeBaseDeclarationService {
     }
 
     public getStepperModel(context: NormativeBaseComponent): StepperData {
+        this.endpoint.testAuth();
         const stepperModel: StepperData = {
             isLinear: true,
             steps: [{
@@ -77,7 +78,6 @@ export class NormativeBaseDeclarationService {
                     type: OptionType.fileLoader,
                     fieldLabel: "",
                     onDataChange: (value: any, form: StepperDataStep) => {
-                        console.log("!! | getFileLoader | value", value)
                         form.isCompleted = true;
                         form.needNextButton = true;
                     },

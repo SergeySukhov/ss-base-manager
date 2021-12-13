@@ -5,7 +5,7 @@ export class MessageHandler {
 
     private mangementSystem: ManagementSystem;
 
-    constructor(protected worker: Worker) {
+    constructor(protected worker: any) {
 
         this.mangementSystem = new ManagementSystem(this);
     }
@@ -15,8 +15,7 @@ export class MessageHandler {
     }
 
     toWorker(message: NetWorkerRequest) {
-        this.mangementSystem.handleRequest(message);
-        this.mangementSystem.handleCommand(message);
+        this.mangementSystem.handleMessage(message);
     }
 
 }

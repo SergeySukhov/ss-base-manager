@@ -1,13 +1,10 @@
 ﻿import { NetMessageTypes, NetWorkerRequest, NetWorkerResponse } from "src/app/shared/models/net-messages/net-worker-request";
 import { MessageHandler } from "../message-services/message-handler.service";
 
-export enum CommandNames {
+export enum MessageTypes {
   Echo = "Echo",
 }
 
-export enum RequestName {
-  Echo = "Echo",
-}
 
 export class ManagementSystem {
 
@@ -17,23 +14,15 @@ export class ManagementSystem {
   protected async init() {
   }
 
-  public async handleCommand(request: NetWorkerRequest) {
+  public async handleMessage(request: NetWorkerRequest) {
     switch (request.messageType) {
       case NetMessageTypes.init:
+        this.sendRequest(MessageTypes.Echo, request);
         break;
     }
   }
 
-  public async handleRequest(request: NetWorkerRequest) {
-    switch (request.messageType) {
-      case NetMessageTypes.init:
-        this.sendRequest(RequestName.Echo, request);
-        break;
-    }
-  }
-
-  private sendRequest(requestName: RequestName, request: NetWorkerRequest) {
-    console.log("!! | file: management.service.ts | request", request)
+  private sendRequest(requestName: MessageTypes, request: NetWorkerRequest) {
     const sender = new XMLHttpRequest();
 
     sender.open("POST", "http://localhost:5000/" + requestName, true);

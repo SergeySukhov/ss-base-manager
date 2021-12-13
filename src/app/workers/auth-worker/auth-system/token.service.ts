@@ -1,8 +1,6 @@
-﻿import { UnitOfWork } from "../indexed-db-service/unit-of-work.service";
-import jwt_decode from "jwt-decode";
+﻿import jwt_decode from "jwt-decode";
 import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
-import { environment } from "../../../environments/environment";
-import { TokenType, Token } from "../../../app/sharedAll/base-connection-to-workers-module/models/token.model";
+import { Token, TokenType } from "src/app/shared/models/auth-messages/auth-worker-messages";
 
 /** Сервис для работы с токенами авторизации */
 export class TokenService {
@@ -15,22 +13,20 @@ export class TokenService {
   /** Оповещение о смене пользователя */
   public userChanged = new BehaviorSubject<string>("");
 
-  constructor(private unitOfWork: UnitOfWork) {
-    if (!environment.standalone) {
-      this.unitOfWork.tokenRepository.getToken(TokenType.accessToken).then((token: Token) => {
-        this.handleAccessToken(token);
-      });
-    }
+  constructor() {
+      // this.unitOfWork.tokenRepository.getToken(TokenType.accessToken).then((token: Token) => {
+      //   this.handleAccessToken(token);
+      // });
   }
 
   /** Получить токен обновления */
   public async getRefreshToken(): Promise<Token | undefined> {
-    return this.unitOfWork.tokenRepository.getToken(TokenType.refreshToken);
+    // return this.unitOfWork.tokenRepository.getToken(TokenType.refreshToken);
   }
 
   /** Получить токен доступа */
   public async getAccessToken(): Promise<Token | undefined> {
-    return this.unitOfWork.tokenRepository.getToken(TokenType.accessToken);
+    // return this.unitOfWork.tokenRepository.getToken(TokenType.accessToken);
   }
 
   /** Получение пользователя по токену */
@@ -66,15 +62,9 @@ export class TokenService {
       tokenType: TokenType.refreshToken,
     };
 
-    await this.unitOfWork.tokenRepository.setToken(newAccessToken);
-    await this.unitOfWork.tokenRepository.setToken(newRefreshToken);
+    // await this.unitOfWork.tokenRepository.setToken(newAccessToken);
+    // await this.unitOfWork.tokenRepository.setToken(newRefreshToken);
     this.handleAccessToken(newAccessToken);
-  }
-
-  /** Очистить IDB от токенов */
-  public async clearTokens() {
-    await this.unitOfWork.tokenRepository.clearTokens();
-    this.handleAccessToken(null);
   }
 
   /** Обработка пришедшего токена */

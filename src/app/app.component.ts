@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthWorkerService } from "./shared/workers-module/services/auth-worker.service";
 import { NetWorkerService } from './shared/workers-module/services/net-worker.service';
 
 @Component({
@@ -9,8 +10,11 @@ import { NetWorkerService } from './shared/workers-module/services/net-worker.se
 export class AppComponent {
   title = 'ss-base-manager';
 
-  constructor(netWorkerService: NetWorkerService) {
-    const worker = new Worker('./workers/net-worker/main.worker', { type: 'module' });
+  constructor(netWorkerService: NetWorkerService, authWorkerService: AuthWorkerService) {
+    const authWorker = new Worker(new URL('./workers/auth-worker/main.worker', import.meta.url), { type: 'module' });
+    authWorkerService.setupWorker(authWorker);
+
+    const worker = new Worker(new URL('./workers/net-worker/main.worker', import.meta.url), { type: 'module' });
     netWorkerService.setupWorker(worker);
   }
 }

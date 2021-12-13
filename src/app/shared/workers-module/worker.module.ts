@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NetWorkerService } from './services/net-worker.service';
+import { AuthWorkerService } from "./services/auth-worker.service";
 
 @NgModule({
   declarations: [
@@ -11,6 +12,7 @@ import { NetWorkerService } from './services/net-worker.service';
     CommonModule,
   ],
   providers: [
+    AuthWorkerService,
     NetWorkerService
   ]
 })
