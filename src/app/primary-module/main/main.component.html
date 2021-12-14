@@ -1,8 +1,7 @@
 <div class="wrapper">
     <mat-toolbar class="main-tool-bar" color="primary">
         <mat-toolbar-row>
-            <button mat-button (click)="toStart()"
-                 *ngIf="stateService.context !== ManagerContext.start"
+            <button mat-button (click)="toStart()" *ngIf="stateService.context !== ManagerContext.start"
                 class="back-arrow" color="accent">
                 <mat-icon>keyboard_backspace</mat-icon>
             </button>
@@ -12,9 +11,12 @@
         </mat-toolbar-row>
     </mat-toolbar>
 
+
     <div [ngSwitch]="stateService.context" class="content-wrapper">
-        <div *ngSwitchCase="ManagerContext.start" class="content-container">
+        <div class="login-container">
             <ss-login></ss-login>
+        </div>
+        <div *ngSwitchCase="ManagerContext.start" class="content-container">
 
             <ss-list-selector [optionsList]="menuOptions">
             </ss-list-selector>

@@ -9,7 +9,7 @@ import { MatStepperModule } from "@angular/material/stepper";
 import { StepperComponent } from "./stepper/stepper.component";
 import { FileLoaderComponent } from './file-loader/file-loader.component';
 import { DndDirective } from "./directives/dnd.directive";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatRippleModule } from '@angular/material/core';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -17,6 +17,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { LoginComponent } from './login/login.component';
 import { MatCardModule } from "@angular/material/card";
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { MatCardModule } from "@angular/material/card";
   imports: [
     CommonModule,
     FormsModule,
-
+    ReactiveFormsModule,
+    
     MatStepperModule,
     MatButtonModule,
     MatButtonModule,
@@ -51,6 +53,7 @@ import { MatCardModule } from "@angular/material/card";
     MatRippleModule,
     MatListModule,
     MatCardModule,
+    MatProgressBarModule,
   ],
   providers: [
   ]
