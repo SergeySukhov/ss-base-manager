@@ -1,6 +1,6 @@
 ﻿import { Token } from "@angular/compiler";
 import { Subject } from "rxjs";
-import { AuthWorkerResponse, AuthWorkerRequest } from "src/app/shared/models/auth-messages/auth-worker-messages";
+import { AuthWorkerResponse, AuthWorkerRequestBase, AuthMessageTypes, AuthWorkerRequest, AuthWorkerRequestLogin } from "src/app/shared/models/auth-messages/auth-worker-messages";
 import { NetWorkerRequest, NetMessageTypes, NetWorkerResponse } from "src/app/shared/models/net-messages/net-worker-request";
 // import { AuthSystemService } from "../auth-system/auth-system.service";
 // import { TokenService } from "../auth-system/token.service";
@@ -50,12 +50,11 @@ export class ManagementSystem {
     // });
   }
 
-  public async handleMessage(request: NetWorkerRequest) {
-    this.sendRequest(request);
+  public async handleMessage(request: AuthWorkerRequest) {
     switch (request.messageType) {
-      // case NetMessageTypes.init:
-      //   this.sendRequest(request);
-      //   break;
+      case AuthMessageTypes.login:
+        this.sendRequestLogin(request);
+        break;
     }
   }
 
@@ -63,11 +62,11 @@ export class ManagementSystem {
   //                                                  PRIVATE METHODS
   // ================================================================================================================================
 
-  private async sendRequest(request: AuthWorkerRequest) {
+  private async sendRequestLogin(request: AuthWorkerRequestLogin) {
     const sender = new XMLHttpRequest();
 
     sender.withCredentials = false;
-    const requestBody = "username=sergey.suhov@smeta.ru&password=109901sekret&grant_type=password&scope=offline_access";
+    const requestBody = `username=${request.data.username}&password=${request.data.password}&grant_type=password&scope=offline_access`;
 
     sender.open("POST", this.urlGetToken);
     sender.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -75,7 +74,12 @@ export class ManagementSystem {
     sender.onreadystatechange = () => {
       console.log("!! sender resp", sender.response);
       if (sender.readyState == XMLHttpRequest.DONE && sender.status == 200) {
-        // this.messageHandler.toClient(response);
+        this.messageHandler.toClient({
+          guid: request.guid,
+          isOk: true,
+          messageType: AuthMessageTypes.login,
+          data: sender.response,
+        });
       }
     }
     sender.onerror = (e) => {

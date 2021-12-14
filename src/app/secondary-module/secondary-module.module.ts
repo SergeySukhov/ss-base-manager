@@ -15,6 +15,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { LoginComponent } from './login/login.component';
+import { MatCardModule } from "@angular/material/card";
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     StepperComponent,
     FileLoaderComponent,
     DndDirective,
+    LoginComponent,
 
   ],
   exports: [
@@ -29,6 +32,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     StepperComponent,
     FileLoaderComponent,
     DndDirective,
+    LoginComponent,
 
   ],
   imports: [
@@ -46,6 +50,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatSelectModule,
     MatRippleModule,
     MatListModule,
+    MatCardModule,
   ],
   providers: [
   ]

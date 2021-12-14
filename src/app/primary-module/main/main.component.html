@@ -14,6 +14,8 @@
 
     <div [ngSwitch]="stateService.context" class="content-wrapper">
         <div *ngSwitchCase="ManagerContext.start" class="content-container">
+            <ss-login></ss-login>
+
             <ss-list-selector [optionsList]="menuOptions">
             </ss-list-selector>
         </div>
