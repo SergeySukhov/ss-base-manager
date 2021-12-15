@@ -1,30 +1,31 @@
 <div class="mat-container">
     <mat-card>
-        <form [formGroup]="form">
-            <mat-card-title>Авторизация</mat-card-title>
+        <mat-card-title class="title">Авторизация</mat-card-title>
+        <img src="assets/icons/lock.svg" class="icon" alt="">
+        <form [formGroup]="form" class="form-container">
             <mat-error *ngIf="loginInvalid">
-                The username and password were not recognized
+                Отсутсвует пара с таким логином и паролем
             </mat-error>
             <mat-form-field class="form-field">
                 <input matInput type="text" autocomplete="false" placeholder="Логин" formControlName="username"
                     required>
                     <mat-error>
-                        Please provide a valid email address
+                        Логин некорректный
                       </mat-error>
             </mat-form-field>
             <mat-form-field class="form-field">
                 <input matInput type="password" autocomplete="false" placeholder="Пароль" formControlName="password"
                     required>
                     <mat-error>
-                        Please provide a valid email address
+                        Пароль некорректный
                       </mat-error>
             </mat-form-field>
-
-            <button mat-button>Войти</button>
-
-            <mat-card-footer>
-                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-            </mat-card-footer>
+            <mat-checkbox class="remeber-checkbox">Запомнить меня</mat-checkbox>
         </form>
+        <button mat-button class="sub-button" (click)="submit()">Войти</button>
+
+        <mat-card-footer>
+            <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
+        </mat-card-footer>
     </mat-card>
 </div>

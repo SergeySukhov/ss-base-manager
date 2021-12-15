@@ -1,6 +1,7 @@
 @use './app/secondary-module/stepper/stepper.component.scss' as stepper;
 @use './app/secondary-module/list-selector/list-selector.component.scss' as list;
 @use './app/secondary-module/file-loader/file-loader.component.scss' as fileLoader;
+@use './app/secondary-module/login/login.component.scss' as login;
 @import "~@angular/material/theming";
 @include mat-core();
 
@@ -75,6 +76,7 @@ $app-dark-theme: mat-dark-theme($mat-primary-palette-dark, $mat-accent-palettee-
   @include stepper.theme($app-light-theme);
   @include list.theme($app-light-theme);
   @include fileLoader.theme($app-light-theme);
+  @include login.theme($app-light-theme);
   
   img {
       filter: brightness(0.5);
@@ -89,6 +91,7 @@ $app-dark-theme: mat-dark-theme($mat-primary-palette-dark, $mat-accent-palettee-
   @include stepper.theme($app-dark-theme);
   @include list.theme($app-dark-theme);
   @include fileLoader.theme($app-dark-theme);
+  @include login.theme($app-dark-theme);
 
   background-color: #424242;
   color: whitesmoke;

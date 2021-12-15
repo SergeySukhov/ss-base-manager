@@ -38,19 +38,21 @@ import { MainComponent } from './main/main.component';
 import { MainStateService } from './main/services/main-state.service';
 import { RouterModule, Routes } from '@angular/router';
 import { SecondaryModule } from '../secondary-module/secondary-module.module';
-import { AuthModule } from '../auth/auth.module';
+import { AuthModule } from '../auth.module/auth.module';
 import { UserService } from '../core/common/services/user.service';
 import { EndpointService } from '../core/common/services/endpoint.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ThemeService } from "./main/services/theme.service";
 import { NormativeBaseComponent } from './normative-base/normative-base.component';
+import { AuthComponent } from '../auth.module/auth/auth.component';
 
 
 // определение маршрутов
-const appRoutes: Routes = [
-  { path: '', component: MainComponent },
-  // { path: '**', component: NotFoundComponent }
-];
+// const appRoutes: Routes = [
+//   { path: '', component: MainComponent },
+//   { path: 'login', component: AuthComponent },
+//   // { path: '**', component: NotFoundComponent }
+// ];
 
 @NgModule({
   declarations: [
@@ -62,7 +64,7 @@ const appRoutes: Routes = [
   ],
   imports: [
     CommonModule,
-    RouterModule.forRoot(appRoutes),
+    // RouterModule.forRoot(appRoutes),
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
@@ -71,7 +73,6 @@ const appRoutes: Routes = [
     MatSlideToggleModule,
     MatIconModule,
 
-    AuthModule,
     SecondaryModule,
 
   ],

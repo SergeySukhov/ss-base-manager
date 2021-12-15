@@ -1,32 +1,58 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin color($theme) {
+  $color-config: mat.get-color-config($theme);
+  $primary-palette: map.get($color-config, 'primary');
+  $accent-palette: map.get($color-config, 'accent');
+  .title {
+    display: flex;
+    justify-content: center;
+    background: mat.get-color-from-palette($primary-palette, 400);
+    height: 50px;
+    padding: 10px;
+    line-height: 50px;
+  }
+  .remeber-checkbox {
+      width: 100%;
+  }
+  .sub-button {
+    width: 50%;
+    background: mat.get-color-from-palette($primary-palette, 300);
+    height: 40px;
+    align-self: center;
+    margin: auto;
+    margin-bottom: 20px;
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}
+
 :host {
   .mat-container {
     display: flex;
     justify-content: center;
-    margin: 100px 0px;
-    width: 300px;
-    height: 600px;
+    width: 350px;
+    height: 460px;
     
     z-index: 99;
   }
 
-  .mat-form-field {
-    width: 100%;
-    min-width: 200px;
+  .form-container {
+      margin: 20px;
   }
-  .mat-card {
-    height: 100%;
-    width: 100%;
-  }
-  mat-card-title,
-  mat-card-content {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
 
+  .icon {
+    width: 100px;
+    height: 100px;
+    margin: 20px auto;
   }
-  mat-card-footer {
-    justify-self: end;
-  }
+
   .error {
     padding: 16px;
     width: 300px;
@@ -38,7 +64,36 @@
     display: flex;
     justify-content: flex-end;
   }
+  
+  mat-form-field {
+    width: 100%;
+    min-width: 200px;
+  }
+  mat-card {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  mat-card-content {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+  mat-card-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    margin: 0;
+  }
 }
+
+
 
 ::ng-deep .dark-mode .mat-primary .mat-option.mat-selected {
   color: whitesmoke !important;

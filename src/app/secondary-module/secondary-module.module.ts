@@ -18,6 +18,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { LoginComponent } from './login/login.component';
 import { MatCardModule } from "@angular/material/card";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatCheckboxModule } from "@angular/material/checkbox";
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatListModule,
     MatCardModule,
     MatProgressBarModule,
+    MatCheckboxModule,
   ],
   providers: [
   ]
