@@ -39,11 +39,11 @@ export interface AuthWorkerResponseBase<T extends AuthMessageTypes> extends Base
   messageType: T,
 
 }
-export interface AuthWorkerResponseCommon extends AuthWorkerResponseBase<AuthMessageTypes.login | AuthMessageTypes.init | AuthMessageTypes.refresh> {
+export interface AuthWorkerResponse extends AuthWorkerResponseBase<AuthMessageTypes.login | AuthMessageTypes.init | AuthMessageTypes.refresh> {
   isOk: boolean;
   errorMessage?: string;
 }
-export type AuthWorkerResponse = AuthWorkerResponseCommon
+// export type AuthWorkerResponse = AuthWorkerResponseCommon
 
 /** Модель для токена авторизации/рефреш токена */
 export interface Token {

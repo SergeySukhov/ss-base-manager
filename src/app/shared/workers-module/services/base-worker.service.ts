@@ -17,6 +17,7 @@ export abstract class BaseWorkerService<TRequest, TResponse> {
         };
         this.isInit = true;
     }
+    
     public async postMessageToWorkerAsync(workerMessage: TRequest, ignoreTimout = false): Promise<TResponse | null> {
         let sub: Subject<TResponse>;
         const promise = new Promise<TResponse | null>((resolve, reject) => {

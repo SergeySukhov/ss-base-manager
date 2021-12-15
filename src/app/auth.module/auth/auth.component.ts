@@ -7,7 +7,6 @@ import { AuthViewService } from "./services/auth.view.service";
   selector: 'ss-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],
-  // providers: [AuthViewService, AuthEndpointService]
 })
 export class AuthComponent implements OnInit {
 
