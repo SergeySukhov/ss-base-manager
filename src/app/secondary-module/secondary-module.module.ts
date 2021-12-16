@@ -19,6 +19,7 @@ import { LoginComponent } from './login/login.component';
 import { MatCardModule } from "@angular/material/card";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
     FileLoaderComponent,
     DndDirective,
     LoginComponent,
+    ToolbarComponent,
 
   ],
   exports: [
@@ -35,6 +37,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
     FileLoaderComponent,
     DndDirective,
     LoginComponent,
+    ToolbarComponent,
 
   ],
   imports: [

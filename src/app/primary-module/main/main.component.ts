@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { MainStateService } from './services/main-state.service';
 import { UserService } from '../../core/common/services/user.service';
 import { ListSelectorOption } from 'src/app/secondary-module/models/list-selector.model';
-import { ThemeService } from "./services/theme.service";
+import { ThemeService } from "../../secondary-module/toolbar/services/theme.service";
 import { ManagerContext } from '../models/common-enums';
 
 @Component({
@@ -13,7 +13,6 @@ import { ManagerContext } from '../models/common-enums';
 })
 export class MainComponent implements OnInit {
   public ManagerContext = ManagerContext;
-  public isDarkMode = true;
   public menuOptions: ListSelectorOption[] = [{
     title: "Нормативные базы",
     available: true,
@@ -37,8 +36,7 @@ export class MainComponent implements OnInit {
   }
   ]
   constructor(public stateService: MainStateService,
-    private userService: UserService, public themeService: ThemeService,) {
-    this.isDarkMode = themeService.isDarkMode();
+    private userService: UserService,) {
   }
 
   ngOnInit(): void {
@@ -49,10 +47,6 @@ export class MainComponent implements OnInit {
     this.stateService.context = ManagerContext.start;
   }
 
-  toggleDarkMode() {
-    this.isDarkMode = this.themeService.isDarkMode();
-    this.themeService.update(this.themeService.isDarkMode() ? 'light-mode' : 'dark-mode')
-  }
 
 
 }

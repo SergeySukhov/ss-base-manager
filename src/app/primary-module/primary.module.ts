@@ -42,7 +42,7 @@ import { AuthModule } from '../auth.module/auth.module';
 import { UserService } from '../core/common/services/user.service';
 import { EndpointService } from '../core/common/services/endpoint.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ThemeService } from "./main/services/theme.service";
+import { ThemeService } from "../secondary-module/toolbar/services/theme.service";
 import { NormativeBaseComponent } from './normative-base/normative-base.component';
 import { AuthComponent } from '../auth.module/auth/auth.component';
 
