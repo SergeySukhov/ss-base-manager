@@ -6,6 +6,7 @@ import { SecondaryModule } from "../secondary-module/secondary-module.module";
 import { AuthGuard } from "./auth/guard/auth.guard";
 import { AuthViewService } from "./auth/services/auth.view.service";
 import { AuthEndpointService } from "./auth/services/auth.endpoint.service";
+import { AuthStateService } from "./auth/services/auth.state.service";
 
 
 
@@ -19,6 +20,6 @@ import { AuthEndpointService } from "./auth/services/auth.endpoint.service";
     SecondaryModule,
 
   ],
-  providers: [AuthGuard, AuthViewService, AuthEndpointService]
+  providers: [AuthGuard, AuthViewService, AuthEndpointService, AuthStateService]
 })
 export class AuthModule { }

@@ -26,7 +26,6 @@ export class AuthWorkerService extends BaseWorkerService<AuthWorkerRequest, Auth
     }
 
     protected handleMessage(message: AuthWorkerResponse) {
-        console.log("!! | handleMessage | message", message)
         if (!message.guid) {
             throw ("!! Worker message has no id");
         }

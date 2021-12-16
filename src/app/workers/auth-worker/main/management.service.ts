@@ -1,6 +1,6 @@
 ﻿import { Token } from "@angular/compiler";
 import { Subject } from "rxjs";
-import { AuthWorkerResponse, AuthWorkerRequestBase, AuthMessageTypes, AuthWorkerRequest, AuthWorkerRequestLogin } from "src/app/shared/models/auth-messages/auth-worker-messages";
+import { AuthWorkerResponse, AuthWorkerRequestBase, AuthMessageTypes, AuthWorkerRequest, AuthWorkerRequestLogin, AuthWorkerResponseLogin } from "src/app/shared/models/auth-messages/auth-worker-messages";
 import { NetWorkerRequest, NetMessageTypes, NetWorkerResponse } from "src/app/shared/models/net-messages/net-worker-request";
 // import { AuthSystemService } from "../auth-system/auth-system.service";
 // import { TokenService } from "../auth-system/token.service";
@@ -71,19 +71,52 @@ export class ManagementSystem {
     sender.open("POST", this.urlGetToken);
     sender.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');
+    sender.timeout = 5000;
+
+    const response: AuthWorkerResponseLogin = {
+      guid: request.guid,
+      messageType: AuthMessageTypes.login,
+      data: undefined
+    }
+
+    sender.ontimeout = () => {
+      response.data = {
+        error: true,
+        errorDescription: "Время ожидания истекло"
+      }
+      sender.abort();
+      this.messageHandler.toClient(response);
+    }
     sender.onreadystatechange = () => {
-      console.log("!! sender resp", sender.response);
-      if (sender.readyState == XMLHttpRequest.DONE && sender.status == 200) {
-        this.messageHandler.toClient({
-          guid: request.guid,
-          isOk: true,
-          messageType: AuthMessageTypes.login,
-          data: sender.response,
-        });
+      if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
+        console.log("!! sender resp", sender.response);
+        const senderObj = JSON.parse(sender.response);
+        if (sender.status === 200) {
+          if (senderObj.token_type) {
+            response.data = true;
+            // TODO: indxdb save
+          } else {
+            response.data = {
+              error: true,
+              errorDescription: "Неверное имя пользователя или пароль"
+            }
+          }
+        } else {
+          response.data = {
+            error: true,
+            errorDescription: "Нет доступа к сервису авторизации"
+          }
+        }
+        this.messageHandler.toClient(response);
       }
     }
     sender.onerror = (e) => {
-      console.error("!! error onreadystatechange", e)
+      response.data = {
+        error: true,
+        errorDescription: "Нет доступа к сервису авторизации"
+      }
+      this.messageHandler.toClient(response);
+      // console.error("!! error onreadystatechange", e)
     }
 
     sender.send(requestBody);

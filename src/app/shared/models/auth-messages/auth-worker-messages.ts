@@ -37,13 +37,24 @@ export type AuthWorkerRequest = AuthWorkerRequestLogin | AuthWorkerRequestInit |
 /** Ответное сообщение с воркера авторизации */
 export interface AuthWorkerResponseBase<T extends AuthMessageTypes> extends BaseWorkerMessage {
   messageType: T,
+}
 
+export interface AuthWorkerResponseLogin extends AuthWorkerResponseBase<AuthMessageTypes.login> {
+  data: AuthError | boolean | undefined;
 }
-export interface AuthWorkerResponse extends AuthWorkerResponseBase<AuthMessageTypes.login | AuthMessageTypes.init | AuthMessageTypes.refresh> {
+
+export interface AuthWorkerResponseCommon extends AuthWorkerResponseBase<AuthMessageTypes.init | AuthMessageTypes.refresh> {
   isOk: boolean;
-  errorMessage?: string;
+  data: any;
 }
-// export type AuthWorkerResponse = AuthWorkerResponseCommon
+
+export type AuthWorkerResponse = AuthWorkerResponseLogin | AuthWorkerResponseCommon; 
+
+
+export interface AuthError {
+  error: boolean,
+  errorDescription: string;
+}
 
 /** Модель для токена авторизации/рефреш токена */
 export interface Token {

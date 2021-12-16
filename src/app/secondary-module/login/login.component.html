@@ -25,7 +25,7 @@
         <button mat-button class="sub-button" (click)="submit()">Войти</button>
 
         <mat-card-footer>
-            <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
+            <mat-progress-bar [mode]="isLoading ? 'indeterminate': 'determinate'" [bufferValue]="100" color="primary"></mat-progress-bar>
         </mat-card-footer>
     </mat-card>
 </div>

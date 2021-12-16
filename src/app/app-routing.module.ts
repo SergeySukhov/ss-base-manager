@@ -5,14 +5,18 @@ import { AuthGuard } from "./auth.module/auth/guard/auth.guard";
 import { MainComponent } from "./primary-module/main/main.component";
 
 const routes: Routes = [
-  { path: 'login', component: AuthComponent },
+  {
+    path: 'login',
+    component: AuthComponent,
+    // canActivate: [AuthGuard]
+  },
   {
     path: "",
     loadChildren: () => import("./primary-module/primary.module").then((m) => m.PrimaryModule),
     data: { key: "MainComponent", cacheRoute: false },
     canActivate: [AuthGuard],
     component: MainComponent,
-    
+
   },
 ];
 

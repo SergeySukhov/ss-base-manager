@@ -3,19 +3,29 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTr
 import { Observable } from "rxjs";
 import { AuthViewService } from "../services/auth.view.service";
 
- @Injectable()
- export class AuthGuard implements CanActivate, OnDestroy {
+@Injectable()
+export class AuthGuard implements CanActivate, OnDestroy {
 
-    constructor(authService: AuthViewService, private router: Router,) {
+   constructor(private authService: AuthViewService, private router: Router,) {
 
-    }
-     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Promise<boolean> {
-        this.router.navigate(["login"])
-        return false;
-     }
-     
-     ngOnDestroy(): void {
-     }
-    
- }
- 
+   }
+   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Promise<boolean> {
+      const path = route.routeConfig?.path;
+      if (this.authService.isAuth) {
+         // if (path?.includes("login")) {
+         //    this.router.navigate([""]);
+         //    return true;
+         // }
+         
+         return true;
+      } else {
+         this.router.navigate(["login"])
+         return false;
+      }
+
+   }
+
+   ngOnDestroy(): void {
+   }
+
+}
