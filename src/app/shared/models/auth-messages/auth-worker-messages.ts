@@ -7,7 +7,6 @@ export enum AuthMessageTypes {
   logout,
 }
 
-
 export interface AuthWorkerRequestBase<T extends AuthMessageTypes> extends BaseWorkerMessage {
   messageType: T,
 }
@@ -25,8 +24,7 @@ export interface AuthWorkerRequestLogout extends AuthWorkerRequestBase<AuthMessa
 }
 export interface AuthWorkerRequestRefresh extends AuthWorkerRequestBase<AuthMessageTypes.refresh> {
   data: {
-    username: string;
-    password: string;
+    token: string;
   }
 }
 
@@ -40,20 +38,30 @@ export interface AuthWorkerResponseBase<T extends AuthMessageTypes> extends Base
 }
 
 export interface AuthWorkerResponseLogin extends AuthWorkerResponseBase<AuthMessageTypes.login> {
-  data: AuthError | boolean | undefined;
+  data: AuthError | AuthSuccess | undefined;
 }
 
-export interface AuthWorkerResponseCommon extends AuthWorkerResponseBase<AuthMessageTypes.init | AuthMessageTypes.refresh> {
+export interface AuthWorkerResponseRefresh extends AuthWorkerResponseBase<AuthMessageTypes.refresh> {
+  data: AuthError | AuthSuccess | undefined;
+}
+
+export interface AuthWorkerResponseCommon extends AuthWorkerResponseBase<AuthMessageTypes.init> {
   isOk: boolean;
-  data: any;
+  data: any
 }
 
-export type AuthWorkerResponse = AuthWorkerResponseLogin | AuthWorkerResponseCommon; 
+export type AuthWorkerResponse = AuthWorkerResponseLogin | AuthWorkerResponseRefresh | AuthWorkerResponseCommon;
 
+export interface AuthData<T extends boolean> {
+  isSuccess: T;
+}
 
-export interface AuthError {
-  error: boolean,
+export interface AuthError extends AuthData<false> {
   errorDescription: string;
+}
+
+export interface AuthSuccess extends AuthData<true> {
+  refreshToken: string;
 }
 
 /** Модель для токена авторизации/рефреш токена */

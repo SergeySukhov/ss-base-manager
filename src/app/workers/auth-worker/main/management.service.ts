@@ -1,6 +1,6 @@
 ﻿import { Token } from "@angular/compiler";
 import { Subject } from "rxjs";
-import { AuthWorkerResponse, AuthWorkerRequestBase, AuthMessageTypes, AuthWorkerRequest, AuthWorkerRequestLogin, AuthWorkerResponseLogin } from "src/app/shared/models/auth-messages/auth-worker-messages";
+import { AuthWorkerResponse, AuthWorkerRequestBase, AuthMessageTypes, AuthWorkerRequest, AuthWorkerRequestLogin, AuthWorkerResponseLogin, AuthWorkerRequestRefresh, AuthWorkerResponseRefresh } from "src/app/shared/models/auth-messages/auth-worker-messages";
 import { NetWorkerRequest, NetMessageTypes, NetWorkerResponse } from "src/app/shared/models/net-messages/net-worker-request";
 // import { AuthSystemService } from "../auth-system/auth-system.service";
 // import { TokenService } from "../auth-system/token.service";
@@ -55,6 +55,9 @@ export class ManagementSystem {
       case AuthMessageTypes.login:
         this.sendRequestLogin(request);
         break;
+      case AuthMessageTypes.refresh:
+        this.sendRequestRefresh(request);
+        break;
     }
   }
 
@@ -81,7 +84,7 @@ export class ManagementSystem {
 
     sender.ontimeout = () => {
       response.data = {
-        error: true,
+        isSuccess: false,
         errorDescription: "Время ожидания истекло"
       }
       sender.abort();
@@ -93,17 +96,20 @@ export class ManagementSystem {
         const senderObj = JSON.parse(sender.response);
         if (sender.status === 200) {
           if (senderObj.token_type) {
-            response.data = true;
+            response.data = {
+              isSuccess: true,
+              refreshToken: senderObj.refresh_token
+            };
             // TODO: indxdb save
           } else {
             response.data = {
-              error: true,
+              isSuccess: false,
               errorDescription: "Неверное имя пользователя или пароль"
             }
           }
         } else {
           response.data = {
-            error: true,
+            isSuccess: false,
             errorDescription: "Нет доступа к сервису авторизации"
           }
         }
@@ -112,7 +118,70 @@ export class ManagementSystem {
     }
     sender.onerror = (e) => {
       response.data = {
-        error: true,
+        isSuccess: false,
+        errorDescription: "Нет доступа к сервису авторизации"
+      }
+      this.messageHandler.toClient(response);
+      // console.error("!! error onreadystatechange", e)
+    }
+
+    sender.send(requestBody);
+  }
+
+  private async sendRequestRefresh(request: AuthWorkerRequestRefresh) {
+    const sender = new XMLHttpRequest();
+
+    sender.withCredentials = false;
+    const requestBody = `grant_type=refresh_token&refresh_token=${request.data.token}&scope=offline_access`;
+
+    sender.open("POST", this.urlGetToken);
+    sender.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    sender.setRequestHeader('Access-Control-Allow-Origin', '*');
+    sender.timeout = 5000;
+
+    const response: AuthWorkerResponseRefresh = {
+      guid: request.guid,
+      messageType: AuthMessageTypes.refresh,
+      data: undefined
+    }
+
+    sender.ontimeout = () => {
+      response.data = {
+        isSuccess: false,
+        errorDescription: "Время ожидания истекло"
+      }
+      sender.abort();
+      this.messageHandler.toClient(response);
+    }
+    sender.onreadystatechange = () => {
+      if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
+        console.log("!! sender resp", sender.response);
+        const senderObj = JSON.parse(sender.response);
+        if (sender.status === 200) {
+          if (senderObj.token_type) {
+            response.data = {
+              isSuccess: true,
+              refreshToken: senderObj.refresh_token
+            };
+            // TODO: indxdb save
+          } else {
+            response.data = {
+              isSuccess: false,
+              errorDescription: "Неверное имя пользователя или пароль"
+            }
+          }
+        } else {
+          response.data = {
+            isSuccess: false,
+            errorDescription: "Нет доступа к сервису авторизации"
+          }
+        }
+        this.messageHandler.toClient(response);
+      }
+    }
+    sender.onerror = (e) => {
+      response.data = {
+        isSuccess: false,
         errorDescription: "Нет доступа к сервису авторизации"
       }
       this.messageHandler.toClient(response);

@@ -1,5 +1,5 @@
 ﻿import { Injectable } from "@angular/core";
-import { AuthMessageTypes, AuthWorkerResponseLogin } from "src/app/shared/models/auth-messages/auth-worker-messages";
+import { AuthMessageTypes, AuthWorkerRequestLogin, AuthWorkerRequestRefresh, AuthWorkerResponseLogin, AuthWorkerResponseRefresh } from "src/app/shared/models/auth-messages/auth-worker-messages";
 import { AuthWorkerService } from "src/app/shared/workers-module/services/auth-worker.service";
 
 @Injectable()
@@ -8,17 +8,32 @@ export class AuthEndpointService {
     }
 
     public async sendAuth(username: string, password: string): Promise<AuthWorkerResponseLogin | null> {
-        const requestAuth = {
+        const requestAuth: AuthWorkerRequestLogin = {
             messageType: AuthMessageTypes.login,
             data: {
                 username,
                 password
             },
         }
-        console.log("!! | sendAuth | aa", requestAuth)
         const responseAuth = await this.authWorker.postMessageToWorkerAsync(requestAuth);
         if (responseAuth?.messageType === AuthMessageTypes.login) {
-            console.log("!! | sendAuth | a", responseAuth)
+            return responseAuth;
+        } else {
+            throw new Error("!! неверный тип ответа авторизации")
+        }
+    }
+
+    public async sendAuthRefresh(token: string): Promise<AuthWorkerResponseRefresh | null> {
+        const requestRefAuth: AuthWorkerRequestRefresh = {
+            messageType: AuthMessageTypes.refresh,
+            data: {
+                token
+            },
+        }
+        console.log("!! | sendAuth | requestRefAuth", requestRefAuth)
+        const responseAuth = await this.authWorker.postMessageToWorkerAsync(requestRefAuth);
+        if (responseAuth?.messageType === AuthMessageTypes.refresh) {
+            console.log("!! | sendAuth | requestRefAuth", responseAuth)
             return responseAuth;
         } else {
             throw new Error("!! неверный тип ответа авторизации")
