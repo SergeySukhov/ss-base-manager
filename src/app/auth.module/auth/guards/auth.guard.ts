@@ -1,6 +1,5 @@
 ﻿import { Injectable, OnDestroy } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
-import { Observable } from "rxjs";
 import { AuthViewService } from "../services/auth.view.service";
 
 @Injectable()
@@ -10,7 +9,7 @@ export class AuthGuard implements CanActivate, OnDestroy {
 
    }
    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Promise<boolean> {
-      return true;
+      // return true;
 
       if (this.authService.isAuth) {
          return true;

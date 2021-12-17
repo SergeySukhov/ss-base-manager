@@ -92,7 +92,7 @@ export class ManagementSystem {
     }
     sender.onreadystatechange = () => {
       if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
-        console.log("!! sender resp", sender.response);
+        // console.log("!! sender resp", sender.response);
         const senderObj = JSON.parse(sender.response);
         if (sender.status === 200) {
           if (senderObj.token_type) {
@@ -155,7 +155,6 @@ export class ManagementSystem {
     }
     sender.onreadystatechange = () => {
       if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
-        console.log("!! sender resp", sender.response);
         const senderObj = JSON.parse(sender.response);
         if (sender.status === 200) {
           if (senderObj.token_type) {

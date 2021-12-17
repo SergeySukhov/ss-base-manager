@@ -10,9 +10,13 @@ import { FormGroup, FormControl, FormBuilder, Validators } from "@angular/forms"
   ]
 })
 export class LoginComponent implements OnInit {
-  @Input() error: string | null = null;
+  @Input() set error(value: string | null) {
+    // this.form.setErrors({value});
+  }
   @Input() isLoading = false;
-  @Output() submitEvent = new EventEmitter<{ username: string; password: string; }>();
+  @Input() isRemember = true;
+  @Input() isUnlock = false;
+  @Output() submitEvent = new EventEmitter<{ username: string; password: string; needRemember: boolean }>();
 
   form: FormGroup;
   public loginInvalid = false;
@@ -20,7 +24,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
-      username: ['', Validators.email],
+      username: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
@@ -29,9 +33,16 @@ export class LoginComponent implements OnInit {
   }
 
   submit() {
-    console.log("!! | submit | this.form.value", this.form.value)
-    if (this.form.valid) {
-      this.submitEvent.emit(this.form.value);
+  if (this.form.valid) {
+      this.submitEvent.emit({username: this.form.controls['username'].value, password: this.form.controls['password'].value, needRemember: this.isRemember});
+    } else {
+      this.form.markAllAsTouched();
+    }
+  }
+
+  handleKey(event: KeyboardEvent) {
+    if (event.key === "Enter") {
+      this.submit();
     }
   }
 

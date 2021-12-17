@@ -1,31 +1,32 @@
 <div class="mat-container">
     <mat-card>
         <mat-card-title class="title">Авторизация</mat-card-title>
-        <img src="assets/icons/lock.svg" class="icon" alt="">
-        <form [formGroup]="form" class="form-container">
+        <img [src]="isUnlock ? 'assets/icons/unlock.svg' : 'assets/icons/lock.svg'" class="icon" alt="">
+        <form [formGroup]="form" class="form-container" (submit)="submit()" (keypress)="handleKey($event)">
             <mat-error *ngIf="loginInvalid">
                 Отсутсвует пара с таким логином и паролем
             </mat-error>
             <mat-form-field class="form-field">
                 <input matInput type="text" autocomplete="false" placeholder="Логин" formControlName="username"
                     required>
-                    <mat-error>
-                        Логин некорректный
-                      </mat-error>
+                <mat-error>
+                    Логин некорректный
+                </mat-error>
             </mat-form-field>
             <mat-form-field class="form-field">
                 <input matInput type="password" autocomplete="false" placeholder="Пароль" formControlName="password"
                     required>
-                    <mat-error>
-                        Пароль некорректный
-                      </mat-error>
+                <mat-error>
+                    Пароль некорректный
+                </mat-error>
             </mat-form-field>
-            <mat-checkbox class="remeber-checkbox">Запомнить меня</mat-checkbox>
         </form>
+        <mat-checkbox class="remeber-checkbox" [(ngModel)]="isRemember">Запомнить меня</mat-checkbox>
         <button mat-button class="sub-button" (click)="submit()">Войти</button>
 
         <mat-card-footer>
-            <mat-progress-bar [mode]="isLoading ? 'indeterminate': 'determinate'" [bufferValue]="100" color="primary"></mat-progress-bar>
+            <mat-progress-bar class="progress-bar-addons" [mode]="isLoading ? 'indeterminate': 'determinate'" value="100" color="primary">
+            </mat-progress-bar>
         </mat-card-footer>
     </mat-card>
 </div>

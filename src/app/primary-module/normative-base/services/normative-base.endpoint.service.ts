@@ -19,15 +19,4 @@ export class NormativeBaseEndpointService { //  extends EndpointService {
 
         return a;
     }
-
-    public async testAuth() {
-        const a = await this.authWorker.postMessageToWorkerAsync({
-            messageType: AuthMessageTypes.login,
-            data: {
-                username: "sergey.suhov@smeta.ru",
-                password: "109901sekret"
-            },
-        })
-        console.log("!! | testAuth | a", a)
-    }
 }

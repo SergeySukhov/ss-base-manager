@@ -1,5 +1,7 @@
 <div class="wrapper">
     <div class="login-container">
-        <ss-login [isLoading]="stateService.isLoading" (submitEvent)="submitEventHandle($event)"></ss-login>
+        <ss-login [isLoading]="stateService.isLoading" [isRemember]="true" 
+            [isUnlock]="isUnlock"
+         (submitEvent)="submitEventHandle($event)"></ss-login>
     </div>
 </div>

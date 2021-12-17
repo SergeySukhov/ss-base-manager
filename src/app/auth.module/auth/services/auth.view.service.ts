@@ -23,23 +23,32 @@ export class AuthViewService {
         }
     }
 
-    public async login(username: string, password: string) {
+    public async login(username: string, password: string, needRemember: boolean): Promise<boolean> {
         const authResponse = await this.endpoint.sendAuth(username, password);
+
         if (!authResponse || !authResponse.data) {
             this.isAuth = false;
-            return;
+            return false;
         }
 
         if (authResponse.data.isSuccess === true) {
             this.isAuth = true;
-            localStorage.setItem("lastTokenTime", JSON.stringify(Date.now()));
-            localStorage.setItem("lastToken", JSON.stringify(authResponse.data.refreshToken));
-            this.router.navigate([""]);
-            return;
+            if (needRemember) {
+                localStorage.setItem("lastTokenTime", JSON.stringify(Date.now()));
+                localStorage.setItem("lastToken", JSON.stringify(authResponse.data.refreshToken));
+            } else {
+                localStorage.removeItem("lastTokenTime");
+                localStorage.removeItem("lastToken");
+            }
+            setTimeout(() => {
+                this.router.navigate([""]);
+            }, 2000)
+            return true;
         } else {
             this.stateService.errorMessage = authResponse.data.errorDescription;
         }
         this.isAuth = false;
+        return false;
     }
 
     public delayCheckAuth(refreshToken: string) {

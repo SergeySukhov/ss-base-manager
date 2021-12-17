@@ -10,8 +10,7 @@ import { AuthViewService } from "./services/auth.view.service";
   styleUrls: ['./auth.component.scss'],
 })
 export class AuthComponent implements OnInit {
-
-  
+  isUnlock = false;  
 
   constructor(public themeService: ThemeService, private viewService: AuthViewService, public stateService: AuthStateService) {
 
@@ -20,10 +19,10 @@ export class AuthComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public async submitEventHandle(userData: {username: string, password: string}) {
+  public async submitEventHandle(userData: {username: string, password: string, needRemember: boolean}) {
     this.stateService.isLoading = true;
 
-    await this.viewService.login(userData.username, userData.password);
+    this.isUnlock = await this.viewService.login(userData.username, userData.password, userData.needRemember);
     this.stateService.isLoading = false;
 
   }

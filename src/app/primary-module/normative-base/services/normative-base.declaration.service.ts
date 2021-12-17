@@ -13,7 +13,6 @@ export class NormativeBaseDeclarationService {
     }
 
     public getStepperModel(context: NormativeBaseComponent): StepperData {
-        this.endpoint.testAuth();
         const stepperModel: StepperData = {
             isLinear: true,
             steps: [{
@@ -167,7 +166,6 @@ export class NormativeBaseDeclarationService {
                     fieldLabel: "Наименование НБ",
                     placeHolder: "",
                     onDataChange: (value) => {
-                        console.log("!! | setAddForm | value", value)
                         if (context.resultParams.addBase) {
                             context.resultParams.addBase.name = value;
                         }
