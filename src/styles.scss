@@ -82,7 +82,7 @@ $app-dark-theme: mat-dark-theme($mat-primary-palette-dark, $mat-accent-palettee-
       filter: brightness(0.5);
   }
   background-color: whitesmoke;
-  color: #363636;
+  color: #363636 !important;
 
 }
 
