@@ -10,6 +10,9 @@
             <div *ngIf="!isDarkMode" class="dark-icon"></div>
             <img src="assets\icons\dark_mode.svg" alt="">
         </div>
-        <!-- <mat-slide-toggle (click)="toggleDarkMode()" [checked]="isDarkMode">Темная тема</mat-slide-toggle> -->
+        <div *ngIf="!hideUser" class="logouter" (click)="onLogout()">
+            <img class="logout-icon" src="assets\icons\user.svg" alt="">
+        </div>
+
     </mat-toolbar-row>
 </mat-toolbar>

@@ -72,7 +72,6 @@
     min-width: 200px;
   }
   mat-card {
-    color: #363636 !important;
 
     height: 100%;
     width: 100%;
@@ -100,7 +99,9 @@
 .progress-bar-addons {
   height: 7px;
 }
-
+.light-mode .mat-card {
+  color: #363636 !important;
+}
 
 ::ng-deep .dark-mode .mat-primary .mat-option.mat-selected {
   color: whitesmoke !important;

@@ -9,7 +9,9 @@ import { ThemeService } from './services/theme.service';
 export class ToolbarComponent implements OnInit {
   @Input() title = "";
   @Input() hideBackArrow = true;
+  @Input() hideUser = true;
   @Output() backArrowEvent = new EventEmitter();
+  @Output() logoutEvent = new EventEmitter();
   public isDarkMode = true;
   
   constructor(public themeService: ThemeService,) { }
@@ -21,6 +23,10 @@ export class ToolbarComponent implements OnInit {
   toggleDarkMode() {
     this.isDarkMode = !this.isDarkMode;
     this.themeService.update(this.isDarkMode ? 'light-mode' : 'dark-mode')
+  }
+
+  onLogout() {
+    this.logoutEvent.emit();
   }
 
   onBack() {

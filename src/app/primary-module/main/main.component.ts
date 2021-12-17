@@ -35,7 +35,7 @@ export class MainComponent implements OnInit {
     available: true,
   }
   ]
-  constructor(public stateService: MainStateService,
+  constructor(private router: Router, public stateService: MainStateService, 
     private userService: UserService,) {
   }
 
@@ -47,6 +47,10 @@ export class MainComponent implements OnInit {
     this.stateService.context = ManagerContext.start;
   }
 
-
+  onLogout() {
+    localStorage.removeItem("lastTokenTime");
+    localStorage.removeItem("lastToken");
+    this.router.navigate(["login"]);
+  }
 
 }

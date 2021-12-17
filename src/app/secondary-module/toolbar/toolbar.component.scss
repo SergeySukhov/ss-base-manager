@@ -3,7 +3,16 @@
     position: relative;
     display: flex;
 }
+.logouter {
+  width: 50px;
+  padding-left: 10px;
+  border-left: solid;
+  margin-left: 20px;
 
+}
+.logout-icon {
+    width: 40px;
+}
 .dark-icon {
     width: 1px;
     background: white;

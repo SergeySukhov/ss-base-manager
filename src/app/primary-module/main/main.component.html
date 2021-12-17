@@ -1,6 +1,10 @@
 <div class="wrapper">
 
-    <ss-toolbar (backArrowEvent)="toStart()" [hideBackArrow]="stateService.context===ManagerContext.start" [title]="stateService.mainTitle"></ss-toolbar>
+    <ss-toolbar (backArrowEvent)="toStart()" (logoutEvent)="onLogout()"
+    [hideUser]="false"
+    [hideBackArrow]="stateService.context===ManagerContext.start"
+        [title]="stateService.mainTitle">
+    </ss-toolbar>
 
     <div [ngSwitch]="stateService.context" class="content-wrapper">
 
