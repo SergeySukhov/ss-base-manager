@@ -24,7 +24,7 @@ export interface AuthWorkerRequestLogout extends AuthWorkerRequestBase<AuthMessa
 }
 export interface AuthWorkerRequestRefresh extends AuthWorkerRequestBase<AuthMessageTypes.refresh> {
   data: {
-    token: string;
+    // token: string;
   }
 }
 
@@ -47,7 +47,7 @@ export interface AuthWorkerResponseRefresh extends AuthWorkerResponseBase<AuthMe
 
 export interface AuthWorkerResponseCommon extends AuthWorkerResponseBase<AuthMessageTypes.init> {
   isOk: boolean;
-  data: any
+  data: any | undefined;
 }
 
 export type AuthWorkerResponse = AuthWorkerResponseLogin | AuthWorkerResponseRefresh | AuthWorkerResponseCommon;
@@ -61,7 +61,7 @@ export interface AuthError extends AuthData<false> {
 }
 
 export interface AuthSuccess extends AuthData<true> {
-  refreshToken: string;
+  // refreshToken: string;
 }
 
 /** Модель для токена авторизации/рефреш токена */

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { action, computed, observable, reaction } from "mobx";
-import { ManagerContext } from "../../models/common-enums";
+import { ManagerContext } from "src/app/shared/models/common/enums";
 
 @Injectable()
 export class MainStateService {

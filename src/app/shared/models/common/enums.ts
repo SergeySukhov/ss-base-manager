@@ -1,3 +1,8 @@
+export enum UserState {
+    guest = "guest",
+    authorized = "authorized",
+}
+
 export enum ManagerContext {
     login = "login", 
     start = "start", 
@@ -5,3 +10,4 @@ export enum ManagerContext {
     indexes = "indexes",
     corrections = "corrections"
 }
+

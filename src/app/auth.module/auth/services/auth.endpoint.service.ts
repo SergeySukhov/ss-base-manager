@@ -23,11 +23,13 @@ export class AuthEndpointService {
         }
     }
 
-    public async sendAuthRefresh(token: string): Promise<AuthWorkerResponseRefresh | null> {
+    public async sendAuthRefresh(
+        // token: string
+        ): Promise<AuthWorkerResponseRefresh | null> {
         const requestRefAuth: AuthWorkerRequestRefresh = {
             messageType: AuthMessageTypes.refresh,
             data: {
-                token
+                // token
             },
         }
         console.log("!! | sendAuth | requestRefAuth", requestRefAuth)

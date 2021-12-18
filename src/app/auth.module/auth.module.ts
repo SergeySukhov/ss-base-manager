@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatToolbarModule } from "@angular/material/toolbar";
 import { AuthComponent } from "./auth/auth.component";
 import { SecondaryModule } from "../secondary-module/secondary-module.module";
 import { AuthGuard } from "./auth/guards/auth.guard";

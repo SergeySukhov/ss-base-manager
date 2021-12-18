@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MainStateService } from './services/main-state.service';
-import { UserService } from '../../core/common/services/user.service';
+import { UserService } from '../../core/services/user.service';
 import { ListSelectorOption } from 'src/app/secondary-module/models/list-selector.model';
-import { ThemeService } from "../../secondary-module/toolbar/services/theme.service";
-import { ManagerContext } from '../models/common-enums';
+import { ManagerContext } from 'src/app/shared/models/common/enums';
 
 @Component({
   selector: 'app-main',
