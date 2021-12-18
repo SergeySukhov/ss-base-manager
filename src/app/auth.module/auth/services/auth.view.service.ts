@@ -6,7 +6,15 @@ import { AuthStateService } from "./auth.state.service";
 @Injectable()
 export class AuthViewService {
 
-    public isAuth = false;
+    public get isAuth(): boolean {
+        return this.pIsAuth;
+    }
+
+    private set isAuth(value: boolean) {
+        this.pIsAuth = value;
+    }
+
+    private pIsAuth = false;
 
     constructor(private router: Router, private endpoint: AuthEndpointService, private stateService: AuthStateService) {
         const lastAuthTimeJSON = localStorage.getItem("lastTokenTime");
@@ -35,11 +43,10 @@ export class AuthViewService {
                 localStorage.setItem("lastTokenTime", JSON.stringify(Date.now()));
             } else {
                 localStorage.removeItem("lastTokenTime");
-                // localStorage.removeItem("lastToken");
             }
             setTimeout(() => {
                 this.router.navigate([""]);
-            }, 2000)
+            }, 500)
             return true;
         } else {
             this.stateService.errorMessage = authResponse.data.errorDescription;
@@ -48,21 +55,21 @@ export class AuthViewService {
         return false;
     }
 
-    public delayCheckAuth(
-        // refreshToken: string
-        ) {
-        this.endpoint.sendAuthRefresh(
-            // refreshToken
-            ).then((result) => {
-            console.log("!! | this.endpoint.sendAuthRefresh | result", result)
+    public async logout() {
+        this.isAuth = false;
+        localStorage.removeItem("lastTokenTime");
+        this.router.navigate(["login"]);
+        this.endpoint.sendLogout();
+    }
+
+    private delayCheckAuth() {
+        this.endpoint.sendAuthRefresh().then((result) => {
             if (!result?.data?.isSuccess) {
-                this.isAuth = false;
-                this.router.navigate(["login"]);
+                this.logout();
             } else {
                 this.isAuth = true;
                 localStorage.setItem("lastTokenTime", JSON.stringify(Date.now()));
-                // localStorage.setItem("lastToken", JSON.stringify(result.data.refreshToken));
             }
-        })
+        });
     }
 }

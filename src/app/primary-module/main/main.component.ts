@@ -4,6 +4,7 @@ import { MainStateService } from './services/main-state.service';
 import { UserService } from '../../core/services/user.service';
 import { ListSelectorOption } from 'src/app/secondary-module/models/list-selector.model';
 import { ManagerContext } from 'src/app/shared/models/common/enums';
+import { AuthViewService } from "src/app/auth.module/auth/services/auth.view.service";
 
 @Component({
   selector: 'app-main',
@@ -34,8 +35,8 @@ export class MainComponent implements OnInit {
     available: true,
   }
   ]
-  constructor(private router: Router, public stateService: MainStateService, 
-    private userService: UserService,) {
+  constructor(public stateService: MainStateService, 
+    private userService: UserService, private authService: AuthViewService) {
   }
 
   ngOnInit(): void {
@@ -47,9 +48,7 @@ export class MainComponent implements OnInit {
   }
 
   onLogout() {
-    localStorage.removeItem("lastTokenTime");
-    localStorage.removeItem("lastToken");
-    this.router.navigate(["login"]);
+    this.authService.logout();
   }
 
 }

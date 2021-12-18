@@ -36,13 +36,17 @@ export class ManagementSystem {
   public async handleMessage(request: AuthWorkerRequest) {
     switch (request.messageType) {
       case AuthMessageTypes.init:
-        this.messageHandler.toClient({ guid: request.guid, isOk: true, messageType: AuthMessageTypes.init, data: undefined });
+        this.replySuccess(request.guid, request.messageType);
         break;
       case AuthMessageTypes.login:
         this.sendRequestLogin(request);
         break;
       case AuthMessageTypes.refresh:
         this.sendRequestRefresh(request);
+        break;
+      case AuthMessageTypes.logout:
+        this.tokenService.removeToken();
+        this.replySuccess(request.guid, request.messageType);
         break;
     }
   }
@@ -70,20 +74,20 @@ export class ManagementSystem {
 
     sender.onreadystatechange = async () => {
       if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
-        console.log("!! sender resp", sender.response);
         if (sender.status === 200) {
           const senderObj = JSON.parse(sender.response);
           if (senderObj.token_type) {
             response.data = {
               isSuccess: true,
             };
-            await this.tokenService.addToken(JSON.stringify(senderObj.access_token), JSON.stringify(senderObj.refresh_token));
+            await this.tokenService.addToken(senderObj.access_token, senderObj.refresh_token);
             this.messageHandler.toClient(response);
             return;
           }
+        } else {
+          this.errorHandler(response)
         }
       }
-      this.errorHandler(response)
     }
     this.setSenderHandlers(sender, response);
     sender.send(requestBody);
@@ -91,8 +95,14 @@ export class ManagementSystem {
 
   private async sendRequestRefresh(request: AuthWorkerRequestRefresh) {
     const sender = new XMLHttpRequest();
+    const response: AuthWorkerResponseRefresh = {
+      guid: request.guid,
+      messageType: AuthMessageTypes.refresh,
+      data: undefined
+    }
     const lastAuthToken = await this.tokenService.getRefreshToken();
     if (!lastAuthToken) {
+      this.errorHandler(response);
       return;
     }
 
@@ -104,28 +114,22 @@ export class ManagementSystem {
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');
     sender.timeout = 5000;
 
-    const response: AuthWorkerResponseRefresh = {
-      guid: request.guid,
-      messageType: AuthMessageTypes.refresh,
-      data: undefined
-    }
-
     sender.onreadystatechange = async () => {
       if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
         if (sender.status === 200) {
           const senderObj = JSON.parse(sender.response);
-          console.log("!! | sender.onreadystatechange= | senderObj", senderObj)
           if (senderObj.token_type) {
             response.data = {
               isSuccess: true,
             };
-            await this.tokenService.updRefreshToken(JSON.stringify(senderObj.refresh_token))
+            await this.tokenService.addToken(senderObj.access_token, senderObj.refresh_token);
             this.messageHandler.toClient(response);
             return;
           }
+        } else {
+          this.errorHandler(response);
         }
       }
-      this.errorHandler(response);
     }
     this.setSenderHandlers(sender, response);
     sender.send(requestBody);
@@ -148,4 +152,17 @@ export class ManagementSystem {
       this.errorHandler(response)
     }
   }
+
+
+  private replySuccess(guid: string | undefined, messageType: AuthMessageTypes.logout | AuthMessageTypes.init) {
+    this.messageHandler.toClient({
+      guid,
+      messageType,
+      data: null
+    });
+
+  }
+  
 }
+
+type AuthMessageTypesW = Omit<AuthMessageTypes, AuthMessageTypes.login>;

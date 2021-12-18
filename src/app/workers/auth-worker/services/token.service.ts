@@ -36,13 +36,9 @@ export class TokenService {
     return;
   }
 
-  /** Записать токен обновления */
-  public async updRefreshToken(value: string): Promise<void> {
-    return;
-  }
-
     /** Удалить токен */
     public async removeToken(): Promise<void> {
+      this.dbService.remove();
       return;
     }
 }

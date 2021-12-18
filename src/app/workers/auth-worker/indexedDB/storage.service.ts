@@ -7,32 +7,29 @@ export class StorageService {
     private table: Dexie.Table<Token, string>;
 
     constructor() {
-       this.table = tokenDB.table('tokens');
+        this.table = tokenDB.table('tokens');
     }
 
     public async getLastToken(): Promise<Token | undefined> {
         const tokens = await this.getAll();
-        let token: Token | undefined = undefined;
-        if (tokens.length) {
-            token = tokens[0];
-            tokens.forEach(x => {
-                this.remove(x.guid);
-            });
-        }
-        console.log("!! | getLastToken | tokens", tokens)
-        return token;
+        return tokens[0] ?? undefined;
     }
-   
+
     public async add(data: Token) {
-        return this.table.add(data);
+        const tokens = await this.getAll();
+        if (!tokens?.length) {
+            await this.table.add(data);
+        } else {
+            await this.table.update(tokens[0].guid, data)
+        }
     }
 
-    public async update(id: string, data: Token) {
-        return await this.table.update(id, data);
-    }
-
-    async remove(id: string) {
-        return await this.table.bulkDelete([id]);
+    public async remove() {
+        const tokens = await this.getAll();
+        if (tokens?.length) {
+            await this.table.bulkDelete(tokens.map(x => x.guid));
+        }
+        return;
     }
 
     private async getAll(): Promise<Token[]> {
