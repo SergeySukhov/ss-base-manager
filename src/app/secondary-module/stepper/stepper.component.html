@@ -3,10 +3,10 @@
 
         <mat-step [editable]="true" [completed]="stepModel?.isCompleted" *ngFor="let stepModel of data?.steps" #stepp >
             <form [ngFormOptions]="firstFormGroup">
-            <!-- <div class="step-container"></div> -->
             <ng-template matStepLabel>{{stepModel.stepLabel}}</ng-template>
             <div class="mat-container" *ngFor="let fieldModel of stepModel.fields">
-                <div *ngIf="fieldModel.type === 'selector'">
+
+                <div class="field-container" *ngIf="fieldModel.type === 'selector'">
                     <mat-form-field class="form-field" appearance="fill">
                         <mat-label>{{fieldModel.fieldLabel}}</mat-label>
                         <mat-select (selectionChange)="fieldModel.onDataChange($event, stepModel)">
@@ -17,21 +17,26 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
+                    <mat-spinner *ngIf="stepModel.isAwaiting" mode="indeterminate" color="accent" [diameter]="40"></mat-spinner>
+
                 </div>
 
                 <div *ngIf="fieldModel?.type === 'input'">
                     <mat-form-field appearance="fill">
-                        <mat-label>{{fieldModel?.fieldLabel}}</mat-label>
+                        <mat-label>{{fieldModel?.fieldLabel ?? ""}}</mat-label>
                         <input matInput autocomplete="false" (change)="fieldModel.onDataChange($event, stepModel)"
                             value="">
                     </mat-form-field>
+                    <mat-spinner *ngIf="stepModel.isAwaiting" mode="indeterminate" color="accent" [diameter]="40"></mat-spinner>
                 </div>
 
                 <div *ngIf="fieldModel.type === 'label'">
                     <mat-form-field appearance="fill">
-                        <ng-template matStepLabel>{{fieldModel.fieldLabel}}</ng-template>
-                        <input matInput type="text" disabled="true" autocomplete="false" [value]="fieldModel.text">
+                        <mat-label>{{fieldModel?.fieldLabel ?? ""}}</mat-label>
+                        <input class="label-input" matInput type="text" disabled="true" autocomplete="false" 
+                        [value]="fieldModel.text">
                     </mat-form-field>
+                    <mat-spinner *ngIf="stepModel.isAwaiting" mode="indeterminate" color="accent" [diameter]="40"></mat-spinner>
                 </div>
 
                 <div *ngIf="fieldModel.type === 'divider'" class="add-form">
@@ -39,13 +44,14 @@
 
                 <div *ngIf="fieldModel.type === 'fileLoader'" class="file-loader">
                     <ss-file-loader (filesAdded)="fieldModel.onDataChange($event, stepModel)"></ss-file-loader>
+                    <mat-spinner *ngIf="stepModel.isAwaiting" mode="indeterminate" color="accent" [diameter]="40"></mat-spinner>
                 </div>
             </div>
 
             <div>
-                <button *ngIf="stepModel.needResetButton" mat-button (click)="stepper.reset()">Заново</button>
-                <button *ngIf="stepModel.needBackButton" mat-button (click)="stepper.previous()">Назад</button>
-                <button *ngIf="stepModel.needNextButton" class="step-button" mat-button
+                <button class="step-button" *ngIf="stepModel.needResetButton" mat-button (click)="stepper.reset()">Заново</button>
+                <button class="step-button" *ngIf="stepModel.needBackButton" mat-button (click)="stepper.previous()">Назад</button>
+                <button class="step-button" *ngIf="stepModel.needNextButton" mat-button
                     (click)="stepper.next()">Вперед</button>
             </div>
         </form>

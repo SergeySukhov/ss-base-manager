@@ -26,10 +26,10 @@ export class NormativeBaseDeclarationService {
                         context.resultParams.baseType = value;
                         step.isAwaiting = true;
 
-                        const a = await this.endpoint.testGetData();
+                        const availableNB = await this.endpoint.testGetData();
 
                         this.normBasefieldOptions.splice(0);
-                        this.normBasefieldOptions.push(...this.toSelectorOptions(a));
+                        this.normBasefieldOptions.push(...this.toSelectorOptions(availableNB));
 
                         step.isAwaiting = false;
                         step.isCompleted = true;
@@ -146,20 +146,23 @@ export class NormativeBaseDeclarationService {
     }
 
 
-    private setAddBaseForm(needAddForm: boolean, context: NormativeBaseComponent, form?: StepperDataStep) {
+    private setAddBaseForm(needAddForm: boolean, context: NormativeBaseComponent, form: StepperDataStep) {
         if (needAddForm) {
             context.resultParams.addBase = {
                 guid: "12313",
                 name: "",
             }
+            form.stepLabel = "Добавление новой НБ"
             if (!!form?.fields) {
-                form.fields.push({
-                    type: OptionType.divider,
-                    onDataChange: () => { }
-                }, {
+                form.fields.push(
+                //     {
+                //     type: OptionType.divider,
+                //     onDataChange: () => { }
+                // }, 
+                {
                     type: OptionType.label,
                     text: context.resultParams.addBase.guid,
-                    fieldLabel: "context.resultParams.addBase.guid",
+                    fieldLabel: "Идентификатор добаляемой НБ",
                     onDataChange: () => { }
                 }, {
                     type: OptionType.input,
@@ -170,18 +173,21 @@ export class NormativeBaseDeclarationService {
                             context.resultParams.addBase.name = value;
                         }
                     }
-                }, {
-                    type: OptionType.divider,
-                    onDataChange: () => { }
-                })
+                },
+                //  {
+                //     type: OptionType.divider,
+                //     onDataChange: () => { }
+                // }
+                )
             }
         } else {
+            form.stepLabel = "Выбор НБ"
+
             context.resultParams.addBase = undefined;
             if (form?.fields) {
                 form.fields.splice(1);
             }
         }
         return
-
     }
 }

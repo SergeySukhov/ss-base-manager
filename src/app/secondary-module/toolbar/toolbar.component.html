@@ -2,7 +2,9 @@
     <mat-toolbar-row>
         <button *ngIf="!hideBackArrow" mat-button (click)="onBack()"
             class="back-arrow" color="accent">
-            <mat-icon>keyboard_backspace</mat-icon>
+            <!-- <mat-icon>keyboard_backspace</mat-icon> -->
+            <img class="back-arrow-icon" src="assets\icons\back_arrow.svg" alt="">
+
         </button>
         <span style="padding-left: 15px;">{{title}}</span>
         <span style="flex: 1 1 auto"></span>

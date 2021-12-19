@@ -20,6 +20,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     MatListModule,
     MatCardModule,
     MatProgressBarModule,
+    MatProgressSpinnerModule,
     MatCheckboxModule,
   ],
   providers: [

@@ -9,7 +9,7 @@ export class AuthGuard implements CanActivate, OnDestroy {
 
    }
    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Promise<boolean> {
-      // return true;
+      return true;
 
       if (this.authService.isAuth) {
          return true;

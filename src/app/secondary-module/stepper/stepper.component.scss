@@ -26,10 +26,28 @@
     display: flex;
     flex-direction: column;
   }
+  .field-container {
+    display: flex;
+  }
 
   .file-loader {
     width: 60%;
     margin: auto;
+  }
+  .label-input {
+    color: whitesmoke;
+  }
+  .step-button {
+    background-color: mat.get-color-from-palette($accent-palette, 700);
+    margin-right: 10px;
+  }
+  mat-stepper {
+    background-color: transparent;
+  }
+  mat-spinner {
+    // margin: auto;
+    margin-top: 10px;
+    margin-left: 10px;
   }
 }
 

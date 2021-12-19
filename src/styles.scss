@@ -3,6 +3,7 @@
 @use './app/secondary-module/file-loader/file-loader.component.scss' as fileLoader;
 @use './app/secondary-module/login/login.component.scss' as login;
 @import "~@angular/material/theming";
+
 @include mat-core();
 
 $mat-primary-scheme: (
@@ -30,9 +31,9 @@ $mat-accent-scheme: (
   ),
 );
 $mat-accent-schemee-dark: (
-  100: #ff80ab,
-  500: #ff4081,
-  700: #f50057,
+  100: #cb5cdf,
+  500: #ce15ee,
+  700: #ce15ee,
   contrast: (
     100: red,
     500: red, // rgba(0, 0, 0, 0.87),
@@ -41,7 +42,8 @@ $mat-accent-schemee-dark: (
 );
 
 $mat-primary-scheme-dark: (
-  background: #424242,
+  background: #232323,
+  background-color: #232323,
   100: #c5cae9,
   300: #737dbe,
   400: #4f5681,
@@ -85,9 +87,9 @@ $app-dark-theme: mat-dark-theme($mat-primary-palette-dark, $mat-accent-palettee-
   color: #363636;
 
 }
+@include angular-material-theme($app-dark-theme);
 
 .dark-mode {
-  @include angular-material-theme($app-dark-theme);
   @include stepper.theme($app-dark-theme);
   @include list.theme($app-dark-theme);
   @include fileLoader.theme($app-dark-theme);

@@ -39,11 +39,15 @@
     padding-left: 0;
   }
   .back-arrow {
-    margin: 5px;
-    padding: 5px;
+    padding: 0;
+    padding-left: 15px;
     height: 100%;
-    min-width: 50px;
+    min-width: 40px;
   }
   .back-arrow:hover {
     background-color: transparent;
+  }
+  .back-arrow-icon {
+    width: 25px;
+
   }
