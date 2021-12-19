@@ -29,12 +29,12 @@ export class AuthViewService {
         }
     }
 
-    public async login(username: string, password: string, needRemember: boolean): Promise<boolean> {
+    public async login(username: string, password: string, needRemember: boolean): Promise<string> {
         const authResponse = await this.endpoint.sendAuth(username, password);
 
         if (!authResponse || !authResponse.data) {
             this.isAuth = false;
-            return false;
+            return "Ошибка! Время ожидания ответа истекло";
         }
 
         if (authResponse.data.isSuccess === true) {
@@ -47,12 +47,12 @@ export class AuthViewService {
             setTimeout(() => {
                 this.router.navigate([""]);
             }, 500)
-            return true;
+            return "";
         } else {
             this.stateService.errorMessage = authResponse.data.errorDescription;
         }
         this.isAuth = false;
-        return false;
+        return authResponse.data.errorDescription;
     }
 
     public async logout() {

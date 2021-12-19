@@ -3,7 +3,7 @@
 
     <div class="login-container">
         <ss-login [isLoading]="stateService.isLoading" [isRemember]="true" 
-            [isUnlock]="isUnlock"
+            [isUnlock]="isUnlock" [errorMessage]="errorMessage"
          (submitEvent)="submitEventHandle($event)"></ss-login>
     </div>
 </div>

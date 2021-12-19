@@ -4,17 +4,18 @@
         <img [src]="isUnlock ? 'assets/icons/unlock.svg' : 'assets/icons/lock.svg'" class="icon" alt="">
         <form [formGroup]="form" class="form-container" (submit)="submit()" (keypress)="handleKey($event)">
             <mat-error *ngIf="loginInvalid">
-                Отсутсвует пара с таким логином и паролем
+                <!-- Отсутсвует пара с таким логином и паролем -->
+                {{loginInvalid}}
             </mat-error>
             <mat-form-field class="form-field">
-                <input matInput type="text" autocomplete="false" placeholder="Логин" formControlName="username"
+                <input matInput (keydown)="onInputKeyDown()" type="text" autocomplete="false" placeholder="Логин" formControlName="username"
                     required>
                 <mat-error>
                     Логин некорректный
                 </mat-error>
             </mat-form-field>
             <mat-form-field class="form-field">
-                <input matInput type="password" autocomplete="false" placeholder="Пароль" formControlName="password"
+                <input matInput (keydown)="onInputKeyDown()" type="password" autocomplete="false" placeholder="Пароль" formControlName="password"
                     required>
                 <mat-error>
                     Пароль некорректный
