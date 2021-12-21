@@ -1,18 +1,18 @@
 <mat-toolbar class="main-tool-bar" color="primary">
     <mat-toolbar-row>
-        <button *ngIf="!hideBackArrow" mat-button (click)="onBack()"
-            class="back-arrow" color="accent">
-            <!-- <mat-icon>keyboard_backspace</mat-icon> -->
-            <img class="back-arrow-icon" src="assets\icons\back_arrow.svg" alt="">
-
-        </button>
+        <div *ngIf="!hideBackArrow" class="tool-container" (click)="onBack()">
+            <img src="assets\icons\back_arrow.svg" alt="">
+        </div>
         <span style="padding-left: 15px;">{{title}}</span>
         <span style="flex: 1 1 auto"></span>
-        <div class="theme-toggler hover-toggler" (click)="toggleDarkMode()">
+        <div class="tool-container hover-toggler" (click)="toggleDarkMode()">
             <div *ngIf="!isDarkMode" class="dark-icon"></div>
-            <img src="assets\icons\dark_mode.svg" alt="">
+            <img [src]="isDarkMode ? 'assets\\icons\\light.svg':'assets\\icons\\dark.svg'" alt="">
         </div>
-        <div *ngIf="!hideUser" class="logouter" (click)="onLogout()">
+        <div *ngIf="!hideNotes" class="tool-container">
+            <img src="assets\icons\notifications.svg" alt="">
+        </div>
+        <div *ngIf="!hideUser" class="tool-container" (click)="onLogout()">
             <img class="logout-icon" src="assets\icons\user.svg" alt="">
         </div>
 

@@ -40,6 +40,11 @@
   .step-button {
     background-color: mat.get-color-from-palette($accent-palette, 700);
     margin-right: 10px;
+    img {
+      margin: auto;
+      display: flex;
+      filter: brightness(0.5);
+  }
   }
   mat-stepper {
     background-color: transparent;
@@ -94,11 +99,6 @@
   margin: auto;
   margin-top: 5px;
   width: 50%;
-}
-
-img {
-    margin: auto;
-    display: flex;
 }
 
 mat-form-field {

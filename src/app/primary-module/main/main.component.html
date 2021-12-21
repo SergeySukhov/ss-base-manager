@@ -2,6 +2,7 @@
 
     <ss-toolbar (backArrowEvent)="toStart()" (logoutEvent)="onLogout()"
     [hideUser]="false"
+    [hideNotes]="false"
     [hideBackArrow]="stateService.context===ManagerContext.start"
         [title]="stateService.mainTitle">
     </ss-toolbar>

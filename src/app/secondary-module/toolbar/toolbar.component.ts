@@ -10,6 +10,8 @@ export class ToolbarComponent implements OnInit {
   @Input() title = "";
   @Input() hideBackArrow = true;
   @Input() hideUser = true;
+  @Input() hideNotes = true;
+  
   @Output() backArrowEvent = new EventEmitter();
   @Output() logoutEvent = new EventEmitter();
   public isDarkMode = true;

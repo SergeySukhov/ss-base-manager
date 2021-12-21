@@ -80,9 +80,9 @@ $app-dark-theme: mat-dark-theme($mat-primary-palette-dark, $mat-accent-palettee-
   @include fileLoader.theme($app-light-theme);
   @include login.theme($app-light-theme);
   
-  img {
-      filter: brightness(0.5);
-  }
+  // img {
+  //     filter: brightness(0.5);
+  // }
   background-color: whitesmoke;
   color: #363636;
 
