@@ -6,12 +6,20 @@
 
 @include mat-core();
 
+@mixin alltheme($theme) {
+  @include angular-material-theme($theme);
+  @include stepper.theme($theme);
+  @include list.theme($theme);
+  @include fileLoader.theme($theme);
+  @include login.theme($theme);
+}
+
 $mat-primary-scheme: (
   background: whitesmoke,
   100: #cacff1,
   300: #c5cae9,
   400: #6b7de4,
-  500: #4c59a6,
+  500: #697ada,
   700: #303f9f,
   contrast: (
     100: red,
@@ -20,31 +28,12 @@ $mat-primary-scheme: (
     700: whitesmoke,
   ),
 );
-$mat-accent-scheme: (
-  100: #fa9cbb,
-  500: #ff83ad,
-  700: #f50057,
-  contrast: (
-    100: red,
-    500: red, // rgba(0, 0, 0, 0.87),
-    700: red,
-  ),
-);
-$mat-accent-schemee-dark: (
-  100: #b6aa60,
-  500: #9f9030,
-  700: #9f9030,
-  contrast: (
-    100: red,
-    500: red, // rgba(0, 0, 0, 0.87),
-    700: red,
-  ),
-);
 
 $mat-primary-scheme-dark: (
   background: #232323,
   background-color: #232323,
   100: #c5cae9,
+  200: #939ee4,
   300: #737dbe,
   400: #4f5681,
   500: #4f5681,
@@ -56,33 +45,20 @@ $mat-primary-scheme-dark: (
     700: whitesmoke,
   ),
 );
-$warn: mat-palette($mat-blue);
-$background-color: green; // map_get($mat-blue-grey, 50);
 
 $mat-primary-palette: mat-palette($mat-primary-scheme);
-$mat-accent-palette: mat-palette($mat-accent-scheme);
-$mat-accent-palettee-dark: mat-palette($mat-accent-schemee-dark);
+// $mat-accent-palette: mat-palette($mat-primary-scheme);
+
 $mat-primary-palette-dark: mat-palette($mat-primary-scheme-dark);
-// $mat-accent-palette: mat-palette($mat-blue-grey, 700);
-// $mat-primary-palette:  mat-palette($mat-pink, 500, 900, A100);
+// $mat-accent-palette-dark: mat-palette($mat-primary-scheme-dark);
 
-$app-light-theme: mat-light-theme($mat-primary-palette, $mat-accent-palette);
-$app-dark-theme: mat-dark-theme($mat-primary-palette-dark, $mat-accent-palettee-dark);
+$app-light-theme: mat-light-theme($mat-primary-palette, $mat-primary-palette-dark);
+$app-dark-theme: mat-dark-theme($mat-primary-palette-dark, $mat-primary-palette);
 
-// $background: map-get($app-dark-theme, background);
-// $background: map-merge($background, (background: $background-color));
-// $app-dark-theme: map-merge($app-dark-theme, (background: $background));
 
 .light-mode {
-  @include angular-material-theme($app-light-theme);
-  @include stepper.theme($app-light-theme);
-  @include list.theme($app-light-theme);
-  @include fileLoader.theme($app-light-theme);
-  @include login.theme($app-light-theme);
+  @include alltheme($app-light-theme);
   
-  // img {
-  //     filter: brightness(0.5);
-  // }
   background-color: whitesmoke;
   color: #363636;
 
@@ -90,16 +66,11 @@ $app-dark-theme: mat-dark-theme($mat-primary-palette-dark, $mat-accent-palettee-
 @include angular-material-theme($app-dark-theme);
 
 .dark-mode {
-  @include stepper.theme($app-dark-theme);
-  @include list.theme($app-dark-theme);
-  @include fileLoader.theme($app-dark-theme);
-  @include login.theme($app-dark-theme);
+  @include alltheme($app-dark-theme);
 
   background-color: #232323;
   color: whitesmoke;
 }
-
-/* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

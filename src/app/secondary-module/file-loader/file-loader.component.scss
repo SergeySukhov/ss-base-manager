@@ -20,7 +20,8 @@
     border: dashed 2px $accentColor;
     position: relative;
     margin: 0 auto;
-  
+    cursor: pointer;
+
     input {
       opacity: 0;
       position: absolute;
@@ -29,6 +30,8 @@
       height: 100%;
       top: 0;
       left: 0;
+      cursor: pointer;
+
     }
   
     label {
@@ -45,7 +48,7 @@
       font-weight: 500;
     }
   }
-  
+
   .fileover {
     animation: shake 1s;
     animation-iteration-count: infinite;
@@ -94,7 +97,13 @@
     }
   }
 }
-  
+
+.light-mode .container {
+  img {
+    filter: brightness(0.1);
+  }
+}
+
   @keyframes shake {
     0% {
       transform: translate(1px, 1px) rotate(0deg);
