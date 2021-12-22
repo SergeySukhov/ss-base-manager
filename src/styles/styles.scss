@@ -1,7 +1,7 @@
-@use './app/secondary-module/stepper/stepper.component.scss' as stepper;
-@use './app/secondary-module/list-selector/list-selector.component.scss' as list;
-@use './app/secondary-module/file-loader/file-loader.component.scss' as fileLoader;
-@use './app/secondary-module/login/login.component.scss' as login;
+@use '../app/secondary-module/stepper/stepper.component.scss' as stepper;
+@use '../app/secondary-module/list-selector/list-selector.component.scss' as list;
+@use '../app/secondary-module/file-loader/file-loader.component.scss' as fileLoader;
+@use '../app/secondary-module/login/login.component.scss' as login;
 @import "~@angular/material/theming";
 
 @include mat-core();
