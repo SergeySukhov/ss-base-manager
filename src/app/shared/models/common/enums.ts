@@ -4,10 +4,10 @@ export enum UserState {
 }
 
 export enum ManagerContext {
-    login = "login", 
     start = "start", 
     base = "base",
     indexes = "indexes",
+    formula = "formula",
     corrections = "corrections"
 }
 

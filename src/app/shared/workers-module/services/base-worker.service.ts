@@ -6,7 +6,7 @@ export abstract class BaseWorkerService<TRequest, TResponse> {
 
     protected isInit = false;
     protected worker: Worker | undefined;
-    protected timoutResponse = 5000;
+    protected timoutResponse = 8000;
 
     private timeout: any;
 

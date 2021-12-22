@@ -21,7 +21,7 @@ export class NormativeBaseComponent implements OnInit {
   public data: StepperData | null = null;
   public resultParams: NormBaseResultParams = new NormBaseResultParams();
 
-  constructor(public stateService: MainStateService, public normativeStateService: NormativeBaseStateService, public declarationService: NormativeBaseDeclarationService) {
+  constructor(public declarationService: NormativeBaseDeclarationService) {
   }
 
   ngOnInit(): void {

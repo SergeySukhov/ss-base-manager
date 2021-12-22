@@ -1,18 +1,17 @@
 import { Injectable } from "@angular/core";
 import { OptionType, SelectorOption, StepperData, StepperDataStep, StepperSelectorField, StepFields } from "src/app/secondary-module/stepper/models/stepper-model";
-import { NormativeBaseComponent } from "../normative-base.component";
-import { NormativeBaseEndpointService } from "./normative-base.endpoint.service";
-import { NormativeBaseStateService } from "./normative-base.state.service";
+import { FormulaBaseComponent } from "../formula-base.component";
+import { FormulaBaseEndpointService } from "./formula-base.endpoint.service";
+
 
 @Injectable()
-export class NormativeBaseDeclarationService {
+export class FormulaBaseDeclarationService {
     normBasefieldOptions: SelectorOption[] = [];
 
-    constructor(private endpoint: NormativeBaseEndpointService, private stateService: NormativeBaseStateService) {
-
+    constructor(private endpoint: FormulaBaseEndpointService) {
     }
 
-    public getStepperModel(context: NormativeBaseComponent): StepperData {
+    public getStepperModel(context: FormulaBaseComponent): StepperData {
         const stepperModel: StepperData = {
             isLinear: true,
             steps: [{
@@ -26,7 +25,7 @@ export class NormativeBaseDeclarationService {
                         context.resultParams.baseType = value;
                         step.isAwaiting = true;
 
-                        const availableNB = await this.endpoint.testGetData();
+                        const availableNB = await this.endpoint.getAvailableNB();
 
                         this.normBasefieldOptions.splice(0);
                         this.normBasefieldOptions.push(...this.toSelectorOptions(availableNB));
@@ -57,10 +56,9 @@ export class NormativeBaseDeclarationService {
                     onDataChange: (value: any, form: StepperDataStep) => {
                         const selectedOption: SelectorOption = value.value;
                         const needAdd = !!selectedOption.imgSrc;
-                        if (form) {
-                            form.needNextButton = true;
-                        }
-                        this.setAddBaseForm(needAdd, context, form);
+                        
+                        form.needNextButton = true;
+                        // this.setAddBaseForm(needAdd, context, form);
                         form.isCompleted = true;
                     },
                     fieldOptions: this.normBasefieldOptions,
@@ -69,7 +67,7 @@ export class NormativeBaseDeclarationService {
             },
             ////////////////////////////////////////////////////////////////////
             {
-                stepLabel: "Добавление файла НБ",
+                stepLabel: "Добавление файла формул (.csv)",
                 needNextButton: false,
                 // needResetButton: true,
                 needBackButton: true,
@@ -84,22 +82,6 @@ export class NormativeBaseDeclarationService {
                 ],
             },
 
-            ////////////////////////////////////////////////////////////////////
-            {
-                stepLabel: "Добавление файла тех. части",
-                needNextButton: false,
-                // needResetButton: true,
-                needBackButton: true,
-                fields: [{
-                    type: OptionType.fileLoader,
-                    fieldLabel: "",
-                    onDataChange: (value: any, form: StepperDataStep) => {
-                        form.isCompleted = true;
-                        form.needNextButton = true;
-                    },
-                },
-                ],
-            },
             ////////////////////////////////////////////////////////////////////
             {
                 stepLabel: "Итог",
@@ -142,51 +124,5 @@ export class NormativeBaseDeclarationService {
             });
         });
         return a;
-    }
-
-
-    private setAddBaseForm(needAddForm: boolean, context: NormativeBaseComponent, form: StepperDataStep) {
-        if (needAddForm) {
-            context.resultParams.addBase = {
-                guid: "12313",
-                name: "",
-            }
-            form.stepLabel = "Добавление новой НБ"
-            if (!!form?.fields) {
-                form.fields.push(
-                //     {
-                //     type: OptionType.divider,
-                //     onDataChange: () => { }
-                // }, 
-                {
-                    type: OptionType.label,
-                    text: context.resultParams.addBase.guid,
-                    fieldLabel: "Идентификатор добаляемой НБ",
-                    onDataChange: () => { }
-                }, {
-                    type: OptionType.input,
-                    fieldLabel: "Наименование НБ",
-                    placeHolder: "",
-                    onDataChange: (value) => {
-                        if (context.resultParams.addBase) {
-                            context.resultParams.addBase.name = value;
-                        }
-                    }
-                },
-                //  {
-                //     type: OptionType.divider,
-                //     onDataChange: () => { }
-                // }
-                )
-            }
-        } else {
-            form.stepLabel = "Выбор НБ"
-
-            context.resultParams.addBase = undefined;
-            if (form?.fields) {
-                form.fields.splice(1);
-            }
-        }
-        return
     }
 }

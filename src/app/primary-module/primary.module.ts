@@ -45,26 +45,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ThemeService } from "../secondary-module/toolbar/services/theme.service";
 import { NormativeBaseComponent } from './normative-base/normative-base.component';
 import { AuthComponent } from '../auth.module/auth/auth.component';
-
-
-// определение маршрутов
-// const appRoutes: Routes = [
-//   { path: '', component: MainComponent },
-//   { path: 'login', component: AuthComponent },
-//   // { path: '**', component: NotFoundComponent }
-// ];
+import { FormulaBaseComponent } from './formula-base/formula-base.component';
 
 @NgModule({
   declarations: [
     MainComponent,
     NormativeBaseComponent,
+    FormulaBaseComponent,
   ],
   exports: [
     MainComponent,
   ],
   imports: [
     CommonModule,
-    // RouterModule.forRoot(appRoutes),
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,

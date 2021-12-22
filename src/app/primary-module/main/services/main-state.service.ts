@@ -8,10 +8,6 @@ export class MainStateService {
     constructor() {
     }
 
-    @action a() {
-
-    }
-
     @computed({ keepAlive: true }) get mainTitle() {
         switch (this.context) {
             case ManagerContext.start:
@@ -20,6 +16,8 @@ export class MainStateService {
                 return "Менеджер нормативных баз Estimate Office";
             case ManagerContext.indexes:
                 return "Менеджер баз индесков Estimate Office";
+            case ManagerContext.formula:
+                return "Менеджер баз формул Estimate Office";
             default:
                 return "Неизвестный контекст";
         }

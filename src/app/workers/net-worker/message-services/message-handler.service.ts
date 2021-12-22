@@ -1,4 +1,4 @@
-﻿import { NetWorkerRequest, NetWorkerResponse } from "src/app/shared/models/net-messages/net-worker-request";
+﻿import { NetWorkerResponse, NetWorkerRequest } from "src/app/shared/models/net-messages/net-worker-messages";
 import { ManagementSystem } from "../main/management.service";
 
 export class MessageHandler {

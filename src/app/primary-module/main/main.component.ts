@@ -21,18 +21,22 @@ export class MainComponent implements OnInit {
     }
   }, {
     title: "Базы индексов",
+    available: false,
   }, {
     title: "Базы поправок",
     available: false,
   }, {
     title: "Базы формул",
-    available: false,
+    available: true,
+    action: () => {
+      this.stateService.context = ManagerContext.formula;
+    }
   }, {
     title: "",
     isDivider: true,
   }, {
     title: "Конфигурация Minio",
-    available: true,
+    available: false,
   }
   ]
   constructor(public stateService: MainStateService, 

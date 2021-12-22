@@ -1,10 +1,6 @@
-﻿import { Token } from "@angular/compiler";
-import { Subject } from "rxjs";
+﻿import { Subject } from "rxjs";
 import { AuthWorkerResponse, AuthWorkerRequestBase, AuthMessageTypes, AuthWorkerRequest, AuthWorkerRequestLogin, AuthWorkerResponseLogin, AuthWorkerRequestRefresh, AuthWorkerResponseRefresh } from "src/app/shared/models/auth-messages/auth-worker-messages";
-import { NetWorkerRequest, NetMessageTypes, NetWorkerResponse } from "src/app/shared/models/net-messages/net-worker-request";
 import { TokenService } from "../services/token.service";
-// import { AuthSystemService } from "../auth-system/auth-system.service";
-// import { TokenService } from "../auth-system/token.service";
 import { MessageHandler } from "../message-services/message-handler.service";
 
 /** Система верхнего уровня воркера. Принимает сообщения, перенаправляет их, инициализирует системы */
@@ -16,9 +12,6 @@ export class ManagementSystem {
   /** Узел для получения токена */
   private urlGetToken: string = "";
 
-  /** Последний полученный токен авторизации */
-  private lastUpdatedToken: Token | undefined;
-
   /** Кто то уже запросил получение токена, одновременно несколько запросов на сервер идти не должно, это вызывает ошибки */
   private tokenRequestInProcess: boolean = false;
 
@@ -27,7 +20,6 @@ export class ManagementSystem {
 
   constructor(private messageHandler: MessageHandler) {
     this.tokenService = new TokenService();
-    // this.authSystem = new AuthSystemService(messageHandler, this.tokenService);
     const identityUrl = "http://localhost:63654" + "/identity";
 
     this.urlGetToken = identityUrl + "/token";
@@ -160,7 +152,6 @@ export class ManagementSystem {
       messageType,
       data: null
     });
-
   }
   
 }

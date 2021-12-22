@@ -6,7 +6,7 @@
     [hideBackArrow]="stateService.context===ManagerContext.start"
         [title]="stateService.mainTitle">
     </ss-toolbar>
-
+    <!-- нужен динамик компонент -->
     <div [ngSwitch]="stateService.context" class="content-wrapper">
 
         <div *ngSwitchCase="ManagerContext.start" class="content-container">
@@ -16,6 +16,10 @@
 
         <div *ngSwitchCase="ManagerContext.base" class="content-container">
             <ss-normative-base></ss-normative-base>
+        </div>
+
+        <div *ngSwitchCase="ManagerContext.formula" class="content-container">
+            <ss-formula-base></ss-formula-base>
         </div>
     </div>
 </div>

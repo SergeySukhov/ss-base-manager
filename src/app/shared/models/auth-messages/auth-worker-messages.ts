@@ -58,23 +58,3 @@ export interface AuthError extends AuthData<false> {
 export interface AuthSuccess extends AuthData<true> {
   // refreshToken: string;
 }
-
-/** Модель для токена авторизации/рефреш токена */
-export interface Token {
-  /** Зашифрованная строка токена */
-  token: string;
-  /** Время, когда истекает токен в миллисекундах. Внимание - не время действия, а timestmp когда токен становится невалидным! */
-  validTill?: number;
-  /** Имя пользователя */
-  userName?: string;
-  /** Тип токена */
-  tokenType: TokenType;
-  /** Роли */
-  roles?: string[];
-}
-
-/** тип токена */
-export enum TokenType {
-  accessToken = "accessToken",
-  refreshToken = "refreshToken",
-}

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UUID } from 'angular2-uuid';
 import { Subject } from 'rxjs';
-import { NetMessageTypes, NetWorkerRequest, NetWorkerResponse } from '../../models/net-messages/net-worker-request';
+import { NetWorkerRequest, NetWorkerResponse } from "../../models/net-messages/net-worker-messages";
 import { BaseWorkerService } from './base-worker.service';
 
 @Injectable({
