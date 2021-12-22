@@ -9,6 +9,11 @@ export class FormulaBaseDeclarationService {
     normBasefieldOptions: SelectorOption[] = [];
 
     constructor(private endpoint: FormulaBaseEndpointService) {
+        const availableNB = this.endpoint.getAvailableNB().then(res => {
+        console.log("!! | availableNB | res", res)
+            
+        });
+    
     }
 
     public getStepperModel(context: FormulaBaseComponent): StepperData {

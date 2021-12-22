@@ -3,7 +3,7 @@ import { ManagementSystemBase } from "src/app/shared/models/worker-models/manage
 import { MessageHandler } from "../message-services/message-handler.service";
 
 export class ManagementSystem extends ManagementSystemBase {
-  serverUrl = "http://localhost:5002/additioninfo"
+  serverUrl = "http://localhost:5000/additioninfo"
   constructor(private messageHandler: MessageHandler) {
     super();
   }
@@ -32,11 +32,13 @@ export class ManagementSystem extends ManagementSystemBase {
     const requestBody = ``;
 
     sender.open("GET", this.serverUrl);
-    sender.setRequestHeader('Access-Control-Allow-Origin', '*/*');
+    sender.setRequestHeader('Access-Control-Allow-Origin', '*');
+    sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+    sender.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
     console.log("!! | sendRequestTest | sender", sender)
     sender.timeout = 5000;
 
-    sender.onreadystatechange = async () => {
+    sender.onreadystatechange = async () => { 
       if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
         if (sender.status === 200) {
           const senderObj = JSON.parse(sender.response);
