@@ -30,7 +30,6 @@ export class FormulaBaseDeclarationService {
                     type: OptionType.selector,
                     fieldLabel: "Доступные виды нормативных баз",
                     onDataChange: async (value: MatSelectChange, step: StepperDataStep) => {
-                        console.log("!! | onDataChange: | value", value)
                         context.resultParams.baseType = value.value.value;
                         step.isAwaiting = true;
 
@@ -104,7 +103,7 @@ export class FormulaBaseDeclarationService {
                 needActionButton: true,
                 isCompleted: !!this.finalOptions.length,
                 fields: this.finalOptions,
-                actionButtonAction: context.onFinish,
+                actionButtonAction: context.onFinish.bind(context),
             },
 
                 ////////////////////////////////////////////////////////////////////

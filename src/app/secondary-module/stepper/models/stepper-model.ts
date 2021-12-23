@@ -13,7 +13,7 @@ export class StepperDataStep {
     needResetButton?: boolean;
     isCompleted?: boolean;
     fields: StepFields[] = [];
-    actionButtonAction?: (data: any) => void | undefined;
+    actionButtonAction?: (data?: any) => void | undefined;
 }
 
 export enum OptionType {

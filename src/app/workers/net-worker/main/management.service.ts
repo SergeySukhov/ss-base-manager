@@ -72,6 +72,7 @@ export class ManagementSystem extends ManagementSystemBase {
     data.append("normoGuid", request.data.normoGuid);
 
     sender.withCredentials = false;
+    sender.open("POST", "http://localhost:5000/uploader");
 
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');
     sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
@@ -94,7 +95,6 @@ export class ManagementSystem extends ManagementSystemBase {
     }
 
     this.setSenderHandlers(sender, response);
-    sender.open("POST", "http://localhost:5000/uploader");
     sender.send(data);
   }
 

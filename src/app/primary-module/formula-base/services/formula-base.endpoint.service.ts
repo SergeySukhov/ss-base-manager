@@ -34,6 +34,7 @@ export class FormulaBaseEndpointService { //  extends EndpointService {
     }
 
     public async sendFormuls(finalData: FormBaseResultParams): Promise<void> {
+        console.log("!! | sendFormuls | finalData", finalData)
         if (!finalData.file) {
             return;
         }

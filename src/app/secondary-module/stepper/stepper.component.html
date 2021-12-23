@@ -49,7 +49,7 @@
             </div>
 
             <div>
-                <button class="step-button" *ngIf="stepModel.needActionButton && !!stepModel.actionButtonAction" mat-button (click)="stepModel.actionButtonAction">Готово</button>
+                <button class="step-button" *ngIf="stepModel.needActionButton && !!stepModel.actionButtonAction" mat-button (click)="stepModel.actionButtonAction()">Готово</button>
                 <button class="step-button" *ngIf="stepModel.needResetButton" mat-button (click)="stepper.reset()">Заново</button>
                 <button class="step-button" *ngIf="stepModel.needBackButton" mat-button (click)="stepper.previous()">Назад</button>
                 <button class="step-button" *ngIf="stepModel.needNextButton" mat-button

@@ -25,7 +25,9 @@ export class FormulaBaseComponent implements OnInit {
   }
 
   onFinish() {
-    this.endpointService.getAvailableNormativeBases()
+    console.log("!! | onFinish | Finish", this.resultParams)
+
+    this.endpointService.sendFormuls(this.resultParams);
   }
 
 }
