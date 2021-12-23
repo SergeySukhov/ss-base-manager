@@ -1,5 +1,5 @@
-<div class="container" dndShaker (fileDropped)="onFileDropped($event)">
-    <input type="file" #fileDropRef id="fileDropRef" multiple (change)="fileBrowseHandler($event)" />
+<div class="container" [fileFormat]="acceptFormat" dndShaker (fileDropped)="onFileDropped($event)">
+    <input type="file" #fileDropRef id="fileDropRef" [accept]="acceptFormat" [multiple]="false" (change)="fileBrowseHandler($event)" />
     <img src="assets\icons\uploader.svg" alt="">
     <h3>+ Перетащите файл сюда +</h3>
     <h3>или</h3>

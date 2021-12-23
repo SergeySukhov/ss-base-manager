@@ -32,7 +32,6 @@ export class ManagementSystem extends ManagementSystemBase {
     }
 
     sender.withCredentials = false;
-    const requestBody = ``;
 
     sender.open("GET", this.serverUrl);
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');

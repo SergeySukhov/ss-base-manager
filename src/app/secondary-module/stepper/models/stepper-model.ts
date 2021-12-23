@@ -50,6 +50,7 @@ export class StepperDividerField extends StepperDataField<OptionType.divider>  {
 }
 
 export class StepperFileLoaderField extends StepperDataField<OptionType.fileLoader>  {
+    fileFormat?: string;
     onDataChange: (value: any, form: StepperDataStep) => void = (value: any) => { return };
 }
 

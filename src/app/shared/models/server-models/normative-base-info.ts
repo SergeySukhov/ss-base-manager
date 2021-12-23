@@ -8,47 +8,47 @@ export interface AvailableBaseAdditionInfo {
     /// <summary>
     /// Идентификатор
     /// </summary>
-    Guid: string;
+    guid: string;
 
     /// <summary>
     /// Является ли отмененной
     /// </summary>
-    IsCancelled: boolean;
+    isCancelled: boolean;
 
     /// <summary>
     /// Флаг доступности
     /// </summary>
-    IsAvailable: boolean;
+    isAvailable: boolean;
 
     /// <summary>
     /// Наименование
     /// </summary>
-    Name: string;
+    name: string;
 
     /// <summary>
     /// Короткое наименование
     /// </summary>
-    ShortName: string;
+    shortName: string;
 
     /// <summary>
     /// Номер дополнения
     /// </summary>
-    AdditionNumber: number;
+    additionNumber: number;
 
     /// <summary>
     /// Тип НБ
     /// </summary>
-    Type: BaseType
+    type: BaseType
 
     /// <summary>
     /// Родительский тип НБ
     /// </summary>
-    ParentBaseType?: BaseType;
+    parentBaseType?: BaseType;
 
     /// <summary>
     /// Ключевые слова для автопривязки сметы из внешних источников к базе
     /// </summary>
-    AdditionRegexp: string;
+    additionRegexp: string;
 }
 
 export enum BaseType {

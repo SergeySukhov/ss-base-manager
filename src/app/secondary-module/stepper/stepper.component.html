@@ -43,7 +43,7 @@
                 </div>
 
                 <div *ngIf="fieldModel.type === 'fileLoader'" class="file-loader">
-                    <ss-file-loader (filesAdded)="fieldModel.onDataChange($event, stepModel)"></ss-file-loader>
+                    <ss-file-loader [acceptFormat]="fieldModel.fileFormat" (filesAdded)="fieldModel.onDataChange($event, stepModel)"></ss-file-loader>
                     <mat-spinner *ngIf="stepModel.isAwaiting" mode="indeterminate" color="accent" [diameter]="40"></mat-spinner>
                 </div>
             </div>

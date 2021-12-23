@@ -29,9 +29,10 @@ export class FormulaBaseEndpointService { //  extends EndpointService {
             messageType: NetMessageTypes.getAvailableNormoBases,
         });
         const a = avNB?.data as AvailableBaseAdditionInfo[]
+        console.log("!! | getAvailableNormativeBases | a", a)
         if (!!a?.length) {
             return a.map(x => {
-                return { guid: x.Guid, name: x.Name, additionalNumber: x.AdditionNumber }
+                return { guid: x.guid, name: x.name, additionalNumber: x.additionNumber }
             });
         } else {
             return null;

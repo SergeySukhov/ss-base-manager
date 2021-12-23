@@ -12,11 +12,6 @@ export class FormulaBaseDeclarationService {
     normBasefieldOptions: SelectorOption[] = [];
     finalOptions: StepFields[] = [];
     constructor(private endpoint: FormulaBaseEndpointService) {
-        const availableNB = this.endpoint.getAvailableNormativeBases().then(res => {
-            console.log("!! | availableNB | res", res)
-
-        });
-
     }
 
     public getStepperModel(context: FormulaBaseComponent): StepperData {
@@ -87,6 +82,7 @@ export class FormulaBaseDeclarationService {
                 fields: [{
                     type: OptionType.fileLoader,
                     fieldLabel: "",
+                    fileFormat: "csv",
                     onDataChange: (value: File[], form: StepperDataStep) => {
                     console.log("!! | getStepperModel | value", value)
                         context.resultParams.file = value[0];

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'ss-file-loader',
@@ -7,6 +7,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 })
 export class FileLoaderComponent implements OnInit {
 
+  @Input() acceptFormat: string | undefined;
   @Output() filesAdded = new EventEmitter<any>();
 
   public files: any[] = [];
@@ -16,10 +17,17 @@ export class FileLoaderComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onFileEnter(event: any) {
+    console.log("!! | onFileEnter | event", event)
 
-  onFileDropped($event: any) {
-    this.prepareFilesList($event);
-    this.filesAdded.emit(this.files);
+  }
+
+  onFileDropped(event: any) {
+    if (event instanceof FileList) {
+      console.log("!! | onFileDropped | event", event)
+      this.prepareFilesList(event);
+    }
+
   }
 
 
@@ -36,11 +44,14 @@ export class FileLoaderComponent implements OnInit {
   }
 
 
-  prepareFilesList(files: Array<any>) {
-    for (const item of files) {
-      item.progress = 0;
-      this.files.push(item);
-    }
+  prepareFilesList(files: FileList) {
+    // for (const item of files) {
+    //   item.progress = 0;
+    //   this.files.push(item);
+    // }
+    this.files.unshift(files[0]);
+    this.files.splice(1);
+    this.filesAdded.emit(this.files);
   }
 
   formatBytes(bytes: any, decimals: any) {
