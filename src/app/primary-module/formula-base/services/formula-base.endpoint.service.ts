@@ -40,16 +40,18 @@ export class FormulaBaseEndpointService { //  extends EndpointService {
 
     public async sendFormuls(finalData: FormBaseResultParams): Promise<void> {
         console.log("!! | sendFormuls | finalData", finalData)
-        if (!finalData.file) {
+        if (!finalData.file || !finalData.normBaseChoice) {
             return;
         }
 
         const avNB = await this.netWorker.postMessageToWorkerAsync({
             messageType: NetMessageTypes.sendFormulsUpload,
             data: {
-                addonNumber: finalData.normBaseChoice,
+                addonNumber: finalData.normBaseChoice.additionalNumber,
                 file: finalData.file,
-                normoGuid: finalData.normBaseChoice,
+                normoGuid: finalData.normBaseChoice.guid,
+                isAdd: false,
+                
             },
         });
         console.log("!! | getAvailableNB | avNB", avNB)

@@ -1,5 +1,5 @@
 ﻿// import jwt_decode from "jwt-decode";
-import { UUID } from "angular2-uuid";
+import { v4 } from "uuid";
 import { StorageService } from "../indexedDB/storage.service";
 
 
@@ -27,7 +27,7 @@ export class TokenService {
   /** Записать токен доступа */
   public async addToken(accessToken: string, refreshToken: string): Promise<void> {
       const token = {
-        guid:v4(),
+        guid: v4(),
         accessToken: accessToken,
         date: Date.now(),
         refreshToken: refreshToken,
