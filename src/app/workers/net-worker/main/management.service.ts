@@ -28,7 +28,7 @@ export class ManagementSystem extends ManagementSystemBase {
     const response: NetWorkerResponseAvailableBases = {
       guid: request.guid,
       messageType: NetMessageTypes.getAvailableNormoBases,
-      data: undefined
+      data: null
     }
 
     sender.withCredentials = false;
@@ -46,8 +46,8 @@ export class ManagementSystem extends ManagementSystemBase {
         if (sender.status === 200) {
           const senderObj = JSON.parse(sender.response);
           console.log("!! | sender.onreadystatechange= | senderObj", senderObj)
-
-          // this.messageHandler.toClient(response);
+          response.data = senderObj;
+          this.messageHandler.toClient(response);
         } else {
           this.errorHandler(response);
         }
@@ -87,7 +87,7 @@ export class ManagementSystem extends ManagementSystemBase {
           const senderObj = JSON.parse(sender.response);
           console.log("!! | sender.onreadystatechange= | senderObj", senderObj)
 
-          // this.messageHandler.toClient(response);
+          this.messageHandler.toClient(response);
         } else {
           this.errorHandler(response);
         }

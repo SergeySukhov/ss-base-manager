@@ -1,9 +1,12 @@
 ﻿import { BaseWorkerMessage } from "../base-worker-message";
+import { AvailableBaseAdditionInfo } from "../server-models/normative-base-info";
+
 
 export enum NetMessageTypes {
-  init,
-  getAvailableNormoBases,
-  sendFormulsUpload
+    init,
+    getAvailableNormoBases,
+    sendFormulsUpload,
+    serverTest
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -20,7 +23,7 @@ export interface NetWorkerRequestUploadFormuls extends NetWorkerRequestBase<NetM
     file: File,
     addonNumber: number,
     normoGuid: string,
-    fileLocation: string,
+    isAdd?: boolean,
   }
 }
 
@@ -39,7 +42,7 @@ export interface NetWorkerResponseBase<T extends NetMessageTypes> extends BaseWo
 }
 
 export interface NetWorkerResponseAvailableBases extends NetWorkerResponseBase<NetMessageTypes.getAvailableNormoBases> {
-  data: any;
+  data: AvailableBaseAdditionInfo[] | null;
 }
 
 export interface NetWorkerResponseUploadFormuls extends NetWorkerResponseBase<NetMessageTypes.sendFormulsUpload> {

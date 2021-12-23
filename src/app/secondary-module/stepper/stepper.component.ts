@@ -17,7 +17,7 @@ export class StepperComponent implements OnInit {
   @Input() data: StepperData | null = null;
   @Input() isLinear: boolean = false;
 
-  public isEditable = false;
+  public isEditable = true;
   public showAddForm = false;
 
   firstFormGroup: FormGroup;

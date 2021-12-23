@@ -34,7 +34,12 @@ export class FormulaBaseDeclarationService {
                         step.isAwaiting = true;
 
                         const availableNB = await this.endpoint.getAvailableNormativeBases();
-
+                        if (!availableNB) {
+                            
+                            step.isAwaiting = false;
+                            step.isCompleted = false;
+                            return;
+                        }
                         this.normBasefieldOptions.splice(0);
                         this.normBasefieldOptions.push(...this.toSelectorOptions(availableNB));
                         
@@ -62,9 +67,10 @@ export class FormulaBaseDeclarationService {
                     type: OptionType.selector,
                     fieldLabel: "Доступные НБ",
                     onDataChange: (value: any, form: StepperDataStep) => {
+                    console.log("!! | getStepperModel | value", value)
                         const selectedOption: SelectorOption = value.value;
 
-                        context.resultParams.normBaseChoice = selectedOption.data.name;
+                        context.resultParams.normBaseChoice = selectedOption.data;
 
                         form.needNextButton = true;
                         form.isCompleted = true;
@@ -84,7 +90,6 @@ export class FormulaBaseDeclarationService {
                     onDataChange: (value: File[], form: StepperDataStep) => {
                     console.log("!! | getStepperModel | value", value)
                         context.resultParams.file = value[0];
-                        context.resultParams.fileLocation = value[0].name;
                         form.isCompleted = true;
                         form.needNextButton = true;
                         this.finalOptions.splice(0);
@@ -115,14 +120,6 @@ export class FormulaBaseDeclarationService {
 
     private toSelectorOptions(baseData: NormativeBaseInfo[]): SelectorOption[] {
         const a: SelectorOption[] = [];
-        // a.push({ // опция создания нового микросервиса формул
-        //     isAvailable: true,
-        //     value: "",
-        //     // data: {}
-        //     imgSrc: "assets/icons/add.svg",
-        //     action: (value: string, form: StepperDataStep) => {
-        //     }
-        // });
 
         baseData.forEach(x => {
             a.push({
@@ -140,16 +137,16 @@ export class FormulaBaseDeclarationService {
     private toFinalData(resultParams: FormBaseResultParams): StepFields[] {
         return [{
             type: OptionType.label,
-            fieldLabel: "Вид базы",
+            fieldLabel: "Вид базы:",
             text: resultParams.baseType,
         },{
             type: OptionType.label,
-            fieldLabel: "Формулы для нормативной базы",
-            text: resultParams.normBaseChoice,
+            fieldLabel: "Формулы для нормативной базы:",
+            text: resultParams.normBaseChoice?.name ?? "!! не выбрана база !!",
         },{
             type: OptionType.label,
-            fieldLabel: "Файл",
-            text: resultParams.file?.name ?? "",
+            fieldLabel: "Файл c формулами:",
+            text: resultParams.file?.name ?? "!! не выбран файл !!",
         },
         ]
     }

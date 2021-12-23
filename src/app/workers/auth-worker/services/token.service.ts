@@ -27,7 +27,7 @@ export class TokenService {
   /** Записать токен доступа */
   public async addToken(accessToken: string, refreshToken: string): Promise<void> {
       const token = {
-        guid: UUID.UUID(),
+        guid:v4(),
         accessToken: accessToken,
         date: Date.now(),
         refreshToken: refreshToken,

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { UUID } from 'angular2-uuid';
 import { Subject } from 'rxjs';
+import { v4 } from "uuid";
 import { AuthWorkerRequest, AuthWorkerRequestBase, AuthWorkerResponse } from "../../models/auth-messages/auth-worker-messages";
 import { BaseWorkerService } from './base-worker.service';
 
@@ -17,7 +17,7 @@ export class AuthWorkerService extends BaseWorkerService<AuthWorkerRequest, Auth
         }
         const sub = new Subject<AuthWorkerResponse>();
         if (!message.guid) {
-            message.guid = UUID.UUID();
+            message.guid = v4();
         }
         this.responseSubs.set(message.guid, sub);
         this.worker.postMessage(message);
