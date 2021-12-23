@@ -18,10 +18,14 @@ export class FormulaBaseComponent implements OnInit {
   public data: StepperData | null = null;
   public resultParams: FormBaseResultParams = new FormBaseResultParams();
 
-  constructor(public declarationService: FormulaBaseDeclarationService) { }
+  constructor(private declarationService: FormulaBaseDeclarationService, private endpointService: FormulaBaseEndpointService) { }
 
   ngOnInit(): void {
     this.data = this.declarationService.getStepperModel(this);
+  }
+
+  onFinish() {
+    this.endpointService.getAvailableNormativeBases()
   }
 
 }

@@ -1,4 +1,4 @@
-﻿import { NetWorkerRequest, NetMessageTypes, NetWorkerResponse, NetWorkerResponseTest, NetWorkerRequestTest } from "src/app/shared/models/net-messages/net-worker-messages";
+﻿import { NetWorkerRequest, NetMessageTypes, NetWorkerResponse, NetWorkerResponseAvailableBases, NetWorkerRequestAvailableBases, NetWorkerRequestUploadFormuls, NetWorkerResponseUploadFormuls } from "src/app/shared/models/net-messages/net-worker-messages";
 import { ManagementSystemBase } from "src/app/shared/models/worker-models/management-system-base";
 import { MessageHandler } from "../message-services/message-handler.service";
 
@@ -13,18 +13,21 @@ export class ManagementSystem extends ManagementSystemBase {
       case NetMessageTypes.init:
         this.replySuccess(request.guid, request.messageType);
         break;
-      case NetMessageTypes.serverTest:
+      case NetMessageTypes.getAvailableNormoBases:
         this.sendRequestTest(request);
+        break;
+      case NetMessageTypes.sendFormulsUpload:
+        this.sendUploadTest(request);
         break;
     }
   }
 
-  private async sendRequestTest(request: NetWorkerRequestTest) {
+  private async sendRequestTest(request: NetWorkerRequestAvailableBases) {
     console.log("!! | sendRequestTest | request", request)
     const sender = new XMLHttpRequest();
-    const response: NetWorkerResponseTest = {
+    const response: NetWorkerResponseAvailableBases = {
       guid: request.guid,
-      messageType: NetMessageTypes.serverTest,
+      messageType: NetMessageTypes.getAvailableNormoBases,
       data: undefined
     }
 
@@ -38,7 +41,7 @@ export class ManagementSystem extends ManagementSystemBase {
     console.log("!! | sendRequestTest | sender", sender)
     sender.timeout = 5000;
 
-    sender.onreadystatechange = async () => { 
+    sender.onreadystatechange = async () => {
       if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
         if (sender.status === 200) {
           const senderObj = JSON.parse(sender.response);
@@ -54,6 +57,46 @@ export class ManagementSystem extends ManagementSystemBase {
     sender.send();
   }
 
+  private async sendUploadTest(request: NetWorkerRequestUploadFormuls) {
+    console.log("!! | sendRequestTest | request", request)
+
+    const sender = new XMLHttpRequest();
+    const response: NetWorkerResponseUploadFormuls = {
+      guid: request.guid,
+      messageType: NetMessageTypes.sendFormulsUpload,
+    }
+
+    var data = new FormData();
+    data.append("nrSpCsv", request.data.file);
+    data.append("addonNumber", "" + request.data.addonNumber);
+    data.append("normoGuid", request.data.normoGuid);
+
+    sender.withCredentials = false;
+
+    sender.setRequestHeader('Access-Control-Allow-Origin', '*');
+    sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    sender.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    sender.setRequestHeader('Content-Type', 'multipart/form-data');
+    console.log("!! | sendRequestTest | sender", sender)
+    sender.timeout = 5000;
+
+    sender.onreadystatechange = async () => {
+      if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
+        if (sender.status === 200) {
+          const senderObj = JSON.parse(sender.response);
+          console.log("!! | sender.onreadystatechange= | senderObj", senderObj)
+
+          // this.messageHandler.toClient(response);
+        } else {
+          this.errorHandler(response);
+        }
+      }
+    }
+
+    this.setSenderHandlers(sender, response);
+    sender.open("POST", "http://localhost:5000/uploader");
+    sender.send(data);
+  }
 
   private setSenderHandlers(sender: XMLHttpRequest, response: NetWorkerResponse) {
     sender.ontimeout = () => {
@@ -61,8 +104,6 @@ export class ManagementSystem extends ManagementSystemBase {
       sender.abort();
     }
     sender.onerror = (e) => {
-    console.log("!! | setSenderHandlers | sender", sender)
-    console.log("!! | setSenderHandlers | e", e)
       this.errorHandler(response)
     }
   }

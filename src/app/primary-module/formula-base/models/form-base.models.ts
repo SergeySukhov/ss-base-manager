@@ -2,7 +2,8 @@
 export class FormBaseResultParams {
     baseType: string = "";
     normBaseChoice: string | "addBase" = "";
-    fileChoice: string = "";
+    fileLocation: string = "";
+    file: File | null = null;
 
     addBase?: {
         guid: string;

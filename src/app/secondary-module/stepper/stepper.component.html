@@ -1,8 +1,8 @@
 <div class="wrapper">
-    <mat-stepper #stepper orientation="vertical" [linear]="true">
+    <mat-stepper #stepper orientation="vertical" [linear]="true" (selectionChange)="test($event)">
 
-        <mat-step [editable]="true" [completed]="stepModel?.isCompleted" *ngFor="let stepModel of data?.steps" #stepp >
-            <form [ngFormOptions]="firstFormGroup">
+        <mat-step [editable]="isEditable" [completed]="stepModel?.isCompleted" *ngFor="let stepModel of data?.steps" #stepp>
+            <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>{{stepModel.stepLabel}}</ng-template>
             <div class="mat-container" *ngFor="let fieldModel of stepModel.fields">
 
@@ -21,7 +21,7 @@
 
                 </div>
 
-                <div *ngIf="fieldModel?.type === 'input'">
+                <div *ngIf="fieldModel.type === 'input'">
                     <mat-form-field appearance="fill">
                         <mat-label>{{fieldModel?.fieldLabel ?? ""}}</mat-label>
                         <input matInput autocomplete="false" (change)="fieldModel.onDataChange($event, stepModel)"
@@ -33,7 +33,7 @@
                 <div *ngIf="fieldModel.type === 'label'">
                     <mat-form-field appearance="fill">
                         <mat-label>{{fieldModel?.fieldLabel ?? ""}}</mat-label>
-                        <input class="label-input" matInput type="text" disabled="true" autocomplete="false" 
+                        <input class="label-input" matInput type="text" readonly="true" autocomplete="false" 
                         [value]="fieldModel.text">
                     </mat-form-field>
                     <mat-spinner *ngIf="stepModel.isAwaiting" mode="indeterminate" color="accent" [diameter]="40"></mat-spinner>
@@ -49,6 +49,7 @@
             </div>
 
             <div>
+                <button class="step-button" *ngIf="stepModel.needActionButton && !!stepModel.actionButtonAction" mat-button (click)="stepModel.actionButtonAction">Готово</button>
                 <button class="step-button" *ngIf="stepModel.needResetButton" mat-button (click)="stepper.reset()">Заново</button>
                 <button class="step-button" *ngIf="stepModel.needBackButton" mat-button (click)="stepper.previous()">Назад</button>
                 <button class="step-button" *ngIf="stepModel.needNextButton" mat-button

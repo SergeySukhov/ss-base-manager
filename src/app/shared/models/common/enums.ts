@@ -8,6 +8,6 @@ export enum ManagerContext {
     base = "base",
     indexes = "indexes",
     formula = "formula",
-    corrections = "corrections"
+    correction = "correction"
 }
 

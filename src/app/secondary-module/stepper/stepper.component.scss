@@ -34,60 +34,12 @@
     width: 60%;
     margin: auto;
   }
-  .label-input {
-    color: whitesmoke;
-  }
   .step-button {
     background-color: mat.get-color-from-palette($primary-palette, 500);
     margin-right: 10px;
   }
-  mat-stepper {
-    background-color: transparent;
-  }
-  mat-spinner {
-    margin-top: 10px;
-    margin-left: 10px;
-  }
-}
-
-@mixin theme($theme) {
-  $color-config: mat.get-color-config($theme);
-  @if $color-config != null {
-    @include color($theme);
-  }
-}
-
-.dark-mode .mat-option.mat-active {
-  img {
-    margin: auto;
-    display: flex;
-  }
-}
-
-.light-mode .mat-option.mat-active {
-  img {
-    margin: auto;
-    display: flex;
-    filter: brightness(0.1);
-  }
-}
-
-.dark-mode .mat-primary .mat-option.mat-selected {
-    color: whitesmoke !important;
-
-}
-.dark-mode .mat-form-field.mat-focused .mat-form-field-label {
-    color: whitesmoke !important;
-}
-
-.light-mode .mat-stepper-horizontal, .light-mode .mat-stepper-vertical {
-  background-color: whitesmoke !important;
-}
-.dark-mode .mat-stepper-horizontal, .dark-mode .mat-stepper-vertical {
-  background-color: #232323 !important;
-}
-
-.wrapper {
+  
+  .wrapper {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -99,17 +51,61 @@
     
     display: flex;
     flex-direction: column;
+  }
+
+  .loader-container {
+    margin: auto;
+    margin-top: 5px;
+    width: 50%;
+  }
+
 }
 
-.loader-container {
-  margin: auto;
-  margin-top: 5px;
-  width: 50%;
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}
+
+.dark-mode .mat-option {
+  img {
+    margin: auto;
+    display: flex;
+  }
+}
+.light-mode .mat-option {
+  img {
+    margin: auto;
+    display: flex;
+    filter: brightness(0.1);
+  }
+}
+
+.dark-mode .mat-primary .mat-option.mat-selected {
+  color: whitesmoke !important;
+
+}
+.dark-mode .mat-form-field.mat-focused .mat-form-field-label {
+  color: whitesmoke !important;
+}
+
+.light-mode .mat-stepper-horizontal, .light-mode .mat-stepper-vertical {
+  background-color: whitesmoke !important;
+}
+.dark-mode .mat-stepper-horizontal, .dark-mode .mat-stepper-vertical {
+  background-color: #232323 !important;
 }
 
 mat-form-field {
     margin-top: 5px;
 }
 
-
+mat-stepper {
+  background-color: transparent;
+}
+mat-spinner {
+  margin-top: 10px;
+  margin-left: 10px;
+}
 
