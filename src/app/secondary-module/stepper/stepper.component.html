@@ -43,17 +43,38 @@
                 </div>
 
                 <div *ngIf="fieldModel.type === 'fileLoader'" class="file-loader">
-                    <ss-file-loader [acceptFormat]="fieldModel.fileFormat" (filesAdded)="fieldModel.onDataChange($event, stepModel)"></ss-file-loader>
+                    <ss-file-loader [acceptFormats]="fieldModel.fileFormats" (filesAdded)="fieldModel.onDataChange($event, stepModel)"></ss-file-loader>
                     <mat-spinner *ngIf="stepModel.isAwaiting" mode="indeterminate" color="accent" [diameter]="40"></mat-spinner>
                 </div>
             </div>
 
-            <div>
-                <button class="step-button" *ngIf="stepModel.needActionButton && !!stepModel.actionButtonAction" mat-button (click)="stepModel.actionButtonAction()">Готово</button>
-                <button class="step-button" *ngIf="stepModel.needResetButton" mat-button (click)="stepper.reset()">Заново</button>
-                <button class="step-button" *ngIf="stepModel.needBackButton" mat-button (click)="stepper.previous()">Назад</button>
-                <button class="step-button" *ngIf="stepModel.needNextButton" mat-button
-                    (click)="stepper.next()">Вперед</button>
+            <div class="checkbox-container">
+                <mat-checkbox *ngIf="stepModel.checkbox && stepModel.checkbox.checkboxAction" class="example-margin"
+                    [disabled]="stepModel.checkbox.isDisable"
+                    [checked]="stepModel.checkbox.value"
+                    color="primary"
+                    (change)="stepModel.checkbox.checkboxAction($event.checked, stepModel)">
+                        {{stepModel.checkbox.text}}
+                </mat-checkbox>
+            </div>
+            <div class="buttons-container">
+                <button class="step-button action-button" 
+                    *ngIf="stepModel.actionButton?.needShow && !!stepModel.actionButtonAction" [disabled]="stepModel.actionButton?.isDisable"
+                    mat-button (click)="stepModel.actionButtonAction()">Готово</button>
+                
+                <button class="step-button" 
+                    *ngIf="stepModel.nextButton?.needShow" [disabled]="stepModel.nextButton?.isDisable"
+                     mat-button (click)="stepper.next()">Вперед</button>
+                
+                <button class="step-button" 
+                    *ngIf="stepModel.backButton?.needShow" [disabled]="stepModel.backButton?.isDisable"
+                     mat-button (click)="stepper.previous()">Назад</button>
+               
+                <button class="step-button" 
+                    *ngIf="stepModel.resetButton?.needShow" [disabled]="stepModel.resetButton?.isDisable"
+                 mat-button (click)="stepper.reset()">Заново</button>
+
+
             </div>
         </form>
 

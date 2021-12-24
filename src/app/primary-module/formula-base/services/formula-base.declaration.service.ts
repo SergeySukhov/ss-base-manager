@@ -17,9 +17,30 @@ export class FormulaBaseDeclarationService {
     public getStepperModel(context: FormulaBaseComponent): StepperData {
         const stepperModel: StepperData = {
             isLinear: true,
-            steps: [{
+            steps: [  {
+                stepLabel: "Добавление файла формул (.csv)",
+                nextButton: { needShow: true, isDisable: true },
+                backButton: { needShow: true, isDisable: false },
+                fields: [{
+                    type: OptionType.fileLoader,
+                    fieldLabel: "",
+                    fileFormats: ["csv", "svg"],
+                    onDataChange: (value: File[], form: StepperDataStep) => {
+                        console.log("!! | getStepperModel | value", value)
+                        context.resultParams.file = value[0];
+                        form.isCompleted = true;
+                        if (form.nextButton) {
+                            form.nextButton.isDisable = false;
+                        }
+                        this.finalOptions.splice(0);
+                        this.finalOptions.push(...this.toFinalData(context.resultParams))
+                    },
+                },
+                ],
+            },
+            {
                 stepLabel: "Выбор вида НБ",
-                needNextButton: false,
+                nextButton: { needShow: true, isDisable: true },
                 isAwaiting: false,
                 fields: [{
                     type: OptionType.selector,
@@ -30,44 +51,47 @@ export class FormulaBaseDeclarationService {
 
                         const availableNB = await this.endpoint.getAvailableNormativeBases();
                         if (!availableNB) {
-                            
                             step.isAwaiting = false;
                             step.isCompleted = false;
                             return;
                         }
                         this.normBasefieldOptions.splice(0);
                         this.normBasefieldOptions.push(...this.toSelectorOptions(availableNB));
-                        
+
                         step.isAwaiting = false;
                         step.isCompleted = true;
-                        step.needNextButton = true;
+                        if (step.nextButton) {
+                            step.nextButton.isDisable = false;
+                        }
                     },
                     fieldOptions: [{
                         isAvailable: true,
                         value: "ТСН МГЭ",
-                        action: (value: string) => { }
+                        action: () => { }
                     }, {
                         isAvailable: false,
                         value: "ФЕР",
-                        action: (value: string) => { }
+                        action: () => { }
                     }]
                 }],
             },
             ////////////////////////////////////////////////////////////////////
             {
                 stepLabel: "Выбор НБ",
-                needNextButton: false,
-                needBackButton: true,
+                nextButton: { needShow: true, isDisable: true },
+                backButton: { needShow: true, isDisable: false },
                 fields: [{
                     type: OptionType.selector,
                     fieldLabel: "Доступные НБ",
                     onDataChange: (value: any, form: StepperDataStep) => {
-                    console.log("!! | getStepperModel | value", value)
+                        console.log("!! | getStepperModel | value", value)
                         const selectedOption: SelectorOption = value.value;
 
                         context.resultParams.normBaseChoice = selectedOption.data;
 
-                        form.needNextButton = true;
+                        if (form.nextButton) {
+                            form.nextButton.isDisable = false;
+                        }
                         form.isCompleted = true;
                     },
                     fieldOptions: this.normBasefieldOptions,
@@ -77,17 +101,19 @@ export class FormulaBaseDeclarationService {
             ////////////////////////////////////////////////////////////////////
             {
                 stepLabel: "Добавление файла формул (.csv)",
-                needNextButton: false,
-                needBackButton: true,
+                nextButton: { needShow: true, isDisable: true },
+                backButton: { needShow: true, isDisable: false },
                 fields: [{
                     type: OptionType.fileLoader,
                     fieldLabel: "",
-                    fileFormat: "csv",
+                    fileFormats: ["csv", "svg"],
                     onDataChange: (value: File[], form: StepperDataStep) => {
-                    console.log("!! | getStepperModel | value", value)
+                        console.log("!! | getStepperModel | value", value)
                         context.resultParams.file = value[0];
                         form.isCompleted = true;
-                        form.needNextButton = true;
+                        if (form.nextButton) {
+                            form.nextButton.isDisable = false;
+                        }
                         this.finalOptions.splice(0);
                         this.finalOptions.push(...this.toFinalData(context.resultParams))
                     },
@@ -98,10 +124,10 @@ export class FormulaBaseDeclarationService {
             ////////////////////////////////////////////////////////////////////
             {
                 stepLabel: "Итог",
-                needNextButton: false,
-                needResetButton: false,
-                needBackButton: false,
-                needActionButton: true,
+                nextButton:  { needShow: false, isDisable: false },
+                resetButton:  { needShow: true, isDisable: false },
+                backButton:  { needShow: true, isDisable: false },
+                actionButton:  { needShow: true, isDisable: false },
                 isCompleted: !!this.finalOptions.length,
                 fields: this.finalOptions,
                 actionButtonAction: context.onFinish.bind(context),
@@ -115,19 +141,18 @@ export class FormulaBaseDeclarationService {
     }
 
     private toSelectorOptions(baseData: NormativeBaseInfo[]): SelectorOption[] {
-        const a: SelectorOption[] = [];
-
+        const selectorOptions: SelectorOption[] = [];
         baseData.forEach(x => {
-            a.push({
+            selectorOptions.push({
                 isAvailable: true,
                 value: x.name,
                 data: x,
-                action: (value: string, form: StepperDataStep) => {
+                action: (value: SelectorOption, form: StepperDataStep) => {
 
                 }
             });
         });
-        return a;
+        return selectorOptions;
     }
 
     private toFinalData(resultParams: FormBaseResultParams): StepFields[] {
@@ -135,11 +160,11 @@ export class FormulaBaseDeclarationService {
             type: OptionType.label,
             fieldLabel: "Вид базы:",
             text: resultParams.baseType,
-        },{
+        }, {
             type: OptionType.label,
             fieldLabel: "Формулы для нормативной базы:",
             text: resultParams.normBaseChoice?.name ?? "!! не выбрана база !!",
-        },{
+        }, {
             type: OptionType.label,
             fieldLabel: "Файл c формулами:",
             text: resultParams.file?.name ?? "!! не выбран файл !!",

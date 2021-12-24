@@ -7,13 +7,15 @@ export class StepperData {
 export class StepperDataStep {
     stepLabel: string = "";
     isAwaiting?: boolean = false;
-    needNextButton?: boolean;
-    needBackButton?: boolean;
-    needActionButton?: boolean;
-    needResetButton?: boolean;
+    nextButton?: { needShow: boolean; isDisable: boolean };
+    backButton?: { needShow: boolean; isDisable: boolean };
+    actionButton?:  { needShow: boolean; isDisable: boolean };
+    checkbox?:  { needShow: boolean; isDisable: boolean; value: boolean; text: string; checkboxAction: (value: boolean, form: StepperDataStep) => void | undefined; };
+    resetButton?: { needShow: boolean; isDisable: boolean };
     isCompleted?: boolean;
     fields: StepFields[] = [];
     actionButtonAction?: (data?: any) => void | undefined;
+    
 }
 
 export enum OptionType {
@@ -29,7 +31,7 @@ export type StepFields = StepperLabelField | StepperInputField | StepperSelector
 export abstract class StepperDataField<T extends OptionType> {
     type: T | undefined;
     fieldLabel?: string;
-    onDataChange?: (value: any, form: StepperDataStep) => void = (value: any) => { return };
+    onDataChange?: (value: any, form: StepperDataStep) => void = () => { return };
 }
 
 export class StepperLabelField extends StepperDataField<OptionType.label>  {
@@ -38,20 +40,20 @@ export class StepperLabelField extends StepperDataField<OptionType.label>  {
 
 export class StepperInputField extends StepperDataField<OptionType.input>  {
     placeHolder?: string = "";
-    onDataChange: (value: any, form: StepperDataStep) => void = (value: any) => { return };
+    onDataChange: (value: any, form: StepperDataStep) => void = () => { return };
 }
 
 export class StepperSelectorField extends StepperDataField<OptionType.selector>  {
     fieldOptions: SelectorOption[] | undefined;
-    onDataChange: (value: any, form: StepperDataStep) => void = (value: any) => { return };
+    onDataChange: (value: any, form: StepperDataStep) => void = () => { return };
 }
 
 export class StepperDividerField extends StepperDataField<OptionType.divider>  {
 }
 
 export class StepperFileLoaderField extends StepperDataField<OptionType.fileLoader>  {
-    fileFormat?: string;
-    onDataChange: (value: any, form: StepperDataStep) => void = (value: any) => { return };
+    fileFormats?: string[];
+    onDataChange: (value: any, form: StepperDataStep) => void = () => { return };
 }
 
 export class SelectorOption {
@@ -59,5 +61,5 @@ export class SelectorOption {
     value: string | undefined;
     isAvailable: boolean | undefined;
     data?: any;
-    action: (value: any, form?: any) => void = (value: any) => { return };
+    action: (value: SelectorOption, form: StepperDataStep) => void = () => { return };
 }

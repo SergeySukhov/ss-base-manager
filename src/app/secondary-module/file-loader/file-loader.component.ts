@@ -7,7 +7,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class FileLoaderComponent implements OnInit {
 
-  @Input() acceptFormat: string | undefined;
+  @Input() acceptFormats: string[] | undefined;
   @Output() filesAdded = new EventEmitter<any>();
 
   public files: any[] = [];

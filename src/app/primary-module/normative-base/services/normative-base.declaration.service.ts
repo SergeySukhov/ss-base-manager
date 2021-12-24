@@ -17,7 +17,7 @@ export class NormativeBaseDeclarationService {
             isLinear: true,
             steps: [{
                 stepLabel: "Выбор вида НБ",
-                needNextButton: false,
+                // nextButton: false,
                 isAwaiting: false,
                 fields: [{
                     type: OptionType.selector,
@@ -33,24 +33,24 @@ export class NormativeBaseDeclarationService {
 
                         step.isAwaiting = false;
                         step.isCompleted = true;
-                        step.needNextButton = true;
+                        // step.nextButton = true;
                     },
                     fieldOptions: [{
                         isAvailable: true,
                         value: "ТСН МГЭ",
-                        action: (value: string) => { }
+                        action: () => { }
                     }, {
                         isAvailable: false,
                         value: "ФЕР",
-                        action: (value: string) => { }
+                        action: () => { }
                     }]
                 }],
             },
             ////////////////////////////////////////////////////////////////////
             {
                 stepLabel: "Выбор НБ",
-                needNextButton: false,
-                needBackButton: true,
+                // nextButton: false,
+                // backButton: true,
                 fields: [{
                     type: OptionType.selector,
                     fieldLabel: "Доступные НБ",
@@ -58,7 +58,7 @@ export class NormativeBaseDeclarationService {
                         const selectedOption: SelectorOption = value.value;
                         const needAdd = !!selectedOption.imgSrc;
                         if (form) {
-                            form.needNextButton = true;
+                            // form.nextButton = true;
                         }
                         this.setAddBaseForm(needAdd, context, form);
                         form.isCompleted = true;
@@ -70,15 +70,15 @@ export class NormativeBaseDeclarationService {
             ////////////////////////////////////////////////////////////////////
             {
                 stepLabel: "Добавление файла НБ",
-                needNextButton: false,
+                // nextButton: false,
                 // needResetButton: true,
-                needBackButton: true,
+                // backButton: true,
                 fields: [{
                     type: OptionType.fileLoader,
                     fieldLabel: "",
                     onDataChange: (value: any, form: StepperDataStep) => {
                         form.isCompleted = true;
-                        form.needNextButton = true;
+                        // form.nextButton = true;
                     },
                 },
                 ],
@@ -87,15 +87,15 @@ export class NormativeBaseDeclarationService {
             ////////////////////////////////////////////////////////////////////
             {
                 stepLabel: "Добавление файла тех. части",
-                needNextButton: false,
-                // needResetButton: true,
-                needBackButton: true,
+                // nextButton: false,
+                // // needResetButton: true,
+                // backButton: true,
                 fields: [{
                     type: OptionType.fileLoader,
                     fieldLabel: "",
                     onDataChange: (value: any, form: StepperDataStep) => {
                         form.isCompleted = true;
-                        form.needNextButton = true;
+                        // form.nextButton = true;
                     },
                 },
                 ],
@@ -103,9 +103,9 @@ export class NormativeBaseDeclarationService {
             ////////////////////////////////////////////////////////////////////
             {
                 stepLabel: "Итог",
-                needNextButton: false,
-                needResetButton: true,
-                needBackButton: true,
+                // nextButton: false,
+                // resetButton: true,
+                // backButton: true,
                 isCompleted: true,
                 fields: [{
                     type: OptionType.input,
@@ -129,7 +129,7 @@ export class NormativeBaseDeclarationService {
             isAvailable: true,
             value: "",
             imgSrc: "assets/icons/add.svg",
-            action: (value: string, form: StepperDataStep) => {
+            action: (value: SelectorOption, form: StepperDataStep) => {
             }
         });
 
@@ -137,7 +137,7 @@ export class NormativeBaseDeclarationService {
             a.push({
                 isAvailable: true,
                 value: x,
-                action: (value: string, form: StepperDataStep) => {
+                action: () => {
                 }
             });
         });

@@ -8,7 +8,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatStepperModule } from "@angular/material/stepper";
 import { StepperComponent } from "./stepper/stepper.component";
 import { FileLoaderComponent } from './file-loader/file-loader.component';
-import { DndDirective } from "./directives/dnd.directive";
+import { DndDirective } from "./file-loader/directives/dnd.directive";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatRippleModule } from '@angular/material/core';
 import { MatListModule } from '@angular/material/list';

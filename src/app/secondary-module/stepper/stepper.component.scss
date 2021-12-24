@@ -37,6 +37,8 @@
   .step-button {
     background-color: mat.get-color-from-palette($primary-palette, 500);
     margin-right: 10px;
+    width: 130px;
+    height: 50px;
   }
   
   .wrapper {
@@ -58,7 +60,11 @@
     margin-top: 5px;
     width: 50%;
   }
-
+  .buttons-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+  }
 }
 
 @mixin theme($theme) {

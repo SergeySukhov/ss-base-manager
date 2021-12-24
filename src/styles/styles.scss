@@ -58,12 +58,12 @@ $app-dark-theme: mat-dark-theme($mat-primary-palette-dark, $mat-primary-palette)
 
 .light-mode {
   @include alltheme($app-light-theme);
-  
   background-color: whitesmoke;
   color: #363636;
 
 }
 @include angular-material-theme($app-dark-theme);
+
 
 .dark-mode {
   @include alltheme($app-dark-theme);

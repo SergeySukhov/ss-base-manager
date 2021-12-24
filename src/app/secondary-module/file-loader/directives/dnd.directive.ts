@@ -14,14 +14,17 @@ export class DndDirective {
   @HostBinding('class.fileover') fileOver: boolean = false;
   @HostBinding('class.wrong-file') wrongFile: boolean = false;
 
-  @Input() fileFormat: string | undefined;
+  @Input() fileFormats: string[] | undefined;
   @Output() fileDropped = new EventEmitter<FileList>();
 
   @HostListener('dragover', ['$event']) onDragOver(evt: DragEvent) {
     evt.preventDefault();
     evt.stopPropagation();
-    
-    if (evt.dataTransfer?.files && evt.dataTransfer?.items[0]?.kind === "file" && (!this.fileFormat || evt.dataTransfer?.items[0]?.type.includes(this.fileFormat.replace(".", "").trim()))) {
+
+    if (evt.dataTransfer?.files && evt.dataTransfer?.items[0]?.kind === "file"
+      && (!this.fileFormats
+        || this.fileFormats.some(format => evt.dataTransfer?.items[0]?.type.includes(format.replace(".", "").trim())))
+    ) {
       this.fileOver = true;
     } else {
       this.wrongFile = true;
@@ -38,12 +41,12 @@ export class DndDirective {
   @HostListener('drop', ['$event']) public ondrop(evt: any) {
     evt.preventDefault();
     evt.stopPropagation();
-    this.fileOver = false;
-    this.wrongFile = false;
-
-    let files = evt.dataTransfer.files;
-    if (files.length > 0) {
+    const files = evt.dataTransfer?.files;
+    if (!files?.length || this.wrongFile) {
+    } else {
       this.fileDropped.emit(files);
     }
+    this.fileOver = false;
+    this.wrongFile = false;
   }
 }
