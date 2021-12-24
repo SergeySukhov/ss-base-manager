@@ -21,6 +21,15 @@ export class FormulaBaseDeclarationService {
                 stepLabel: "Добавление файла формул (.csv)",
                 nextButton: { needShow: true, isDisable: true },
                 backButton: { needShow: true, isDisable: false },
+                checkbox: {
+                    needShow: true,
+                    isDisable: false,
+                    text: "Деплой",
+                    value: false,
+                    checkboxAction: (value: boolean, form: StepperDataStep) => {
+                        context.resultParams.needDeploy = value;
+                    }
+                },
                 fields: [{
                     type: OptionType.fileLoader,
                     fieldLabel: "",

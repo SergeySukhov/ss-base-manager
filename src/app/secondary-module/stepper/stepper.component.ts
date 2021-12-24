@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatOptionSelectionChange } from "@angular/material/core";
 import { MatSelectChange } from "@angular/material/select";
@@ -16,6 +16,8 @@ export class StepperComponent implements OnInit {
 
   @Input() data: StepperData | null = null;
   @Input() isLinear: boolean = false;
+
+  @Output() modelChange = new EventEmitter();
 
   public isEditable = true;
   public showAddForm = false;
@@ -43,7 +45,7 @@ export class StepperComponent implements OnInit {
 
   test(event: any) {
     console.log("!! | test | event", event)
-
+    this.modelChange.emit();
   }
 
 
