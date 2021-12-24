@@ -44,8 +44,8 @@ export class StepperInputField extends StepperDataField<OptionType.input>  {
 }
 
 export class StepperSelectorField extends StepperDataField<OptionType.selector>  {
-    fieldOptions: SelectorOption[] | undefined;
-    onDataChange: (value: any, form: StepperDataStep) => void = () => { return };
+    fieldOptions: SelectorOption<any>[] | undefined;
+    onDataChange: <T>(value: SelectorOption<T>, form: StepperDataStep) => void = () => { return };
 }
 
 export class StepperDividerField extends StepperDataField<OptionType.divider>  {
@@ -53,13 +53,14 @@ export class StepperDividerField extends StepperDataField<OptionType.divider>  {
 
 export class StepperFileLoaderField extends StepperDataField<OptionType.fileLoader>  {
     fileFormats?: string[];
-    onDataChange: (value: any, form: StepperDataStep) => void = () => { return };
+    onDataChange: (value: File[], form: StepperDataStep) => void = () => { return };
 }
 
-export class SelectorOption {
+export class SelectorOption<T> {
     imgSrc?: string;
     value: string | undefined;
     isAvailable: boolean | undefined;
-    data?: any;
-    action: (value: SelectorOption, form: StepperDataStep) => void = () => { return };
+    // TODO:
+    data: any | T;
+    action: (value: SelectorOption<T>, form: StepperDataStep) => void | Promise<void> = () => { return };
 }

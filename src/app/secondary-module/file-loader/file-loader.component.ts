@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class FileLoaderComponent implements OnInit {
 
   @Input() acceptFormats: string[] | undefined;
-  @Output() filesAdded = new EventEmitter<any>();
+  @Output() filesChanged = new EventEmitter<any>();
 
   public files: any[] = [];
 
@@ -17,14 +17,8 @@ export class FileLoaderComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onFileEnter(event: any) {
-    console.log("!! | onFileEnter | event", event)
-
-  }
-
   onFileDropped(event: any) {
     if (event instanceof FileList) {
-      console.log("!! | onFileDropped | event", event)
       this.prepareFilesList(event);
     }
 
@@ -41,6 +35,7 @@ export class FileLoaderComponent implements OnInit {
 
   deleteFile(index: number) {
     this.files.splice(index, 1);
+    this.filesChanged.emit(this.files);
   }
 
 
@@ -51,7 +46,7 @@ export class FileLoaderComponent implements OnInit {
     // }
     this.files.unshift(files[0]);
     this.files.splice(1);
-    this.filesAdded.emit(this.files);
+    this.filesChanged.emit(this.files);
   }
 
   formatBytes(bytes: any, decimals: any) {

@@ -9,7 +9,7 @@
                 <div class="field-container" *ngIf="fieldModel.type === 'selector'">
                     <mat-form-field class="form-field" appearance="fill">
                         <mat-label>{{fieldModel.fieldLabel}}</mat-label>
-                        <mat-select (selectionChange)="fieldModel.onDataChange($event, stepModel)">
+                        <mat-select (selectionChange)="fieldModel.onDataChange($event.value, stepModel)">
                             <mat-option *ngFor="let option of fieldModel.fieldOptions" [value]="option"
                                 [disabled]="!option.isAvailable" (onSelectionChange)="option.action(option, stepModel)">
                                 <img *ngIf="!!option.imgSrc" [src]="option.imgSrc" />
@@ -43,13 +43,13 @@
                 </div>
 
                 <div *ngIf="fieldModel.type === 'fileLoader'" class="file-loader">
-                    <ss-file-loader [acceptFormats]="fieldModel.fileFormats" (filesAdded)="fieldModel.onDataChange($event, stepModel)"></ss-file-loader>
+                    <ss-file-loader [acceptFormats]="fieldModel.fileFormats" (filesChanged)="fieldModel.onDataChange($event, stepModel)"></ss-file-loader>
                     <mat-spinner *ngIf="stepModel.isAwaiting" mode="indeterminate" color="accent" [diameter]="40"></mat-spinner>
                 </div>
             </div>
 
-            <div class="checkbox-container">
-                <mat-checkbox *ngIf="stepModel.checkbox && stepModel.checkbox.checkboxAction" class="example-margin"
+            <div class="checkbox-container" *ngIf="stepModel.checkbox && stepModel.checkbox.checkboxAction">
+                <mat-checkbox  class="example-margin"
                     [disabled]="stepModel.checkbox.isDisable"
                     [checked]="stepModel.checkbox.value"
                     color="primary"

@@ -23,7 +23,6 @@ export class ManagementSystem extends ManagementSystemBase {
   }
 
   private async sendRequestTest(request: NetWorkerRequestAvailableBases) {
-    console.log("!! | sendRequestTest | request", request)
     const sender = new XMLHttpRequest();
     const response: NetWorkerResponseAvailableBases = {
       guid: request.guid,

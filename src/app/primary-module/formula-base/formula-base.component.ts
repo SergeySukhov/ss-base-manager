@@ -30,4 +30,9 @@ export class FormulaBaseComponent implements OnInit {
     this.endpointService.sendFormuls(this.resultParams);
   }
 
+  onModelChange() {
+    
+    console.log("!! | onModelChange | this.data", this.data)
+  }
+
 }
