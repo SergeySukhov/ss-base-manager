@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from "@angular/core";
-import { LocalStorageService } from "./local-storage.service";
+import { LocalStorageConst, LocalStorageService } from "./local-storage.service";
 
 
 @Injectable()
@@ -16,6 +16,7 @@ export class UserService {
 
     setName(name: string) {
         this.username = name;
+        this.storageService.setItem(LocalStorageConst.username, name);
         this.gacciUser = this.username.includes("voro");
         this.userChange.emit(this.username);
     }

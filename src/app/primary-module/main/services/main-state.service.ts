@@ -5,6 +5,8 @@ import { ManagerContext } from "src/app/shared/models/common/enums";
 @Injectable()
 export class MainStateService {
     @observable context = ManagerContext.start;
+    @observable needMuscle = false;
+
     constructor() {
     }
 

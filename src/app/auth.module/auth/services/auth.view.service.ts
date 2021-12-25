@@ -45,7 +45,7 @@ export class AuthViewService {
         if (authResponse.data.isSuccess === true) {
             this.isAuth = true;
             if (needRemember) {
-                this.userService
+                this.userService.setName(username);
                 this.storageService.setItem(LocalStorageConst.lastTokenTime, Date.now())
             } else {
                 this.storageService.removeItem(LocalStorageConst.lastTokenTime)
