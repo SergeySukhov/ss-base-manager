@@ -22,7 +22,6 @@ export class NormativeBaseDeclarationService extends BaseDeclarationService<Norm
             isLinear: true,
             steps: [
                 {
-                    isOptional: true,
                     stepLabel: "Выбор вида НБ",
                     nextButton: { needShow: true, isDisable: true },
                     isAwaiting: false,
