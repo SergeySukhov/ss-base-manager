@@ -37,7 +37,7 @@
                 <div *ngIf="fieldModel.type === 'input'">
                     <mat-form-field appearance="fill">
                         <mat-label>{{fieldModel?.fieldLabel ?? ""}}</mat-label>
-                        <input matInput autocomplete="false" (change)="fieldModel.onDataChange($event, stepModel)"
+                        <input #stepInput  matInput autocomplete="false" (keyup)="fieldModel.onDataChange(stepInput.value, stepModel)"
                             value="">
                     </mat-form-field>
                     <mat-spinner *ngIf="stepModel.isAwaiting" mode="indeterminate" color="accent" [diameter]="40"></mat-spinner>

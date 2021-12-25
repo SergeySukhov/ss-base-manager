@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { OptionType, SelectorOption, StepperData, StepperDataStep, StepperSelectorField, StepFields, StepperLabelField } from "src/app/secondary-module/stepper/models/stepper-model";
 import { BaseType, NormativeBaseInfo } from "src/app/shared/models/server-models/normative-base-info";
+import { v4 } from "uuid";
 import { BaseTypeInfo } from "../../formula-base/models/form-base.models";
 import { BaseDeclarationService } from "../../models/declaration-base.service";
 import { NormBaseResultParams } from "../models/norm-base.models";
@@ -35,8 +36,6 @@ export class NormativeBaseDeclarationService extends BaseDeclarationService<Norm
 
                             const availableNB = await this.endpoint.getAvailableNormativeBases(data.type);
                             if (!availableNB) {
-                                step.isAwaiting = false;
-                                step.isCompleted = false;
                                 return;
                             }
 
@@ -80,10 +79,12 @@ export class NormativeBaseDeclarationService extends BaseDeclarationService<Norm
                         onDataChange: (value: SelectorOption<NormativeBaseInfo>, form: StepperDataStep) => {
                             context.resultParams.normBaseChoice = value.data as NormativeBaseInfo;
 
+                            this.setAddBaseForm(!!value.imgSrc, context, form);
+
                             if (form.nextButton) {
-                                form.nextButton.isDisable = false;
+                                form.nextButton.isDisable = !context.resultParams.normBaseChoice;;
                             }
-                            form.isCompleted = true;
+                            form.isCompleted = !form.nextButton?.isDisable
                             this.updateResultParams(context.resultParams);
                         },
                         fieldOptions: this.normBaseFieldOptions,
@@ -187,14 +188,14 @@ export class NormativeBaseDeclarationService extends BaseDeclarationService<Norm
     }
 
     protected toFinalData(resultParams: NormBaseResultParams): StepperLabelField[] {
-        return [{
+        const resultInfoFields: StepperLabelField[] = [{
             type: OptionType.label,
             fieldLabel: "Вид базы:",
             text: resultParams.baseTypeName ?? "не выбран тип НБ",
         }, {
             type: OptionType.label,
-            fieldLabel: "Формулы для нормативной базы:",
-            text: resultParams.normBaseChoice?.name ?? "не выбрана база",
+            fieldLabel: resultParams.addBase ? "Новая нормативная" : "Нормативная база:",
+            text: resultParams.addBase?.name ?? resultParams.normBaseChoice?.name ?? "не выбрана база",
         }, {
             type: OptionType.label,
             fieldLabel: "Файл c нормативами:",
@@ -208,11 +209,29 @@ export class NormativeBaseDeclarationService extends BaseDeclarationService<Norm
             fieldLabel: "Файл c техчастями:",
             text: resultParams.fileTechDocs?.name ?? "не выбран файл (необязательно)",
         },
-        ]
+        ];
+        if (resultParams.addBase) {
+            const addInfo: StepperLabelField = {
+                type: OptionType.label,
+                fieldLabel: "Файл c техчастями:",
+                text: resultParams.fileTechDocs?.name ?? "не выбран файл (необязательно)",
+            };
+
+            resultInfoFields.splice(2, 0, addInfo);
+        }
+        return resultInfoFields;
     }
 
     private toSelectorOptions(baseData: NormativeBaseInfo[]): SelectorOption<NormativeBaseInfo>[] {
         const selectorOptions: SelectorOption<NormativeBaseInfo>[] = [];
+        selectorOptions.push({
+            isAvailable: true,
+            imgSrc: "assets\\icons\\add.svg",
+            value: "",
+            data: {},
+            action: () => {
+            }
+        });
         baseData.forEach(x => {
             selectorOptions.push({
                 isAvailable: true,
@@ -225,48 +244,53 @@ export class NormativeBaseDeclarationService extends BaseDeclarationService<Norm
         return selectorOptions;
     }
 
-    // private setAddBaseForm(needAddForm: boolean, context: NormativeBaseComponent, form: StepperDataStep) {
-    //     if (needAddForm) {
-    //         context.resultParams.addBase = {
-    //             guid: "12313",
-    //             name: "",
-    //         }
-    //         form.stepLabel = "Добавление новой НБ"
-    //         if (!!form?.fields) {
-    //             form.fields.push(
-    //             //     {
-    //             //     type: OptionType.divider,
-    //             //     onDataChange: () => { }
-    //             // }, 
-    //             {
-    //                 type: OptionType.label,
-    //                 text: context.resultParams.addBase.guid,
-    //                 fieldLabel: "Идентификатор добаляемой НБ",
-    //                 onDataChange: () => { }
-    //             }, {
-    //                 type: OptionType.input,
-    //                 fieldLabel: "Наименование НБ",
-    //                 placeHolder: "",
-    //                 onDataChange: (value) => {
-    //                     if (context.resultParams.addBase) {
-    //                         context.resultParams.addBase.name = value;
-    //                     }
-    //                 }
-    //             },
-    //             //  {
-    //             //     type: OptionType.divider,
-    //             //     onDataChange: () => { }
-    //             // }
-    //             )
-    //         }
-    //     } else {
-    //         form.stepLabel = "Выбор НБ"
+    private setAddBaseForm(needAddForm: boolean, context: NormativeBaseComponent, form: StepperDataStep) {
+        if (needAddForm) {
+            context.resultParams.addBase = {
+                guid: v4(),
+                name: "",
+            }
+            context.resultParams.normBaseChoice = null;
+            form.stepLabel = "Добавление новой НБ"
+            form.fields.push(
+                {
+                    type: OptionType.label,
+                    text: context.resultParams.addBase.guid,
+                    fieldLabel: "Идентификатор добаляемой НБ",
+                    onDataChange: () => { }
+                }, {
+                type: OptionType.input,
+                fieldLabel: "Наименование НБ",
+                placeHolder: "",
+                onDataChange: (value: string, form: StepperDataStep) => {
+                    console.log("!! | setAddBaseForm | value", value)
+                    if (context.resultParams.addBase) {
+                        context.resultParams.addBase.name = value;
+                        if (form.nextButton) {
+                            form.nextButton.isDisable = !value;
+                        }
+                        form.isCompleted = !!value;
+                    }
+                }
 
-    //         context.resultParams.addBase = undefined;
-    //         if (form?.fields) {
-    //             form.fields.splice(1);
-    //         }
-    //     }
-    //     return
-    // }
+            },
+                // {
+                //     type: OptionType.input,
+                //     fieldLabel: "Дополнение",
+                //     placeHolder: "",
+                //     onDataChange: (value: string) => {
+                //         if (context.resultParams.addBase) {
+                //             context.resultParams.addBase.name = value;
+                //         }
+                //     }
+
+                // },
+            )
+        } else {
+            form.stepLabel = "Выбор НБ"
+            context.resultParams.addBase = undefined;
+            form.fields.splice(1);
+        }
+        return;
+    }
 }
