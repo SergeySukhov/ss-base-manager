@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { observable } from 'mobx';
 import { StepperData } from "src/app/secondary-module/stepper/models/stepper-model";
-import { MainStateService } from '../main/services/main-state.service';
 import { NormBaseResultParams } from './models/norm-base.models';
 import { NormativeBaseDeclarationService } from "./services/normative-base.declaration.service";
 import { NormativeBaseEndpointService } from './services/normative-base.endpoint.service';
@@ -21,12 +19,17 @@ export class NormativeBaseComponent implements OnInit {
   public data: StepperData | null = null;
   public resultParams: NormBaseResultParams = new NormBaseResultParams();
 
-  constructor(public declarationService: NormativeBaseDeclarationService) {
+  constructor(public declarationService: NormativeBaseDeclarationService, private endpointService: NormativeBaseEndpointService) {
   }
 
   ngOnInit(): void {
     this.data = this.declarationService.getStepperModel(this);
   }
 
+  onFinish() {
+    console.log("!! | onFinish | Finish", this.resultParams)
+
+    // this.endpointService.(this.resultParams);
+  }
 
 }

@@ -37,9 +37,10 @@ export class FormulaBaseDeclarationService extends BaseDeclarationService<FormBa
                                 step.isCompleted = false;
                                 return;
                             }
+
                             this.normBaseFieldOptions.splice(0);
                             this.normBaseFieldOptions.push(...this.toSelectorOptions(availableNB));
-
+                            
                             step.isAwaiting = false;
                             step.isCompleted = true;
                             if (step.nextButton) {
@@ -125,7 +126,7 @@ export class FormulaBaseDeclarationService extends BaseDeclarationService<FormBa
                         isDisable: false,
                         text: "Развернуть микросервис после обновления базы",
                         value: false,
-                        checkboxAction: (value: boolean, form: StepperDataStep) => {
+                        action: (value: boolean, form: StepperDataStep) => {
                             context.resultParams.needDeploy = value;
                             this.updateResultParams(context.resultParams);
                         }

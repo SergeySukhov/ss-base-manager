@@ -6,16 +6,20 @@ export class StepperData {
 
 export class StepperDataStep {
     stepLabel: string = "";
-    isAwaiting?: boolean = false;
-    nextButton?: { needShow: boolean; isDisable: boolean };
-    backButton?: { needShow: boolean; isDisable: boolean };
-    actionButton?:  { needShow: boolean; isDisable: boolean };
-    checkbox?:  { needShow: boolean; isDisable: boolean; value: boolean; text: string; checkboxAction: (value: boolean, form: StepperDataStep) => void | undefined; };
-    resetButton?: { needShow: boolean; isDisable: boolean };
+    
+    isAwaiting?: boolean;
+    isOptional?: boolean;
     isCompleted?: boolean;
+
+    nextButton?: StepCntrl;
+    backButton?: StepCntrl;
+    actionButton?: StepCntrl;
+    resetButton?: StepCntrl;
+
+    checkbox?: StepCheckboxCntrl;
     fields: StepFields[] = [];
     actionButtonAction?: (data?: any) => void | undefined;
-    
+
 }
 
 export enum OptionType {
@@ -63,4 +67,14 @@ export class SelectorOption<T> {
     // TODO:
     data: any | T;
     action: (value: SelectorOption<T>, form: StepperDataStep) => void | Promise<void> = () => { return };
+}
+
+export interface StepCntrl { needShow: boolean; isDisable: boolean }
+export interface StepActionCntrl extends StepCntrl {
+    action: (value: any, form: StepperDataStep) => void | undefined;
+}
+export interface StepCheckboxCntrl extends StepActionCntrl {
+    text: string;
+    value: boolean;
+    action: (value: boolean, form: StepperDataStep) => void | undefined;
 }

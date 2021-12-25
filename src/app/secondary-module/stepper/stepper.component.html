@@ -1,14 +1,26 @@
 <div class="wrapper">
-    <mat-stepper #stepper orientation="vertical" [linear]="true" (selectionChange)="test($event)">
+    <span id="demo-optional-label-group"
+        [(ngModel)]="optionalLabelText"
+        ngDefaultControl 
+        (ngModelChange)="updateOptionalLabel()">
+</span>
 
-        <mat-step [editable]="isEditable" [completed]="stepModel?.isCompleted" *ngFor="let stepModel of data?.steps" #stepp>
-            <form [formGroup]="firstFormGroup">
+    <mat-stepper #stepper orientation="vertical" [linear]="true" *ngIf="!!firstFormGroup"
+        (selectionChange)="test($event)">
+
+        <mat-step [editable]="isEditable" [completed]="stepModel.isCompleted" [optional]="stepModel.isOptional"
+                [stepControl]="firstFormGroup"
+                *ngFor="let stepModel of data?.steps" #stepp>
+
+            <form  [formGroup]="firstFormGroup">
             <ng-template matStepLabel>{{stepModel.stepLabel}}</ng-template>
+
             <div class="mat-container" *ngFor="let fieldModel of stepModel.fields">
 
                 <div class="field-container" *ngIf="fieldModel.type === 'selector'">
                     <mat-form-field class="form-field" appearance="fill">
                         <mat-label>{{fieldModel.fieldLabel}}</mat-label>
+
                         <mat-select (selectionChange)="fieldModel.onDataChange($event.value, stepModel)">
                             <mat-option *ngFor="let option of fieldModel.fieldOptions" [value]="option"
                                 [disabled]="!option.isAvailable" (onSelectionChange)="option.action(option, stepModel)">
@@ -16,6 +28,7 @@
                                 {{option.value}}
                             </mat-option>
                         </mat-select>
+
                     </mat-form-field>
                     <mat-spinner *ngIf="stepModel.isAwaiting" mode="indeterminate" color="accent" [diameter]="40"></mat-spinner>
 
@@ -48,12 +61,12 @@
                 </div>
             </div>
 
-            <div class="checkbox-container" *ngIf="stepModel.checkbox && stepModel.checkbox.checkboxAction">
+            <div class="checkbox-container" *ngIf="stepModel.checkbox && stepModel.checkbox.action">
                 <mat-checkbox  class="example-margin"
                     [disabled]="stepModel.checkbox.isDisable"
                     [checked]="stepModel.checkbox.value"
                     color="primary"
-                    (change)="stepModel.checkbox.checkboxAction($event.checked, stepModel)">
+                    (change)="stepModel.checkbox.action($event.checked, stepModel)">
                         {{stepModel.checkbox.text}}
                 </mat-checkbox>
             </div>

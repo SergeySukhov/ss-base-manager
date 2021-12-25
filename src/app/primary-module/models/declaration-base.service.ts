@@ -3,7 +3,7 @@ import { SelectorOption, StepFields, StepperData } from "src/app/secondary-modul
 
 @Injectable()
 export abstract class BaseDeclarationService<TResult> {
-    protected normBasefieldOptions: SelectorOption<any>[] = [];
+    protected normBaseFieldOptions: SelectorOption<any>[] = [];
     protected finalOptions: StepFields[] = [];
 
 
