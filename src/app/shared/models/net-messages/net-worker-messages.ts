@@ -6,6 +6,7 @@ export enum NetMessageTypes {
     init,
     getAvailableNormoBases,
     sendFormulsUpload,
+    sendNormativesUpload,
     serverTest
 }
 
@@ -24,13 +25,29 @@ export interface NetWorkerRequestUploadFormuls extends NetWorkerRequestBase<NetM
     addonNumber: number,
     normoGuid: string,
     isAdd?: boolean,
+    isDeploy?: boolean
+  }
+}
+
+export interface NetWorkerRequestUploadNormatives extends NetWorkerRequestBase<NetMessageTypes.sendNormativesUpload> {
+  data: {
+    fileNormatives: File,
+    fileFormuls?: File,
+    fileTechs?: File,
+    addonNumber: number,
+    normoGuid: string,
+    addBase?: {
+      guid: string;
+      name: string,
+    },
+    isDeploy?: boolean
   }
 }
 
 export interface NetWorkerRequestInit extends NetWorkerRequestBase<NetMessageTypes.init> {
 }
 
-export type NetWorkerRequest = NetWorkerRequestAvailableBases | NetWorkerRequestInit | NetWorkerRequestUploadFormuls;
+export type NetWorkerRequest = NetWorkerRequestAvailableBases | NetWorkerRequestInit | NetWorkerRequestUploadFormuls | NetWorkerRequestUploadNormatives;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -47,11 +64,12 @@ export interface NetWorkerResponseAvailableBases extends NetWorkerResponseBase<N
 
 export interface NetWorkerResponseUploadFormuls extends NetWorkerResponseBase<NetMessageTypes.sendFormulsUpload> {
 }
-
+export interface NetWorkerResponseUploadNormatives extends NetWorkerResponseBase<NetMessageTypes.sendNormativesUpload> {
+}
 export interface NetWorkerResponseCommon extends NetWorkerResponseBase<NetMessageTypes.init> {
 }
 
-export type NetWorkerResponse = NetWorkerResponseAvailableBases | NetWorkerResponseCommon | NetWorkerResponseUploadFormuls;
+export type NetWorkerResponse = NetWorkerResponseAvailableBases | NetWorkerResponseCommon | NetWorkerResponseUploadFormuls | NetWorkerResponseUploadNormatives;
 
 export interface NetData<T extends boolean> {
   isSuccess: T;

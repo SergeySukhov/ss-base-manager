@@ -50,7 +50,7 @@ export class FormulaBaseEndpointService { //  extends EndpointService {
                 file: finalData.file,
                 normoGuid: finalData.normBaseChoice.guid,
                 isAdd: false,
-                
+                isDeploy: finalData.needDeploy
             },
         });
     }
