@@ -1,32 +1,33 @@
 import { Injectable } from "@angular/core";
-import { MatSelectChange } from "@angular/material/select";
-import { OptionType, SelectorOption, StepperData, StepperDataStep, StepperSelectorField, StepFields } from "src/app/secondary-module/stepper/models/stepper-model";
+import { OptionType, SelectorOption, StepperData, StepperDataStep, StepperSelectorField, StepFields, StepperLabelField } from "src/app/secondary-module/stepper/models/stepper-model";
 import { BaseType, NormativeBaseInfo } from "src/app/shared/models/server-models/normative-base-info";
+import { BaseDeclarationService } from "../../models/declaration-base.service";
 import { FormulaBaseComponent } from "../formula-base.component";
 import { BaseTypeInfo, FormBaseResultParams } from "../models/form-base.models";
 import { FormulaBaseEndpointService } from "./formula-base.endpoint.service";
 
 
 @Injectable()
-export class FormulaBaseDeclarationService {
-    normBasefieldOptions: SelectorOption<NormativeBaseInfo>[] = [];
+export class FormulaBaseDeclarationService extends BaseDeclarationService<FormBaseResultParams> {
+    normBaseFieldOptions: SelectorOption<NormativeBaseInfo>[] = [];
     finalOptions: StepFields[] = [];
     constructor(private endpoint: FormulaBaseEndpointService) {
+        super();
     }
 
     public getStepperModel(context: FormulaBaseComponent): StepperData {
         const stepperModel: StepperData = {
             isLinear: true,
             steps: [
-                  {
+                {
                     stepLabel: "Выбор вида НБ",
                     nextButton: { needShow: true, isDisable: true },
                     isAwaiting: false,
                     fields: [{
                         type: OptionType.selector,
                         fieldLabel: "Доступные виды нормативных баз",
-                        onDataChange: async (value: SelectorOption<NormativeBaseInfo>, step: StepperDataStep) => {
-                            const data = value.data;
+                        onDataChange: async (value: SelectorOption<BaseTypeInfo>, step: StepperDataStep) => {
+                            const data = value.data as BaseTypeInfo;
                             context.resultParams.baseTypeName = data.name;
                             step.isAwaiting = true;
 
@@ -36,8 +37,8 @@ export class FormulaBaseDeclarationService {
                                 step.isCompleted = false;
                                 return;
                             }
-                            this.normBasefieldOptions.splice(0);
-                            this.normBasefieldOptions.push(...this.toSelectorOptions(availableNB));
+                            this.normBaseFieldOptions.splice(0);
+                            this.normBaseFieldOptions.push(...this.toSelectorOptions(availableNB));
 
                             step.isAwaiting = false;
                             step.isCompleted = true;
@@ -73,8 +74,8 @@ export class FormulaBaseDeclarationService {
                     fields: [{
                         type: OptionType.selector,
                         fieldLabel: "Доступные НБ",
-                        onDataChange: (value: SelectorOption<any>, form: StepperDataStep) => {
-                            context.resultParams.normBaseChoice = value.data;
+                        onDataChange: (value: SelectorOption<NormativeBaseInfo>, form: StepperDataStep) => {
+                            context.resultParams.normBaseChoice = value.data as NormativeBaseInfo;
 
                             if (form.nextButton) {
                                 form.nextButton.isDisable = false;
@@ -82,7 +83,7 @@ export class FormulaBaseDeclarationService {
                             form.isCompleted = true;
                             this.updateResultParams(context.resultParams);
                         },
-                        fieldOptions: this.normBasefieldOptions,
+                        fieldOptions: this.normBaseFieldOptions,
                     },
                     ],
                 },
@@ -94,7 +95,7 @@ export class FormulaBaseDeclarationService {
                     fields: [{
                         type: OptionType.fileLoader,
                         fieldLabel: "",
-                        fileFormats: ["csv", ".svg"],
+                        fileFormats: [".csv", ".svg"],
                         onDataChange: (value: File[], form: StepperDataStep) => {
                             if (value?.length) {
                                 context.resultParams.file = value[0];
@@ -140,26 +141,7 @@ export class FormulaBaseDeclarationService {
         return stepperModel;
     }
 
-    private updateResultParams(resultParams: FormBaseResultParams) {
-        this.finalOptions.splice(0);
-        this.finalOptions.push(...this.toFinalData(resultParams));
-    }
-
-    private toSelectorOptions(baseData: NormativeBaseInfo[]): SelectorOption<NormativeBaseInfo>[] {
-        const selectorOptions: SelectorOption<NormativeBaseInfo>[] = [];
-        baseData.forEach(x => {
-            selectorOptions.push({
-                isAvailable: true,
-                value: x.name,
-                data: x,
-                action: () => {
-                }
-            });
-        });
-        return selectorOptions;
-    }
-
-    private toFinalData(resultParams: FormBaseResultParams): StepFields[] {
+    protected toFinalData(resultParams: FormBaseResultParams): StepperLabelField[] {
         return [{
             type: OptionType.label,
             fieldLabel: "Вид базы:",
@@ -174,5 +156,19 @@ export class FormulaBaseDeclarationService {
             text: resultParams.file?.name ?? "не выбран файл",
         },
         ]
+    }
+
+    private toSelectorOptions(baseData: NormativeBaseInfo[]): SelectorOption<NormativeBaseInfo>[] {
+        const selectorOptions: SelectorOption<NormativeBaseInfo>[] = [];
+        baseData.forEach(x => {
+            selectorOptions.push({
+                isAvailable: true,
+                value: x.name,
+                data: x,
+                action: () => {
+                }
+            });
+        });
+        return selectorOptions;
     }
 }

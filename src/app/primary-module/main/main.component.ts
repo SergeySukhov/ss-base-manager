@@ -31,13 +31,7 @@ export class MainComponent implements OnInit {
     action: () => {
       this.stateService.context = ManagerContext.formula;
     }
-  }, {
-    title: "",
-    isDivider: true,
-  }, {
-    title: "Конфигурация Minio",
-    available: false,
-  }
+  }, 
   ]
   constructor(public stateService: MainStateService, 
     private userService: UserService, private authService: AuthViewService) {

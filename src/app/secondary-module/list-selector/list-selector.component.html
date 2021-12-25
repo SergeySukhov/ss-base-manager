@@ -1,8 +1,4 @@
 <div *ngIf="!!optionsList?.length" class="wrapper">
-    <!-- <div *ngFor="let option of optionsList" matRipple [matRippleColor]="'red'" [ngClass]="{'available' : option.available}"
-        (click)="onOptionClicked(option)">
-        {{option.title}}
-    </div> -->
     <div class="selector-container">
       <mat-selection-list class="selector" color="primary" #selector [multiple]="false" (selectionChange)="selector.selectedOptions.selected[0].value.action()">
         <mat-list-option class="selector-opt" color="primary"
