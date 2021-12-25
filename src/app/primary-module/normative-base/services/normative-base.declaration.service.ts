@@ -98,7 +98,7 @@ export class NormativeBaseDeclarationService extends BaseDeclarationService<Norm
                     fields: [{
                         type: OptionType.fileLoader,
                         fieldLabel: "",
-                        fileFormats: [".xml", ".svg"],
+                        fileFormats: [".xml",],
                         onDataChange: (value: File[], form: StepperDataStep) => {
                             if (value?.length) {
                                 context.resultParams.fileNormatives = value[0];
@@ -202,11 +202,11 @@ export class NormativeBaseDeclarationService extends BaseDeclarationService<Norm
         }, {
             type: OptionType.label,
             fieldLabel: "Файл c формулами:",
-            text: resultParams.fileFormuls?.name ?? "не выбран файл",
+            text: resultParams.fileFormuls?.name ?? "не выбран файл (необязательно)",
         }, {
             type: OptionType.label,
             fieldLabel: "Файл c техчастями:",
-            text: resultParams.fileTechDocs?.name ?? "не выбран файл",
+            text: resultParams.fileTechDocs?.name ?? "не выбран файл (необязательно)",
         },
         ]
     }

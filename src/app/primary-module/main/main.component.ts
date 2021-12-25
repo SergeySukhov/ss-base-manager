@@ -13,6 +13,7 @@ import { AuthViewService } from "src/app/auth.module/auth/services/auth.view.ser
 })
 export class MainComponent implements OnInit {
   public ManagerContext = ManagerContext;
+  public needMuscle = false;
   public menuOptions: ListSelectorOption[] = [{
     title: "Нормативные базы",
     available: true,
@@ -31,14 +32,17 @@ export class MainComponent implements OnInit {
     action: () => {
       this.stateService.context = ManagerContext.formula;
     }
-  }, 
+  },
   ]
-  constructor(public stateService: MainStateService, 
+
+  constructor(public stateService: MainStateService,
     private userService: UserService, private authService: AuthViewService) {
   }
 
   ngOnInit(): void {
-
+    this.userService.userChange.subscribe(name => {
+      this.needMuscle = this.userService.gacciUser;
+    });
   }
 
   toStart() {

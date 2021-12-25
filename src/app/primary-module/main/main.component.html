@@ -3,6 +3,7 @@
     <ss-toolbar (backArrowEvent)="toStart()" (logoutEvent)="onLogout()"
     [hideUser]="false"
     [hideNotes]="false"
+    [needMuscle]="needMuscle"
     [hideBackArrow]="stateService.context===ManagerContext.start"
         [title]="stateService.mainTitle">
     </ss-toolbar>
@@ -21,5 +22,8 @@
         <div *ngSwitchCase="ManagerContext.formula" class="content-container">
             <ss-formula-base></ss-formula-base>
         </div>
+    </div>
+    <div>
+
     </div>
 </div>

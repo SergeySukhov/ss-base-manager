@@ -2,6 +2,7 @@
 @use '../app/secondary-module/list-selector/list-selector.component.scss' as list;
 @use '../app/secondary-module/file-loader/file-loader.component.scss' as fileLoader;
 @use '../app/secondary-module/login/login.component.scss' as login;
+@use '../app/secondary-module/toolbar/toolbar.component.scss' as toolbar;
 @import "~@angular/material/theming";
 
 @include mat-core();
@@ -12,6 +13,7 @@
   @include list.theme($theme);
   @include fileLoader.theme($theme);
   @include login.theme($theme);
+  @include toolbar.theme($theme);
 }
 
 $mat-primary-scheme: (

@@ -1,5 +1,7 @@
 ﻿import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+import { LocalStorageConst, LocalStorageService } from "src/app/core/services/local-storage.service";
+import { UserService } from "src/app/core/services/user.service";
 import { AuthEndpointService } from "./auth.endpoint.service";
 import { AuthStateService } from "./auth.state.service";
 
@@ -16,7 +18,9 @@ export class AuthViewService {
 
     private pIsAuth = false;
 
-    constructor(private router: Router, private endpoint: AuthEndpointService, private stateService: AuthStateService) {
+    constructor(private router: Router, private userService: UserService, private storageService: LocalStorageService,
+        private endpoint: AuthEndpointService, private stateService: AuthStateService
+        ) {
         const lastAuthTimeJSON = localStorage.getItem("lastTokenTime");
         if (!lastAuthTimeJSON) {
             return;
@@ -30,6 +34,7 @@ export class AuthViewService {
     }
 
     public async login(username: string, password: string, needRemember: boolean): Promise<string> {
+
         const authResponse = await this.endpoint.sendAuth(username, password);
 
         if (!authResponse || !authResponse.data) {
@@ -40,9 +45,10 @@ export class AuthViewService {
         if (authResponse.data.isSuccess === true) {
             this.isAuth = true;
             if (needRemember) {
-                localStorage.setItem("lastTokenTime", JSON.stringify(Date.now()));
+                this.userService
+                this.storageService.setItem(LocalStorageConst.lastTokenTime, Date.now())
             } else {
-                localStorage.removeItem("lastTokenTime");
+                this.storageService.removeItem(LocalStorageConst.lastTokenTime)
             }
             setTimeout(() => {
                 this.router.navigate([""]);
@@ -57,7 +63,7 @@ export class AuthViewService {
 
     public async logout() {
         this.isAuth = false;
-        localStorage.removeItem("lastTokenTime");
+        this.storageService.clear();
         this.router.navigate(["login"]);
         this.endpoint.sendLogout();
     }
@@ -68,7 +74,7 @@ export class AuthViewService {
                 this.logout();
             } else {
                 this.isAuth = true;
-                localStorage.setItem("lastTokenTime", JSON.stringify(Date.now()));
+                this.storageService.setItem(LocalStorageConst.lastTokenTime, Date.now())
             }
         });
     }

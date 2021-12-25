@@ -12,9 +12,18 @@
         <div *ngIf="!hideNotes" class="tool-container">
             <img src="assets\icons\notifications.svg" alt="">
         </div>
-        <div *ngIf="!hideUser" class="tool-container" (click)="onLogout()">
-            <img class="logout-icon" src="assets\icons\user.svg" alt="">
+        <div *ngIf="!hideUser" class="tool-container"
+         (click)="onLogout()">
+            <img *ngIf="!needMuscle" class="logout-icon" src="assets\\icons\\user.svg" alt="">
+            <img style="height: 40px; width: 40px;" *ngIf="needMuscle" class="logout-icon g-icon" src="assets\\icons\\g.jpg" alt="">
         </div>
+
 
     </mat-toolbar-row>
 </mat-toolbar>
+<div *ngIf="needMuscle" 
+[ngClass]="{'g-style': needMuscle}"
+>
+<img class="g.icon" src="assets\\icons\\g.jpg" alt="">
+
+</div>

@@ -11,6 +11,8 @@ export class ToolbarComponent implements OnInit {
   @Input() hideBackArrow = true;
   @Input() hideUser = true;
   @Input() hideNotes = true;
+  @Input() needMuscle = false;
+  
   
   @Output() backArrowEvent = new EventEmitter();
   @Output() logoutEvent = new EventEmitter();
