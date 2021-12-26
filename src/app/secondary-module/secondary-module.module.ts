@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {CdkStepperModule} from '@angular/cdk/stepper';
+import {CdkTableModule} from '@angular/cdk/table';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 import { ListSelectorComponent } from './list-selector/list-selector.component';
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
@@ -22,6 +25,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TableControlComponent } from './table-control/table-control.component';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -48,7 +52,11 @@ import { TableControlComponent } from './table-control/table-control.component';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    
+    DragDropModule,
+    CdkStepperModule,
+    CdkTableModule,
+    MatTableModule,
+
     MatStepperModule,
     MatButtonModule,
     MatButtonModule,

@@ -1,0 +1,37 @@
+  .wrapper {
+    width: 100%;
+    table {
+        width: 100%;
+      }
+  }
+
+  .example-container {
+    height: 100%;
+    overflow: auto;
+    position: relative;
+    margin: 6px;
+  }
+  
+  .demo-button + .demo-button {
+    margin-left: 8px;
+  }
+  .dark-mode, .mat-header-row {
+    background: #323232;
+  }
+  .light-mode, .mat-header-row {
+    background: gray;
+  }
+
+  .load-spinner-container {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    margin-top: 10px;
+  }
+
+  .mat-column-select,
+  .mat-column-position {
+    max-width: 64px;
+    width: 64px;
+  }
+

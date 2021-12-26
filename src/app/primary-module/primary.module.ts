@@ -41,7 +41,6 @@ import { EndpointService } from '../core/services/endpoint.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ThemeService } from "../secondary-module/toolbar/services/theme.service";
 import { NormativeBaseComponent } from './normative-base/normative-base.component';
-import { AuthComponent } from '../auth.module/auth/auth.component';
 import { FormulaBaseComponent } from './formula-base/formula-base.component';
 import { BaseAvailabilityManagerComponent } from './base-availability-manager/base-availability-manager.component';
 
