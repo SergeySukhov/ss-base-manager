@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { SelectorOption, StepFields, StepperData } from "src/app/secondary-module/stepper/models/stepper-model";
 
 @Injectable()
-export abstract class BaseDeclarationService<TResult> {
+export abstract class DeclarationBaseService<TResult> {
     protected normBaseFieldOptions: SelectorOption<any>[] = [];
     protected finalOptions: StepFields[] = [];
 

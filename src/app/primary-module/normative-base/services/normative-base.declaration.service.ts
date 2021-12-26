@@ -3,14 +3,14 @@ import { OptionType, SelectorOption, StepperData, StepperDataStep, StepperSelect
 import { BaseType, NormativeBaseInfo } from "src/app/shared/models/server-models/normative-base-info";
 import { v4 } from "uuid";
 import { BaseTypeInfo } from "../../formula-base/models/form-base.models";
-import { BaseDeclarationService } from "../../models/declaration-base.service";
+import { DeclarationBaseService } from "../../models/declaration-base.service";
 import { NormBaseResultParams } from "../models/norm-base.models";
 import { NormativeBaseComponent } from "../normative-base.component";
 import { NormativeBaseEndpointService } from "./normative-base.endpoint.service";
 import { NormativeBaseStateService } from "./normative-base.state.service";
 
 @Injectable()
-export class NormativeBaseDeclarationService extends BaseDeclarationService<NormBaseResultParams> {
+export class NormativeBaseDeclarationService extends DeclarationBaseService<NormBaseResultParams> {
     normBaseFieldOptions: SelectorOption<NormativeBaseInfo>[] = [];
 
     constructor(private endpoint: NormativeBaseEndpointService, private stateService: NormativeBaseStateService) {
