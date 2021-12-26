@@ -48,14 +48,31 @@ $mat-primary-scheme-dark: (
   ),
 );
 
+$mat-accent-scheme-dark: (
+  background: #232323,
+  background-color: #232323,
+  100: #c5cae9,
+  200: #939ee4,
+  300: #7492de,
+  400: #7492de,
+  500: #7492de,
+  700: #7492de,
+  contrast: (
+    100: red,
+    300: whitesmoke,
+    500: whitesmoke,
+    700: whitesmoke,
+  ),
+);
+
 $mat-primary-palette: mat-palette($mat-primary-scheme);
 // $mat-accent-palette: mat-palette($mat-primary-scheme);
 
 $mat-primary-palette-dark: mat-palette($mat-primary-scheme-dark);
-// $mat-accent-palette-dark: mat-palette($mat-primary-scheme-dark);
+$mat-accent-palette-dark: mat-palette($mat-accent-scheme-dark);
 
 $app-light-theme: mat-light-theme($mat-primary-palette, $mat-primary-palette-dark);
-$app-dark-theme: mat-dark-theme($mat-primary-palette-dark, $mat-primary-palette);
+$app-dark-theme: mat-dark-theme($mat-primary-palette-dark, $mat-accent-palette-dark);
 
 
 .light-mode {

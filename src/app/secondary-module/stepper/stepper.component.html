@@ -5,7 +5,7 @@
         (ngModelChange)="updateOptionalLabel()">
 </span>
 
-    <mat-stepper #stepper orientation="vertical" [linear]="true" *ngIf="!!firstFormGroup"
+    <mat-stepper #stepper orientation="vertical" [linear]="true" *ngIf="!!firstFormGroup" color="accent"
         (selectionChange)="test($event)">
 
         <mat-step [editable]="isEditable" [completed]="stepModel.isCompleted" [optional]="stepModel.isOptional"
