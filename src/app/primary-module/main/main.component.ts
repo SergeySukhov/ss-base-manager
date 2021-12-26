@@ -31,6 +31,12 @@ export class MainComponent implements OnInit {
     action: () => {
       this.stateService.context = ManagerContext.formula;
     }
+  }, {
+    title: "Управление доступными базами",
+    available: true,
+    action: () => {
+      this.stateService.context = ManagerContext.manager;
+    }
   },
   ]
 

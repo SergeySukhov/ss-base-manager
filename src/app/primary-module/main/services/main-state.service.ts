@@ -20,6 +20,8 @@ export class MainStateService {
                 return "Менеджер баз индесков Estimate Office";
             case ManagerContext.formula:
                 return "Менеджер баз формул Estimate Office";
+            case ManagerContext.manager:
+                return "Менеджер управления доступностью баз Estimate Office";
             default:
                 return "Неизвестный контекст";
         }

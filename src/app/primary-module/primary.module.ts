@@ -43,12 +43,14 @@ import { ThemeService } from "../secondary-module/toolbar/services/theme.service
 import { NormativeBaseComponent } from './normative-base/normative-base.component';
 import { AuthComponent } from '../auth.module/auth/auth.component';
 import { FormulaBaseComponent } from './formula-base/formula-base.component';
+import { BaseAvailabilityManagerComponent } from './base-availability-manager/base-availability-manager.component';
 
 @NgModule({
   declarations: [
     MainComponent,
     NormativeBaseComponent,
     FormulaBaseComponent,
+    BaseAvailabilityManagerComponent,
   ],
   exports: [
     MainComponent,

@@ -21,6 +21,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TableControlComponent } from './table-control/table-control.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     DndDirective,
     LoginComponent,
     ToolbarComponent,
+    TableControlComponent,
 
   ],
   exports: [
@@ -39,6 +41,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     DndDirective,
     LoginComponent,
     ToolbarComponent,
+    TableControlComponent,
 
   ],
   imports: [
