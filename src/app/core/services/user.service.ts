@@ -6,7 +6,7 @@ import { LocalStorageConst, LocalStorageService } from "./local-storage.service"
 export class UserService {
     
     username: string = "guest";
-    gacciUser: boolean = false;
+    gacciUser: "0" |"1" |"2" = "0";
 
     userChange = new EventEmitter<string>();
 
@@ -17,7 +17,12 @@ export class UserService {
     setName(name: string) {
         this.username = name;
         this.storageService.setItem(LocalStorageConst.username, name);
-        this.gacciUser = this.username.includes("bege");
+        if (this.username.includes("bege")) {
+            this.gacciUser = "2";
+        }
+        if (this.username.includes("sergey")) {
+            this.gacciUser = "1";
+        }
         this.userChange.emit(this.username);
     }
 

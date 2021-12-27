@@ -30,11 +30,11 @@ export class FormulaBaseComponent implements OnInit {
     this.endpointService.sendFormuls(this.resultParams);
     this.tempProgress = 1;
     const tempInterval = setInterval(() => {
-      this.tempProgress += 1;
+      this.tempProgress += 2;
       if (this.tempProgress >= 100) {
         clearInterval(tempInterval);
       }
-    }, 300)
+    }, 50)
   }
 
   onModelChange() {
