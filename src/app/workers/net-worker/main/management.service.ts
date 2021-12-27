@@ -14,7 +14,7 @@ export class ManagementSystem extends ManagementSystemBase {
         this.replySuccess(request.guid, request.messageType);
         break;
       case NetMessageTypes.getAvailableNormoBases:
-        this.sendRequestTest(request);
+        this.sendRequestGetBases(request);
         break;
       case NetMessageTypes.sendFormulsUpload:
         this.sendUploadFormulas(request);
@@ -25,7 +25,7 @@ export class ManagementSystem extends ManagementSystemBase {
     }
   }
 
-  private async sendRequestTest(request: NetWorkerRequestAvailableBases) {
+  private async sendRequestGetBases(request: NetWorkerRequestAvailableBases) {
     const sender = new XMLHttpRequest();
     const response: NetWorkerResponseAvailableBases = {
       guid: request.guid,
@@ -74,16 +74,17 @@ export class ManagementSystem extends ManagementSystemBase {
     data.append("deploy", "" + request.data.isDeploy);
 
     sender.withCredentials = false;
-    sender.open("POST", "http://localhost:5000/uploader");
+    sender.open("POST", "http://localhost:56715/uploader");
 
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');
     sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
     sender.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-    sender.setRequestHeader('Content-Type', 'multipart/form-data');
     console.log("!! | sendRequestTest | sender", sender)
     sender.timeout = 5000;
 
     sender.onreadystatechange = async () => {
+      console.log("!! | sender.onreadystatechange= | sender", sender)
+      console.log("!! | sender.onreadystatechange= | sender.status", sender.status)
       if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
         if (sender.status === 200) {
           const senderObj = JSON.parse(sender.response);

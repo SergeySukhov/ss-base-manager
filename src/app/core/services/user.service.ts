@@ -17,7 +17,7 @@ export class UserService {
     setName(name: string) {
         this.username = name;
         this.storageService.setItem(LocalStorageConst.username, name);
-        this.gacciUser = this.username.includes("voro");
+        this.gacciUser = this.username.includes("bege");
         this.userChange.emit(this.username);
     }
 
