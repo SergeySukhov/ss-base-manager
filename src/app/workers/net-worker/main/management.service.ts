@@ -35,7 +35,7 @@ export class ManagementSystem extends ManagementSystemBase {
 
     sender.withCredentials = false;
 
-    sender.open("GET", "http://localhost:5001");
+    sender.open("GET", "http://localhost:5001/additioninfo");
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');
     sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
     sender.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
