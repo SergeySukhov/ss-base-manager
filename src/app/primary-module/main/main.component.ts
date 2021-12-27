@@ -47,7 +47,7 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     this.stateService.muscleType = this.userService.gacciUser;
     this.userService.userChange.subscribe(name => {
-    this.stateService.muscleType = this.userService.gacciUser;
+      this.stateService.muscleType = this.userService.gacciUser;
     });
   }
 

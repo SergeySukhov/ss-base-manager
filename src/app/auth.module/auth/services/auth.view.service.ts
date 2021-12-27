@@ -74,6 +74,7 @@ export class AuthViewService {
                 this.logout();
             } else {
                 this.isAuth = true;
+                this.userService.setName();
                 this.storageService.setItem(LocalStorageConst.lastTokenTime, Date.now())
             }
         });
