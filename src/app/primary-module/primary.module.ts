@@ -63,7 +63,8 @@ import { BaseAvailabilityManagerComponent } from './base-availability-manager/ba
     MatToolbarModule,
     MatSlideToggleModule,
     MatIconModule,
-
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
     SecondaryModule,
 
   ],

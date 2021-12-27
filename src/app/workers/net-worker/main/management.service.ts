@@ -35,7 +35,7 @@ export class ManagementSystem extends ManagementSystemBase {
 
     sender.withCredentials = false;
 
-    sender.open("GET", this.serverUrl);
+    sender.open("GET", "http://localhost:5001");
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');
     sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
     sender.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
@@ -74,7 +74,7 @@ export class ManagementSystem extends ManagementSystemBase {
     data.append("deploy", "" + request.data.isDeploy);
 
     sender.withCredentials = false;
-    sender.open("POST", "http://localhost:56715/uploader");
+    sender.open("POST", "http://localhost:5002/uploader");
 
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');
     sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
@@ -103,26 +103,26 @@ export class ManagementSystem extends ManagementSystemBase {
 
   private async sendUploadNormatives(request: NetWorkerRequestUploadNormatives) {
     console.log("!! | sendRequestTest | request", request)
-
+    
     const sender = new XMLHttpRequest();
     const response: NetWorkerResponseUploadNormatives = {
       guid: request.guid,
       messageType: request.messageType,
     }
-
+    this.messageHandler.toClient(response);
+    return;
     var data = new FormData();
-    data.append("nrSpCsv", request.data.fileNormatives);
-    data.append("addonNumber", "" + request.data.addonNumber);
+    data.append("xmlFile", request.data.fileNormatives);
     data.append("normoGuid", request.data.normoGuid);
+    data.append("type", request.data.normoGuid);
     data.append("deploy", "" + request.data.isDeploy);
 
     sender.withCredentials = false;
-    sender.open("POST", "http://localhost:5000/uploader");
+    sender.open("GET", "http://localhost:5000/uploader");
 
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');
     sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
     sender.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-    sender.setRequestHeader('Content-Type', 'multipart/form-data');
     console.log("!! | sendRequestTest | sender", sender)
     sender.timeout = 5000;
 

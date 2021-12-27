@@ -17,7 +17,7 @@ export class FormulaBaseComponent implements OnInit {
 
   public data: StepperData | null = null;
   public resultParams: FormBaseResultParams = new FormBaseResultParams();
-
+  public tempProgress = 0;
   constructor(private declarationService: FormulaBaseDeclarationService, private endpointService: FormulaBaseEndpointService) { }
 
   ngOnInit(): void {
@@ -28,6 +28,13 @@ export class FormulaBaseComponent implements OnInit {
     console.log("!! | onFinish | Finish", this.resultParams)
 
     this.endpointService.sendFormuls(this.resultParams);
+    this.tempProgress = 1;
+    const tempInterval = setInterval(() => {
+      this.tempProgress += 1;
+      if (this.tempProgress >= 100) {
+        clearInterval(tempInterval);
+      }
+    }, 300)
   }
 
   onModelChange() {
