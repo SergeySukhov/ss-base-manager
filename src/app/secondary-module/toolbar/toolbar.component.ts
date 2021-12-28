@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { GachiType } from "src/app/core/common/models/models";
 import { ThemeService } from './services/theme.service';
 
 @Component({
@@ -11,23 +12,15 @@ export class ToolbarComponent implements OnInit {
   @Input() hideBackArrow = true;
   @Input() hideUser = true;
   @Input() hideNotes = true;
-  @Input() set muscleType(value: "0" | "1" | "2") {
-    this.pMuscleType = value;
-    this.muscleSrc = this.muscleSrcMap.find(x => x.type === value)?.src ?? "";
-  }
-  get muscleType() {
-    return this.pMuscleType;
-  }
-  pMuscleType:  "0" | "1" | "2" = "0"
+
+  @Input() vipImageSrc = "";
+
+
   @Output() backArrowEvent = new EventEmitter();
   @Output() logoutEvent = new EventEmitter();
+
   public isDarkMode = true;
 
-  public muscleSrc: string = "";
-  private muscleSrcMap: {type: string, src: string}[] = [
-    {type: "2", src: "assets\\icons\\g.jpg"},
-    {type: "1", src: "assets\\icons\\van.jpg"},
-  ]
   constructor(public themeService: ThemeService,) { }
 
   ngOnInit(): void {

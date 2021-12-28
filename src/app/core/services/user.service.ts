@@ -1,17 +1,28 @@
 import { EventEmitter, Injectable } from "@angular/core";
+import { GachiType } from "../common/models/models";
 import { LocalStorageConst, LocalStorageService } from "./local-storage.service";
 
+type MuscleMap = {
+    [key in GachiType]: string;
+};
 
 @Injectable()
 export class UserService {
+
+    public username: string = "guest";
+    public vipUserImgSrc = "";
+
+    public userChange = new EventEmitter<string>();
+
+    private readonly muscleSrcMap: MuscleMap = {
+        none: "",
+        van: "assets\\icons\\van.jpg",
+        billy: "assets\\icons\\g.jpg",
+        danny: "assets\\icons\\danny.jpg",
+        steve: "assets\\icons\\steve.png",
+    };
     
-    username: string = "guest";
-    gacciUser: "0" |"1" |"2" = "0";
-
-    userChange = new EventEmitter<string>();
-
     constructor(private storageService: LocalStorageService) {
-
     }
 
     setName(name?: string) {
@@ -23,12 +34,17 @@ export class UserService {
         }
 
         if (this.username.includes("bege")) {
-            this.gacciUser = "2";
+            this.vipUserImgSrc = this.muscleSrcMap.steve;
         }
-        if (this.username.includes("sergey")) {
-            this.gacciUser = "1";
+        if (this.username.includes("suh")) {
+            this.vipUserImgSrc = this.muscleSrcMap.steve;
         }
-        console.log("!! | setName | name", name)
+        if (this.username.includes("ker")) {
+            this.vipUserImgSrc = this.muscleSrcMap.danny;
+        }
+        if (this.username.includes("kir")) {
+            this.vipUserImgSrc = this.muscleSrcMap.billy;
+        }
 
         this.userChange.emit(this.username);
     }

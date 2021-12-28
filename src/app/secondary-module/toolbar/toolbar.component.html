@@ -13,15 +13,15 @@
             <img src="assets\icons\notifications.svg" alt="">
         </div>
         <div *ngIf="!hideUser" class="tool-container" (click)="onLogout()">
-            <img *ngIf="muscleType === '0'" class="logout-icon" src="assets\icons\user.svg" alt="">
-            <img *ngIf="muscleType !== '0'" class="logout-icon g-icon" style="height: 40px; width: 40px;"  
-                [src]="muscleSrc" alt="">
+            <img *ngIf="!vipImageSrc" class="logout-icon" src="assets\icons\user.svg" alt="">
+            <img *ngIf="vipImageSrc" class="logout-icon g-icon" style="height: 40px; width: 40px;"  
+                [src]="vipImageSrc" alt="">
         </div>
 
 
     </mat-toolbar-row>
 </mat-toolbar>
-<div *ngIf="muscleType !== '0'" class='g-style'>
-    <img class="g.icon" [src]="muscleSrc" alt="">
+<div *ngIf="vipImageSrc" class='g-style'>
+    <img class="g.icon" [src]="vipImageSrc" alt="">
 
 </div>

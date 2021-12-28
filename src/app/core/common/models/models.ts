@@ -5,3 +5,11 @@ export interface UserData {
     email: string;
     status: UserState;
 }
+
+export enum GachiType {
+    none = "none",
+    van = "van",
+    billy = "billy",
+    danny = "danny",
+    steve = "steve",
+} 
