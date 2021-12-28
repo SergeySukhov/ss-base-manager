@@ -1,33 +1,32 @@
 <div class="wrapper">
-
-    <ss-toolbar (backArrowEvent)="toStart()" (logoutEvent)="onLogout()"
-    [hideUser]="false"
-    [hideNotes]="false"
-    [vipImageSrc]="stateService.tooltipUserImageSrc"
-    [hideBackArrow]="stateService.context===ManagerContext.start"
+    <ss-toolbar (backArrowEvent)="toStart()" (logoutEvent)="onLogout()" [hideUser]="false" [hideNotes]="false"
+        [vipImageSrc]="stateService.tooltipUserImageSrc" [hideBackArrow]="stateService.context===ManagerContext.start"
         [title]="stateService.mainTitle">
     </ss-toolbar>
     <!-- нужен динамик компонент -->
-    <div [ngSwitch]="stateService.context" class="content-wrapper">
+    <div class="main-content">
+        <div [ngSwitch]="stateService.context" class="content-wrapper">
 
-        <div *ngSwitchCase="ManagerContext.start" class="content-container">
-            <ss-list-selector [optionsList]="menuOptions">
-            </ss-list-selector>
+            <div *ngSwitchCase="ManagerContext.start" class="content-container">
+                <ss-list-selector [optionsList]="menuOptions">
+                </ss-list-selector>
+            </div>
+
+            <div *ngSwitchCase="ManagerContext.base" class="content-container">
+                <ss-normative-base></ss-normative-base>
+            </div>
+
+            <div *ngSwitchCase="ManagerContext.formula" class="content-container">
+                <ss-formula-base></ss-formula-base>
+            </div>
+
+            <div *ngSwitchCase="ManagerContext.manager" class="content-container">
+                <ss-base-availability-manager></ss-base-availability-manager>
+            </div>
         </div>
-
-        <div *ngSwitchCase="ManagerContext.base" class="content-container">
-            <ss-normative-base></ss-normative-base>
-        </div>
-
-        <div *ngSwitchCase="ManagerContext.formula" class="content-container">
-            <ss-formula-base></ss-formula-base>
-        </div>
-
-        <div *ngSwitchCase="ManagerContext.manager" class="content-container">
-            <ss-base-availability-manager></ss-base-availability-manager>
+        <div *ngIf="stateService.context===ManagerContext.start" class="preview-content">
+            <ss-preview></ss-preview>
         </div>
     </div>
-    <div>
-
-    </div>
+    
 </div>

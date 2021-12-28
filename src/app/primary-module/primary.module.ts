@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
@@ -43,7 +44,6 @@ import { ThemeService } from "../secondary-module/toolbar/services/theme.service
 import { NormativeBaseComponent } from './normative-base/normative-base.component';
 import { FormulaBaseComponent } from './formula-base/formula-base.component';
 import { BaseAvailabilityManagerComponent } from './base-availability-manager/base-availability-manager.component';
-
 @NgModule({
   declarations: [
     MainComponent,

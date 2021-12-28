@@ -37,7 +37,7 @@ export class UserService {
             this.vipUserImgSrc = this.muscleSrcMap.steve;
         }
         if (this.username.includes("suh")) {
-            this.vipUserImgSrc = this.muscleSrcMap.steve;
+            this.vipUserImgSrc = this.muscleSrcMap.van;
         }
         if (this.username.includes("ker")) {
             this.vipUserImgSrc = this.muscleSrcMap.danny;

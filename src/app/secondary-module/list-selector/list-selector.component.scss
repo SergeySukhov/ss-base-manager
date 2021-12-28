@@ -47,3 +47,16 @@
 .wrapper {
     height: 100%;
 }
+
+.list-tree-button {
+    width: 250px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    line-height: 0;
+    
+}
+
+.mat-tree-node {
+  min-height: 65px;
+}

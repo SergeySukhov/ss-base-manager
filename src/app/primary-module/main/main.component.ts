@@ -6,12 +6,21 @@ import { ListSelectorOption } from 'src/app/secondary-module/models/list-selecto
 import { ManagerContext } from 'src/app/shared/models/common/enums';
 import { AuthViewService } from "src/app/auth.module/auth/services/auth.view.service";
 
+
+/** Flat node with expandable and level information */
+interface ExampleFlatNode {
+  expandable: boolean;
+  name: string;
+  level: number;
+}
+
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
+
   public ManagerContext = ManagerContext;
   public menuOptions: ListSelectorOption[] = [{
     title: "Нормативные базы",
@@ -43,6 +52,8 @@ export class MainComponent implements OnInit {
   constructor(public stateService: MainStateService,
     private userService: UserService, private authService: AuthViewService) {
   }
+
+
 
   ngOnInit(): void {
     this.stateService.tooltipUserImageSrc = this.userService.vipUserImgSrc;

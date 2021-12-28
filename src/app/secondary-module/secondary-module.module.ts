@@ -26,6 +26,8 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TableControlComponent } from './table-control/table-control.component';
 import { MatTableModule } from '@angular/material/table';
+import { MatTreeModule } from "@angular/material/tree";
+import { PreviewComponent } from './preview/preview.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,7 @@ import { MatTableModule } from '@angular/material/table';
     LoginComponent,
     ToolbarComponent,
     TableControlComponent,
+    PreviewComponent,
 
   ],
   exports: [
@@ -46,6 +49,7 @@ import { MatTableModule } from '@angular/material/table';
     LoginComponent,
     ToolbarComponent,
     TableControlComponent,
+    PreviewComponent,
 
   ],
   imports: [
@@ -72,6 +76,8 @@ import { MatTableModule } from '@angular/material/table';
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
+    MatTreeModule,
+
   ],
   providers: [
   ]
