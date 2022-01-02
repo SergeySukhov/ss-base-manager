@@ -41,10 +41,10 @@
   margin-top: 10%;
   height: 100%;
   margin-bottom: 10%;
-  padding: 20px;
-  padding-top: 0;
-  border-right-style: solid;
-  border-color: gray;
+  margin-left: 0;
+  padding: 0px 50px;
+  border-right: 1px solid gray;
+  width: 80%;
 }
 .wrapper {
     height: 100%;
@@ -52,13 +52,13 @@
 
 .list-tree-button {
     width: 100%;
-    justify-content: space-around;
+    justify-content: start;
     height: 60px;
     display: flex;
     align-items: center;
     line-height: 0;
     padding: 0 30px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
 
 }

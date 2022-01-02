@@ -52,7 +52,10 @@
 }
 
 .main-tool-bar {
-    height: 50px;
+    height: 55px;
+    min-height: 40px;
+    font-size: 18px;
+    
   }
   .mat-toolbar-row, .mat-toolbar-single-row {
     padding-left: 0;
