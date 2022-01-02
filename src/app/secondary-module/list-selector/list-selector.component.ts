@@ -1,34 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ListSelectorOption } from '../models/list-selector.model';
+import { TreeSelectorOption } from '../models/list-selector.model';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-
-interface FoodNode {
-  name: string;
-  children?: FoodNode[];
-}
-
-const TREE_DATA: FoodNode[] = [
-  {
-    name: 'Fruit',
-    children: [{ name: 'Apple' }, { name: 'Banana' }, { name: 'Fruit loops' }],
-  },
-  {
-    name: 'Vegetables',
-
-  },
-  {
-    name: 'Vegetables',
-
-  },
-];
-
-/** Flat node with expandable and level information */
-interface ExampleFlatNode {
-  expandable: boolean;
-  name: string;
-  level: number;
-}
 
 @Component({
   selector: 'ss-list-selector',
@@ -37,52 +10,53 @@ interface ExampleFlatNode {
 })
 export class ListSelectorComponent implements OnInit {
 
-  @Input() set optionsList(value: ListSelectorOption[] | null) {
-    this.innerOptionsList = value;
+  @Input() set optionsList(value: TreeSelectorOption[] | null) {
+    if (value) {
+      this.dataSource.data = value;
+    }
   }
 
-  @Output() selectedOption = new EventEmitter<ListSelectorOption>();
+  @Output() selectedOption = new EventEmitter<TreeSelectorOption>();
 
-  private _transformer = (node: FoodNode, level: number) => {
+  hasChild = (_: number, node: TreeSelectorOption) => node.expandable;
+
+  treeTransformer = (node: TreeSelectorOption, level: number) => {
     return {
       expandable: !!node.children && node.children.length > 0,
       name: node.name,
       level: level,
+      action: node.action,
     };
   };
 
-  treeControl = new FlatTreeControl<ExampleFlatNode>(
-    node => node.level,
-    node => node.expandable,
-  );
-
   treeFlattener = new MatTreeFlattener(
-    this._transformer,
+    this.treeTransformer,
     node => node.level,
     node => node.expandable,
     node => node.children,
   );
 
+  treeControl = new FlatTreeControl<TreeSelectorOption>(
+    node => node.level,
+    node => node.expandable,
+  );
+
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-  hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
-  public get optionsList(): ListSelectorOption[] | null {
-    return this.innerOptionsList;
-  }
-  typesOfShoes: string[] = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
-  public currentOption: ListSelectorOption | null = null;
-
-
-  private innerOptionsList: ListSelectorOption[] | null = null;
+  public currentOption: TreeSelectorOption | null = null;
 
   constructor() {
-    this.dataSource.data = TREE_DATA;
   }
 
   ngOnInit(): void {
   }
 
-  public onOptionClicked(event: ListSelectorOption) {
+  test(event: any) {
+    console.log("!! | test | event", event)
+
+  }
+
+  public onOptionClicked(event: TreeSelectorOption) {
     this.currentOption = event;
     this.selectedOption.emit(event);
   }

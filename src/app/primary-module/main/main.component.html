@@ -8,7 +8,7 @@
         <div [ngSwitch]="stateService.context" class="content-wrapper">
 
             <div *ngSwitchCase="ManagerContext.start" class="content-container">
-                <ss-list-selector [optionsList]="menuOptions">
+                <ss-list-selector [optionsList]="contextOptions">
                 </ss-list-selector>
             </div>
 

@@ -1,6 +1,9 @@
-export class ListSelectorOption {
-    title? = "";
+export class TreeSelectorOption {
+    name = "";
     available? = false;
     isDivider? = false;
-    action? = () => {};
+    children?: TreeSelectorOption[] = [];
+    expandable: boolean = false;
+    level = 0;
+    action: () => void = () => {};
 }

@@ -49,14 +49,20 @@
 }
 
 .list-tree-button {
-    width: 250px;
+    width: 300px;
+    justify-content: space-around;
     height: 60px;
     display: flex;
     align-items: center;
     line-height: 0;
-    
-}
 
+}
+.tree-icon {
+  position: absolute;
+  left: 5px;
+
+}
 .mat-tree-node {
   min-height: 65px;
+  position: relative;
 }

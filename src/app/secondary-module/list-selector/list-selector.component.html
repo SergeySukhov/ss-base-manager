@@ -1,38 +1,23 @@
-<div *ngIf="!!optionsList?.length" class="wrapper">
+<div class="wrapper">
   <div class="selector-container">
-    <!-- <mat-selection-list class="selector" color="primary" #selector [multiple]="false" (selectionChange)="selector.selectedOptions.selected[0].value.action()">
-        <mat-list-option class="selector-opt" color="primary"
-          [ngClass]="{divider:option.isDivider}"
-         *ngFor="let option of optionsList" [value]="option" [disabled]="!option.available">
-          {{option.title}}
-        </mat-list-option>
-      </mat-selection-list> -->
-
-    <!--  -->
-    <!--  -->
-    <!--  -->
 
     <mat-tree  [dataSource]="dataSource" [treeControl]="treeControl" style="background-color: transparent;">
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-        <button mat-stroked-button matTreeNodeToggle class="list-tree-button">{{node.name}}</button>
+        <button mat-stroked-button matTreeNodeToggle class="list-tree-button" (click)="node.action()">
+          {{node.name}}
+        </button>
       </mat-tree-node>
 
       <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
-        <button mat-stroked-button  matTreeNodeToggle class="list-tree-button">
-
+        <mat-icon class="mat-icon-rtl-mirror tree-icon" >
+          {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+        </mat-icon>
+        <button mat-stroked-button  matTreeNodeToggle class="list-tree-button" >
           {{node.name}}
-<!--          
-            <mat-icon class="mat-icon-rtl-mirror" >
-              {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-            </mat-icon> -->
         </button>
 
       </mat-tree-node>
     </mat-tree>
-    <!--  -->
-    <!--  -->
-    <!--  -->
-    <!--  -->
   </div>
 
 

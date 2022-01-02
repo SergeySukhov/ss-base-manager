@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MainStateService } from './services/main-state.service';
 import { UserService } from '../../core/services/user.service';
-import { ListSelectorOption } from 'src/app/secondary-module/models/list-selector.model';
+import { TreeSelectorOption } from 'src/app/secondary-module/models/list-selector.model';
 import { ManagerContext } from 'src/app/shared/models/common/enums';
 import { AuthViewService } from "src/app/auth.module/auth/services/auth.view.service";
 
@@ -22,27 +22,51 @@ interface ExampleFlatNode {
 export class MainComponent implements OnInit {
 
   public ManagerContext = ManagerContext;
-  public menuOptions: ListSelectorOption[] = [{
-    title: "Нормативные базы",
+  public contextOptions: TreeSelectorOption[] = [{
+    name: "Добавление микросервиса базы",
     available: true,
-    action: () => {
-      this.stateService.context = ManagerContext.base;
-    }
+    expandable: true,
+    level: 0,
+    action: () => {},
+    children: [{
+      name: "Нормативные базы",
+      available: true,
+      level: 1,
+      expandable: false,
+      action: () => {
+        this.stateService.context = ManagerContext.base;
+      }
+    }, {
+      name: "Базы индексов",
+      available: false,
+      level: 1,
+      expandable: false,
+      action: () => {
+        this.stateService.context = ManagerContext.indexes;
+      }
+    }, {
+      name: "Базы поправок",
+      available: false,
+      level: 1,
+      expandable: false,
+      action: () => {
+        this.stateService.context = ManagerContext.correction;
+      }
+    }, {
+      name: "Базы формул",
+      available: true,
+      level: 1,
+      expandable: false,
+      action: () => {
+        this.stateService.context = ManagerContext.formula;
+      },
+    }]
+
   }, {
-    title: "Базы индексов",
-    available: false,
-  }, {
-    title: "Базы поправок",
-    available: false,
-  }, {
-    title: "Базы формул",
+    name: "Управление доступными базами",
     available: true,
-    action: () => {
-      this.stateService.context = ManagerContext.formula;
-    }
-  }, {
-    title: "Управление доступными базами",
-    available: true,
+    level: 0,
+    expandable: false,
     action: () => {
       this.stateService.context = ManagerContext.manager;
     }
