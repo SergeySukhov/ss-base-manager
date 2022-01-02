@@ -1,9 +1,9 @@
 ﻿import { NetWorkerRequest, NetMessageTypes, NetWorkerResponse, NetWorkerResponseAvailableBases, NetWorkerRequestAvailableBases, NetWorkerRequestUploadFormuls, NetWorkerResponseUploadFormuls, NetWorkerRequestUploadNormatives, NetWorkerResponseUploadNormatives } from "src/app/shared/models/net-messages/net-worker-messages";
 import { ManagementSystemBase } from "src/app/shared/models/worker-models/management-system-base";
+import { environment } from "src/environments/environment";
 import { MessageHandler } from "../message-services/message-handler.service";
 
 export class ManagementSystem extends ManagementSystemBase {
-  serverUrl = "http://localhost:5000/additioninfo"
   constructor(private messageHandler: MessageHandler) {
     super();
   }
@@ -35,7 +35,7 @@ export class ManagementSystem extends ManagementSystemBase {
 
     sender.withCredentials = false;
 
-    sender.open("GET", "http://localhost:5000/additioninfo");
+    sender.open("GET", environment.normo + "additioninfo");
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');
     sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
     sender.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
@@ -74,7 +74,7 @@ export class ManagementSystem extends ManagementSystemBase {
     data.append("deploy", "" + request.data.isDeploy);
 
     sender.withCredentials = false;
-    sender.open("POST", "http://localhost:5002/uploader");
+    sender.open("POST", environment.formuls + "uploader");
 
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');
     sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
@@ -103,14 +103,13 @@ export class ManagementSystem extends ManagementSystemBase {
 
   private async sendUploadNormatives(request: NetWorkerRequestUploadNormatives) {
     console.log("!! | sendRequestTest | request", request)
-    
+
     const sender = new XMLHttpRequest();
     const response: NetWorkerResponseUploadNormatives = {
       guid: request.guid,
       messageType: request.messageType,
     }
-    this.messageHandler.toClient(response);
-    return;
+
     var data = new FormData();
     data.append("xmlFile", request.data.fileNormatives);
     data.append("normoGuid", request.data.normoGuid);
@@ -118,7 +117,7 @@ export class ManagementSystem extends ManagementSystemBase {
     data.append("deploy", "" + request.data.isDeploy);
 
     sender.withCredentials = false;
-    sender.open("GET", "http://localhost:5000/uploader");
+    sender.open("POST", environment.normo + "uploader");
 
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');
     sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');

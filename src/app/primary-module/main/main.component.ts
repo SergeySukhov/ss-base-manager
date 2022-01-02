@@ -37,6 +37,14 @@ export class MainComponent implements OnInit {
         this.stateService.context = ManagerContext.base;
       }
     }, {
+      name: "Базы формул",
+      available: true,
+      level: 1,
+      expandable: false,
+      action: () => {
+        this.stateService.context = ManagerContext.formula;
+      },
+    }, {
       name: "Базы индексов",
       available: false,
       level: 1,
@@ -52,15 +60,7 @@ export class MainComponent implements OnInit {
       action: () => {
         this.stateService.context = ManagerContext.correction;
       }
-    }, {
-      name: "Базы формул",
-      available: true,
-      level: 1,
-      expandable: false,
-      action: () => {
-        this.stateService.context = ManagerContext.formula;
-      },
-    }]
+    },]
 
   }, {
     name: "Управление доступными базами",
@@ -69,6 +69,14 @@ export class MainComponent implements OnInit {
     expandable: false,
     action: () => {
       this.stateService.context = ManagerContext.manager;
+    }
+  }, {
+    name: "Шаблоны добавления",
+    available: false,
+    level: 0,
+    expandable: false,
+    action: () => {
+      // this.stateService.context = ManagerContext.manager;
     }
   },
   ]
