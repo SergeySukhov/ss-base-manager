@@ -11,38 +11,38 @@ export abstract class EndpointBaseService {
     }
 
     public async getAvailableNormativeBases(baseType: BaseType): Promise<NormativeBaseInfo[] | null> {
-        // const a = new Promise<NormativeBaseInfo[]>((resolve, reject) => {
-        //     setTimeout(() => {
-        //         resolve([{
-        //            guid: v4(),
-        //            name: "Dopolnenie idi naxuy 1",
-        //            additionalNumber: 1,
+        const a = new Promise<NormativeBaseInfo[]>((resolve, reject) => {
+            setTimeout(() => {
+                resolve([{
+                   guid: v4(),
+                   name: "Dopolnenie idi naxuy 1",
+                   additionalNumber: 1,
 
-        //         }, {
-        //             guid: v4(),
-        //             name: "Dopolnenie idi naxuy 1",
-        //             additionalNumber: 1,
+                }, {
+                    guid: v4(),
+                    name: "Dopolnenie idi naxuy 1",
+                    additionalNumber: 1,
 
-        //          },{
-        //             guid: v4(),
-        //             name: "Dopolnenie idi naxuy 1",
-        //             additionalNumber: 1,
+                 },{
+                    guid: v4(),
+                    name: "Dopolnenie idi naxuy 1",
+                    additionalNumber: 1,
 
-        //          }]);
-        //     }, 100);
-        // });
-        // return a;
-
-        const avNB = await this.netWorker.postMessageToWorkerAsync({
-            messageType: NetMessageTypes.getAvailableNormoBases,
+                 }]);
+            }, 100);
         });
-        const mappedAvailableBases = avNB?.data as AvailableBaseAdditionInfo[]
-        if (!!mappedAvailableBases?.length) {
-            return mappedAvailableBases.map(x => {
-                return { guid: x.guid, name: x.name, additionalNumber: x.additionNumber }
-            });
-        } else {
-            return null;
-        }
+        return a;
+
+        // const avNB = await this.netWorker.postMessageToWorkerAsync({
+        //     messageType: NetMessageTypes.getAvailableNormoBases,
+        // });
+        // const mappedAvailableBases = avNB?.data as AvailableBaseAdditionInfo[]
+        // if (!!mappedAvailableBases?.length) {
+        //     return mappedAvailableBases.map(x => {
+        //         return { guid: x.guid, name: x.name, additionalNumber: x.additionNumber }
+        //     });
+        // } else {
+        //     return null;
+        // }
     }
 }

@@ -21,7 +21,7 @@ export class UserService {
         danny: "assets\\icons\\danny.jpg",
         steve: "assets\\icons\\steve.png",
     };
-    
+
     constructor(private storageService: LocalStorageService) {
     }
 

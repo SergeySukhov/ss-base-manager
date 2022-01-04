@@ -1,19 +1,64 @@
+   :host span {
+     display: flex;
+   }
   .wrapper {
     width: 100%;
     table {
         width: 100%;
       }
   }
+  .control-container {
+    height: 50px;
+    display: flex;
+    justify-content: start;
+    margin-left: 5px;
+
+  }
+  .control-button {
+    width: 150px;
+    margin: 5px;
+    margin-left: 0;
+  }
 
   .example-container {
     height: 100%;
     overflow: auto;
     position: relative;
-    margin: 6px;
+    margin: 5px;
+    margin-top: 0;
   }
-  
-  .demo-button + .demo-button {
-    margin-left: 8px;
+  .show-name-input {
+    display: flex !important;
+    z-index: 99;
+    height: 30px;
+    margin-right: 20px;
+  }
+  .name-value {
+    display: flex;
+  }
+
+  .row-common {
+    transition: all 0.5s ease-in ;
+    height: 48px;
+    opacity: 1;
+  }
+  .hide-row {
+    transition: all 0.4s ease-in ;
+    height:  0 !important;
+    border: none;
+    opacity: 0;
+    * {
+      display: none;
+    }
+    
+  }
+  .hide-name-value,
+  .hide-name-input {
+    display: none;
+  }
+
+  .name-input {
+    width: 100%;
   }
   .dark-mode, .mat-header-row {
     background: #323232;
