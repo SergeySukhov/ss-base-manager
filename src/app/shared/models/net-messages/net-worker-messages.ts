@@ -31,7 +31,7 @@ export interface NetWorkerRequestAvailableBases extends NetWorkerRequestBase<Net
 }
 
 export interface NetWorkerAddAvailableBases extends NetWorkerRequestBase<NetMessageTypes.managerAddNodes> {
-  data: { nodes: AvailableNormativeBaseType[] },
+  data: { rootNodes: AvailableNormativeBaseType[] },
 }
 export interface NetWorkerRemoveAvailableBases extends NetWorkerRequestBase<NetMessageTypes.managerRemoveNodes> {
   data: { guids: string[] },

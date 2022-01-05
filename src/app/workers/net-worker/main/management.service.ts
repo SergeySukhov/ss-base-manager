@@ -41,11 +41,7 @@ export class ManagementSystem extends ManagementSystemBase {
       guid: request.guid,
       messageType: request.messageType,
     }
-    const data = new FormData();
-    const a = request.data.nodes[0];
-    Object.keys(a).forEach(x => {
-      data.append(x, Object(a).x);
-    });
+    const data = JSON.stringify(request.data.rootNodes[0]);
 
     sender.withCredentials = false;
     sender.open("POST", environment.manager + "normativebasetype");
@@ -69,11 +65,63 @@ export class ManagementSystem extends ManagementSystemBase {
   }
 
   private async sendManagerRemoveNodes(request: NetWorkerRemoveAvailableBases) {
-    
+    const sender = new XMLHttpRequest();
+    const response: NetWorkerResponseCommon = {
+      guid: request.guid,
+      messageType: request.messageType,
+    }
+
+    sender.withCredentials = false;
+    sender.open("Delete", environment.manager + "normativebasetype" + "/"+ request.data.guids[0]);
+
+    sender.setRequestHeader('Access-Control-Allow-Origin', '*');
+    sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    sender.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    sender.timeout = 5000;
+
+    sender.onreadystatechange = async () => {
+      if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
+        if (sender.status === 200) {
+          this.messageHandler.toClient(response);
+        } else {
+          this.errorHandler(response);
+        }
+      }
+    }
+    this.setSenderHandlers(sender, response);
+    sender.send();
   }
 
   private async sendManagerEditNodes(request: NetWorkerEditAvailableBases) {
     
+    const sender = new XMLHttpRequest();
+    const response: NetWorkerResponseCommon = {
+      guid: request.guid,
+      messageType: request.messageType,
+    }
+    const data = JSON.stringify(request.data.rootNodes[0]);
+    console.log("!! | sendManagerAddNodes | data", data)
+
+
+    sender.withCredentials = false;
+    sender.open("PUT", environment.manager + "normativebasetype");
+//AdditionInfo
+    sender.setRequestHeader('Access-Control-Allow-Origin', '*');
+    sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    sender.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    sender.timeout = 5000;
+
+    sender.onreadystatechange = async () => {
+      if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
+        if (sender.status === 200) {
+          this.messageHandler.toClient(response);
+        } else {
+          this.errorHandler(response);
+        }
+      }
+    }
+    this.setSenderHandlers(sender, response);
+    sender.send(data);
   }
 
   private async sendRequestGetBases(request: NetWorkerRequestAvailableBases) {
@@ -153,8 +201,6 @@ export class ManagementSystem extends ManagementSystemBase {
   }
 
   private async sendUploadNormatives(request: NetWorkerRequestUploadNormatives) {
-    console.log("!! | sendRequestTest | request", request)
-
     const sender = new XMLHttpRequest();
     const response: NetWorkerResponseUploadNormatives = {
       guid: request.guid,
@@ -173,15 +219,11 @@ export class ManagementSystem extends ManagementSystemBase {
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');
     sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
     sender.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-    console.log("!! | sendRequestTest | sender", sender)
     sender.timeout = 5000;
 
     sender.onreadystatechange = async () => {
       if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
         if (sender.status === 200) {
-          const senderObj = JSON.parse(sender.response);
-          console.log("!! | sender.onreadystatechange= | senderObj", senderObj)
-
           this.messageHandler.toClient(response);
         } else {
           this.errorHandler(response);
