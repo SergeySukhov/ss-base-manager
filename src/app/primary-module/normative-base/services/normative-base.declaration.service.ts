@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
+import { DeclarationBaseService } from "src/app/core/services/base-services/declaration-base.service";
 import { OptionType, SelectorOption, StepperData, StepperDataStep, StepperSelectorField, StepFields, StepperLabelField } from "src/app/secondary-module/stepper/models/stepper-model";
-import { BaseType, NormativeBaseInfo } from "src/app/shared/models/server-models/normative-base-info";
+import { AvailableBaseAdditionInfo } from "src/app/shared/models/server-models/AvailableBaseAdditionInfo";
+import { BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { v4 } from "uuid";
 import { BaseTypeInfo } from "../../formula-base/models/form-base.models";
-import { DeclarationBaseService } from "../../models/declaration-base.service";
 import { NormBaseResultParams } from "../models/norm-base.models";
 import { NormativeBaseComponent } from "../normative-base.component";
 import { NormativeBaseEndpointService } from "./normative-base.endpoint.service";
@@ -11,7 +12,7 @@ import { NormativeBaseStateService } from "./normative-base.state.service";
 
 @Injectable()
 export class NormativeBaseDeclarationService extends DeclarationBaseService<NormBaseResultParams> {
-    normBaseFieldOptions: SelectorOption<NormativeBaseInfo>[] = [];
+    normBaseFieldOptions: SelectorOption<AvailableBaseAdditionInfo>[] = [];
 
     constructor(private endpoint: NormativeBaseEndpointService, private stateService: NormativeBaseStateService) {
         super();
@@ -75,8 +76,8 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Norm
                     fields: [{
                         type: OptionType.selector,
                         fieldLabel: "Доступные НБ",
-                        onDataChange: (value: SelectorOption<NormativeBaseInfo>, form: StepperDataStep) => {
-                            context.resultParams.normBaseChoice = value.data as NormativeBaseInfo;
+                        onDataChange: (value: SelectorOption<AvailableBaseAdditionInfo>, form: StepperDataStep) => {
+                            context.resultParams.normBaseChoice = value.data as AvailableBaseAdditionInfo;
 
                             this.setAddBaseForm(!!value.imgSrc, context, form);
 
@@ -221,8 +222,8 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Norm
         return resultInfoFields;
     }
 
-    private toSelectorOptions(baseData: NormativeBaseInfo[]): SelectorOption<NormativeBaseInfo>[] {
-        const selectorOptions: SelectorOption<NormativeBaseInfo>[] = [];
+    private toSelectorOptions(baseData: AvailableBaseAdditionInfo[]): SelectorOption<AvailableBaseAdditionInfo>[] {
+        const selectorOptions: SelectorOption<AvailableBaseAdditionInfo>[] = [];
         selectorOptions.push({
             isAvailable: true,
             imgSrc: "assets\\icons\\add.svg",

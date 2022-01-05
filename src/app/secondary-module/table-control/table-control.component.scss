@@ -1,16 +1,14 @@
-   :host span {
-     display: flex;
-   }
   .wrapper {
     width: 100%;
     table {
         width: 100%;
       }
+    user-select: none;
   }
   .control-container {
     height: 50px;
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     margin-left: 5px;
 
   }
@@ -35,6 +33,7 @@
   }
   .name-value {
     display: flex;
+    min-width: 400px;
   }
 
   .row-common {
@@ -76,10 +75,18 @@
     flex: 1;
     margin-top: 10px;
   }
-
-  .mat-column-select,
-  .mat-column-position {
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+  }
+  .mat-column-select {
     max-width: 64px;
     width: 64px;
+  }
+  .mat-column-availability {
+    max-width: 350px;
+    min-width: 350px;
+    width: 350px;
   }
 

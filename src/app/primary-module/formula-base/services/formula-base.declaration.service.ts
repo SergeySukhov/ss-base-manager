@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
+import { DeclarationBaseService } from "src/app/core/services/base-services/declaration-base.service";
 import { OptionType, SelectorOption, StepperData, StepperDataStep, StepperSelectorField, StepFields, StepperLabelField } from "src/app/secondary-module/stepper/models/stepper-model";
-import { BaseType, NormativeBaseInfo } from "src/app/shared/models/server-models/normative-base-info";
-import { DeclarationBaseService } from "../../models/declaration-base.service";
+import { AvailableBaseAdditionInfo } from "src/app/shared/models/server-models/AvailableBaseAdditionInfo";
+import { BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { FormulaBaseComponent } from "../formula-base.component";
 import { BaseTypeInfo, FormBaseResultParams } from "../models/form-base.models";
 import { FormulaBaseEndpointService } from "./formula-base.endpoint.service";
@@ -9,7 +10,7 @@ import { FormulaBaseEndpointService } from "./formula-base.endpoint.service";
 
 @Injectable()
 export class FormulaBaseDeclarationService extends DeclarationBaseService<FormBaseResultParams> {
-    normBaseFieldOptions: SelectorOption<NormativeBaseInfo>[] = [];
+    normBaseFieldOptions: SelectorOption<AvailableBaseAdditionInfo>[] = [];
     finalOptions: StepFields[] = [];
     constructor(private endpoint: FormulaBaseEndpointService) {
         super();
@@ -75,8 +76,8 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<FormBa
                     fields: [{
                         type: OptionType.selector,
                         fieldLabel: "Доступные НБ",
-                        onDataChange: (value: SelectorOption<NormativeBaseInfo>, form: StepperDataStep) => {
-                            context.resultParams.normBaseChoice = value.data as NormativeBaseInfo;
+                        onDataChange: (value: SelectorOption<AvailableBaseAdditionInfo>, form: StepperDataStep) => {
+                            context.resultParams.normBaseChoice = value.data as AvailableBaseAdditionInfo;
 
                             if (form.nextButton) {
                                 form.nextButton.isDisable = false;
@@ -159,8 +160,8 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<FormBa
         ]
     }
 
-    private toSelectorOptions(baseData: NormativeBaseInfo[]): SelectorOption<NormativeBaseInfo>[] {
-        const selectorOptions: SelectorOption<NormativeBaseInfo>[] = [];
+    private toSelectorOptions(baseData: AvailableBaseAdditionInfo[]): SelectorOption<AvailableBaseAdditionInfo>[] {
+        const selectorOptions: SelectorOption<AvailableBaseAdditionInfo>[] = [];
         baseData.forEach(x => {
             selectorOptions.push({
                 isAvailable: true,

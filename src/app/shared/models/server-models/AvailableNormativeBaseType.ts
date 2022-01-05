@@ -4,7 +4,7 @@
     additionalNumber: number;
 }
 
-export interface AvailableBaseAdditionInfo {
+export interface AvailableNormativeBaseType {
     /// <summary>
     /// Идентификатор
     /// </summary>
@@ -21,34 +21,39 @@ export interface AvailableBaseAdditionInfo {
     isAvailable: boolean;
 
     /// <summary>
-    /// Наименование
-    /// </summary>
-    name: string;
-
-    /// <summary>
-    /// Короткое наименование
-    /// </summary>
-    shortName: string;
-
-    /// <summary>
-    /// Номер дополнения
-    /// </summary>
-    additionNumber: number;
-
-    /// <summary>
     /// Тип НБ
     /// </summary>
     type: BaseType
 
     /// <summary>
-    /// Родительский тип НБ
+    /// Короткое наименование
     /// </summary>
-    parentBaseType?: BaseType;
+    typeName: string;
 
     /// <summary>
-    /// Ключевые слова для автопривязки сметы из внешних источников к базе
+    /// Список доступных узлов
     /// </summary>
-    additionRegexp: string;
+    availabilityNodes: AvailabilityNodes[],
+}
+
+/// <summary>
+/// Доступные узлы
+/// </summary>
+export enum AvailabilityNodes {
+    /// <summary>
+    /// Нормативы
+    /// </summary>
+    Normatives = "Normatives",
+
+    /// <summary>
+    /// Индексы
+    /// </summary>
+    Indexes = "Indexes",
+
+    /// <summary>
+    /// Поправки
+    /// </summary>
+    Corrections = "Corrections"
 }
 
 export enum BaseType {

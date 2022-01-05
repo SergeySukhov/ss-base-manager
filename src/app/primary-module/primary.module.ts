@@ -38,7 +38,6 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { MainComponent } from './main/main.component';
 import { MainStateService } from './main/services/main-state.service';
 import { SecondaryModule } from '../secondary-module/secondary-module.module';
-import { EndpointService } from '../core/services/endpoint.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ThemeService } from "../secondary-module/toolbar/services/theme.service";
 import { NormativeBaseComponent } from './normative-base/normative-base.component';

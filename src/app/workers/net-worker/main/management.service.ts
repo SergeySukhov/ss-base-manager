@@ -1,4 +1,4 @@
-﻿import { NetWorkerRequest, NetMessageTypes, NetWorkerResponse, NetWorkerResponseAvailableBases, NetWorkerRequestAvailableBases, NetWorkerRequestUploadFormuls, NetWorkerResponseUploadFormuls, NetWorkerRequestUploadNormatives, NetWorkerResponseUploadNormatives } from "src/app/shared/models/net-messages/net-worker-messages";
+﻿import { NetWorkerRequest, NetMessageTypes, NetWorkerResponse, NetWorkerResponseAvailableBases, NetWorkerRequestAvailableBases, NetWorkerRequestUploadFormuls, NetWorkerResponseUploadFormuls, NetWorkerRequestUploadNormatives, NetWorkerResponseUploadNormatives, NetWorkerAddAvailableBases, NetWorkerEditAvailableBases, NetWorkerRemoveAvailableBases, NetWorkerResponseCommon } from "src/app/shared/models/net-messages/net-worker-messages";
 import { ManagementSystemBase } from "src/app/shared/models/worker-models/management-system-base";
 import { environment } from "src/environments/environment";
 import { MessageHandler } from "../message-services/message-handler.service";
@@ -22,7 +22,58 @@ export class ManagementSystem extends ManagementSystemBase {
       case NetMessageTypes.sendNormativesUpload:
         this.sendUploadNormatives(request);
         break;
+      case NetMessageTypes.managerAddNodes:
+        this.sendManagerAddNodes(request);
+        break;
+      case NetMessageTypes.managerRemoveNodes:
+        this.sendManagerRemoveNodes(request);
+        break;
+      case NetMessageTypes.managerEditNodes:
+        this.sendManagerEditNodes(request);
+        break;
     }
+  }
+
+  private async sendManagerAddNodes(request: NetWorkerAddAvailableBases) {
+
+    const sender = new XMLHttpRequest();
+    const response: NetWorkerResponseCommon = {
+      guid: request.guid,
+      messageType: request.messageType,
+    }
+    const data = new FormData();
+    const a = request.data.nodes[0];
+    Object.keys(a).forEach(x => {
+      data.append(x, Object(a).x);
+    });
+
+    sender.withCredentials = false;
+    sender.open("POST", environment.manager + "normativebasetype");
+
+    sender.setRequestHeader('Access-Control-Allow-Origin', '*');
+    sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    sender.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    sender.timeout = 5000;
+
+    sender.onreadystatechange = async () => {
+      if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
+        if (sender.status === 200) {
+          this.messageHandler.toClient(response);
+        } else {
+          this.errorHandler(response);
+        }
+      }
+    }
+    this.setSenderHandlers(sender, response);
+    sender.send(data);
+  }
+
+  private async sendManagerRemoveNodes(request: NetWorkerRemoveAvailableBases) {
+    
+  }
+
+  private async sendManagerEditNodes(request: NetWorkerEditAvailableBases) {
+    
   }
 
   private async sendRequestGetBases(request: NetWorkerRequestAvailableBases) {

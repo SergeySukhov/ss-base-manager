@@ -4,18 +4,23 @@ import { MatTable } from '@angular/material/table';
 import { DatePipe } from '@angular/common'
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { v4 } from 'uuid';
+import { AvailabilityNodes } from 'src/app/shared/models/server-models/AvailableNormativeBaseType';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { observable } from 'mobx';
 
 export interface BaseDataView {
   guid: string;
   name: string;
-  position: number;
   availability: boolean | "awaiting";
-  changeDate: string | null;
+  baseTypeName: string;
+  isCancelled: boolean;
   isRoot?: boolean;
   hasChildren?: boolean;
   parentGuid?: string;
   isExpand?: boolean;
   isHide?: boolean;
+  availableChilds?: AvailabilityNodes[];
+  data?: any;
 }
 
 @Component({
@@ -27,71 +32,36 @@ export interface BaseDataView {
 export class TableControlComponent implements OnInit {
   @ViewChild(MatTable) table!: MatTable<BaseDataView>;
 
-  @Input() set dataSourceTemp(value: string[]) {
+  @Input() isAwaiting = false;
+  @Input() set dataSource(value: BaseDataView[]) {
+    console.log("!! | @Input | value", value)
     this.data.splice(0);
-    const rootGuid = v4();
-    this.data.push({
-      guid: rootGuid,
-      position: 1,
-      name: "Root",
-      isRoot: true,
-      isExpand: true,
-      availability: true,
-      changeDate: this.datepipe.transform(Date.now(), 'HH:mm, dd-MM-yyyy'),
-      hasChildren: true,
-    });
-    value.forEach((x, index) => {
-      this.data.push({
-        guid: v4(),
-        position: index + 2,
-        name: x,
-        availability: true,
-        changeDate: this.datepipe.transform(Date.now(), 'HH:mm, dd-MM-yyyy'),
-        parentGuid: rootGuid,
-      });
-    });
-    const rootGuid2 = v4();
-    this.data.push({
-      guid: rootGuid2,
-      position: 1,
-      name: "Root",
-      isRoot: true,
-      isExpand: true,
-      availability: true,
-      changeDate: this.datepipe.transform(Date.now(), 'HH:mm, dd-MM-yyyy'),
-      hasChildren: true,
-    });
-    value.forEach((x, index) => {
-      this.data.push({
-        guid: v4(),
-        position: index + 2,
-        name: x,
-        availability: true,
-        changeDate: this.datepipe.transform(Date.now(), 'HH:mm, dd-MM-yyyy'),
-        parentGuid: rootGuid2,
-      });
-    });
+    this.data.push(...value);
     if (this.table) {
       this.table.renderRows();
     }
-
     this.updateAllAvailableState();
   }
 
-  @Output() onAddNodes = new EventEmitter<string[]>();
-  @Output() onRemoveNodes = new EventEmitter<string[]>();
+  @Output() onAddNodes = new EventEmitter<BaseDataView[]>();
+  @Output() onRemoveNodes = new EventEmitter<BaseDataView[]>();
   @Output() onEditedNodes = new EventEmitter<BaseDataView[]>();
 
+  availabilityNodes = AvailabilityNodes;
   allAvailableState: "checked" | "unchecked" | "mixed" = "mixed";
+
   editingRow: BaseDataView | null = null;
   data: BaseDataView[] = [];
 
-  displayedColumns: string[] = ['select', 'position', 'name', 'availability', 'changeDate'];
+  displayedColumns: string[] = ['select', 'name', 'availability', 'baseType', 'cancelled', 'availableChilds'];
   selection = new SelectionModel<BaseDataView>(true, []);
 
   constructor(public datepipe: DatePipe) { }
 
   ngOnInit(): void {
+    if (this.table) {
+      this.table.renderRows();
+    }
   }
 
   onRootExpandClick(row: BaseDataView) {
@@ -117,7 +87,8 @@ export class TableControlComponent implements OnInit {
   }
 
   toggleChange(value: boolean, rowData: BaseDataView) {
-    if (rowData.isRoot) {
+    if (!!rowData.isRoot) {
+      rowData.availability = value;
       this.data.filter(x => x.parentGuid === rowData.guid).forEach(x => {
         this.toggleChange(value, x);
       });
@@ -125,17 +96,18 @@ export class TableControlComponent implements OnInit {
       rowData.availability = "awaiting";
       setTimeout(() => {
         rowData.availability = value;
-        this.onEditedNodes.emit([rowData]);
       }, 1000);
     }
+    this.onEditedNodes.emit([rowData]);
     this.updateAllAvailableState();
-
   }
 
-  toggleGlobalChange(event: MatButtonToggleChange) {
+  toggleGlobalChange(isAllAvailable: boolean) {
     this.data.forEach(x => {
-      x.availability = event.value === "checked";
+      x.availability = isAllAvailable;
     });
+    this.updateAllAvailableState();
+
     this.onEditedNodes.emit(this.data);
   }
 
@@ -152,7 +124,6 @@ export class TableControlComponent implements OnInit {
       this.finishEditing(value, false);
     } else if (event.key === "Escape") {
       this.finishEditing("", true);
-
     }
   }
 
@@ -165,16 +136,19 @@ export class TableControlComponent implements OnInit {
   }
 
   addData() {
-    this.data.push({
+    const newNode: BaseDataView = {
       guid: v4(),
       availability: false,
-      changeDate: this.datepipe.transform(Date.now()),
       name: "Новый корневой узел",
-      position: 0,
+      baseTypeName: "",
+      isCancelled: false,
       isRoot: true,
       hasChildren: false,
+    }
 
-    });
+    this.data.push(newNode);
+    this.onAddNodes.emit([newNode]);
+
     this.table.renderRows();
     this.updateAllAvailableState();
   }
@@ -187,6 +161,7 @@ export class TableControlComponent implements OnInit {
           this.data.splice(idx, 1);
         }
       });
+      this.onRemoveNodes.emit(this.selection.selected)
     }
     this.selection.clear();
     this.table.renderRows();
@@ -194,16 +169,14 @@ export class TableControlComponent implements OnInit {
     this.updateAllAvailableState();
   }
 
-  updateAllAvailableState() {
-    const allAvailable = this.data.filter(x => !x.isRoot).every(x => x.availability === true);
-    const noAvailable = this.data.filter(x => !x.isRoot).every(x => x.availability === false);
-    this.allAvailableState = allAvailable ? "checked" : (noAvailable ? "unchecked" : "mixed");
+  toggleAvailableChildChange(event: MatCheckboxChange, row: BaseDataView) {
+    // TODO:
   }
 
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.data.filter(x => !x.isRoot).length;
-    return numSelected === numRows;
+  toggleCancelChange(value: boolean, row: BaseDataView) {
+    row.isCancelled = value;
+    this.onEditedNodes.emit([row]);
+
   }
 
   masterToggle() {
@@ -212,20 +185,50 @@ export class TableControlComponent implements OnInit {
       return;
     }
 
-    this.selection.select(...this.data.filter(x => !x.isRoot));
+    this.selection.select(...this.data.filter(this.filterDataSource));
   }
 
   checkboxLabel(row?: BaseDataView): string {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row `;
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.data.filter(this.filterDataSource).length;
+    return numSelected === numRows;
+  }
+
+  rowSelected(value: boolean, row: BaseDataView) {
+    if (row.hasChildren) {
+      this.data.filter(x => x.parentGuid === row.guid).forEach(x => {
+        this.rowSelected(value, x);
+      });
+    }
+    if (value) {
+      this.selection.select(...[row])
+    } else {
+      this.selection.deselect(...[row])
+    }
   }
 
   onRowClick(row: BaseDataView) {
-    if (row.isRoot) {
-      return;
-    }
-    this.selection.toggle(row)
+    this.rowSelected(!this.selection.isSelected(row), row)
+  }
+
+  isIncludeChildNodes(nodeType: AvailabilityNodes, row: BaseDataView): boolean {
+    return !!row.availableChilds?.includes(nodeType);
+  }
+
+  private updateAllAvailableState() {
+    const allAvailable = this.data.filter(this.filterDataSource).every(x => x.availability === true);
+    const noAvailable = this.data.filter(this.filterDataSource).every(x => x.availability === false);
+    this.allAvailableState = allAvailable ? "checked" : (noAvailable ? "unchecked" : "mixed");
+  }
+
+  private filterDataSource(value: BaseDataView): boolean {
+    return true;
   }
 }

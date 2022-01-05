@@ -17,10 +17,10 @@
                     </mat-checkbox>
                 </th>
                 <td mat-cell *matCellDef="let row">
-                    <span>
+                    <span style="display: flex; justify-content: space-between; width: 60px; line-height: 24px;">
 
-                        <mat-checkbox *ngIf="!row.isRoot" (click)="$event.stopPropagation()"
-                            (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="rowSelected($event.checked, row)" [checked]="selection.isSelected(row)"
                             [aria-label]="checkboxLabel(row)">
                         </mat-checkbox>
 
@@ -33,17 +33,16 @@
             </ng-container>
 
             <!-- Position Column -->
-            <ng-container matColumnDef="position">
+            <!-- <ng-container matColumnDef="position">
                 <th mat-header-cell *matHeaderCellDef> № </th>
                 <td mat-cell *matCellDef="let element"><span> {{element.isRoot? "" : element.position}} </span></td>
-            </ng-container>
+            </ng-container> -->
 
             <!-- Name Column -->
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef> Наименование базы </th>
-                <td mat-cell *matCellDef="let element" style="width: 40%">
+                <td mat-cell *matCellDef="let element">
                     <span>
-
                         <div [ngClass]="{'hide-name-value': editingRow?.guid === element.guid}" class="name-value">
                             <div (click)="$event.stopPropagation();startNameEdit(element, editInput)">{{element.name}}
                             </div>
@@ -61,16 +60,26 @@
             <ng-container matColumnDef="availability">
                 <th mat-header-cell *matHeaderCellDef>
                     Доступность
-                    <mat-button-toggle-group [value]="allAvailableState" (change)="toggleGlobalChange($event)">
-                        <mat-button-toggle value="checked" [checked]="allAvailableState === 'checked'">Все доступны
-                        </mat-button-toggle>
-                        <mat-button-toggle value="unchecked" [checked]="allAvailableState === 'unchecked'">Все
-                            недоступны</mat-button-toggle>
-                    </mat-button-toggle-group>
+                    <mat-checkbox style="margin-left: 10px;"
+                            (click)="$event.stopPropagation()"
+                        [checked]="allAvailableState === 'checked'"
+                        [disabled]="allAvailableState === 'checked'"
+                        [indeterminate]="allAvailableState === 'mixed'"
+                        (change)="toggleGlobalChange(true)">
+                        Все доступны
+                   </mat-checkbox>
+                   <mat-checkbox style="margin-left: 5px;"
+                            (click)="$event.stopPropagation()"
+                            [checked]="allAvailableState === 'unchecked'"
+                        [disabled]="allAvailableState === 'unchecked'"
+                        [indeterminate]="allAvailableState === 'mixed'"
+                        (change)="toggleGlobalChange(false)">
+                       Все не доступны
+                  </mat-checkbox>
                 </th>
                 <td mat-cell *matCellDef="let element">
                     <span>
-                        <div style="width: 200px;">
+                        <div>
                             <mat-slide-toggle (click)="$event.stopPropagation()"
                                 (change)="toggleChange($event.checked, element)"
                                 *ngIf="element.availability !== 'awaiting'" [checked]="element.availability"
@@ -83,12 +92,61 @@
                     </span>
                 </td>
             </ng-container>
-
-            <!-- changeDate Column -->
-            <ng-container matColumnDef="changeDate">
-                <th mat-header-cell *matHeaderCellDef> Дата изменения </th>
-                <td mat-cell *matCellDef="let element"> <span>{{element.changeDate}}</span> </td>
+            <!-- baseType Column -->
+            <ng-container matColumnDef="baseType">
+                <th mat-header-cell *matHeaderCellDef> Тип базы </th>
+                <td mat-cell *matCellDef="let element">
+                    <span>
+                        {{element.baseTypeName}}
+                    </span>
+                 </td>
             </ng-container>
+
+            <!-- cancelled Column -->
+            <ng-container matColumnDef="cancelled">
+                <th mat-header-cell *matHeaderCellDef> Отменена </th>
+                <td mat-cell *matCellDef="let element">
+                    <span>
+                        <mat-checkbox style="margin-left: 10px;"
+                            [checked]="element.isCancelled"
+                            (click)="$event.stopPropagation()"
+                            (change)="toggleCancelChange($event.checked, element)">
+                        Отменена
+                   </mat-checkbox>
+                    </span>
+                 </td>
+            </ng-container>
+
+            <!-- availableChilds Column -->
+            <ng-container matColumnDef="availableChilds">
+                <th mat-header-cell *matHeaderCellDef> Доступные дочерние типы </th>
+                <td mat-cell *matCellDef="let element">
+                     <span *ngIf="!!element.isRoot">
+                         <div class="button-group">
+                                <mat-checkbox
+                                 [checked]="isIncludeChildNodes(availabilityNodes.Normatives, element)"
+                                 (change)="toggleAvailableChildChange($event, element)">
+                                    Нормативы
+                                </mat-checkbox>
+                                <mat-checkbox
+                                 [checked]="isIncludeChildNodes(availabilityNodes.Indexes, element)"
+                                 (change)="toggleAvailableChildChange($event, element)">
+                                    Индексы
+                                </mat-checkbox>
+                                <mat-checkbox
+                                 [checked]="isIncludeChildNodes(availabilityNodes.Corrections, element)"
+                                 (change)="toggleAvailableChildChange($event, element)">
+                                    Поправки
+                                </mat-checkbox>
+                        </div>
+                     </span>
+                     <span *ngIf="!element.isRoot">
+                        --
+                    </span>
+                 </td>
+            </ng-container>
+
+           
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="header-row"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'hide-row': row.isHide}"

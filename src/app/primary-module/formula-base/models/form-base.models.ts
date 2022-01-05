@@ -1,8 +1,9 @@
-import { BaseType, NormativeBaseInfo } from "src/app/shared/models/server-models/normative-base-info";
+import { AvailableBaseAdditionInfo } from "src/app/shared/models/server-models/AvailableBaseAdditionInfo";
+import { BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 
 export class FormBaseResultParams {
     baseTypeName: string = "";
-    normBaseChoice: NormativeBaseInfo | null = null;
+    normBaseChoice: AvailableBaseAdditionInfo | null = null;
     needDeploy = false;
     file: File | null = null;
     get isComplete(): boolean {

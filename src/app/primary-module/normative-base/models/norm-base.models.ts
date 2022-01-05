@@ -1,9 +1,9 @@
-import { NormativeBaseInfo } from "src/app/shared/models/server-models/normative-base-info";
+import { AvailableBaseAdditionInfo } from "src/app/shared/models/server-models/AvailableBaseAdditionInfo";
 import { BaseTypeInfo } from "../../formula-base/models/form-base.models";
 
 export class NormBaseResultParams {
     baseTypeName: string = "";
-    normBaseChoice: NormativeBaseInfo | null = null;
+    normBaseChoice: AvailableBaseAdditionInfo | null = null;
     needDeploy = false;
     
     fileNormatives: File | null = null;

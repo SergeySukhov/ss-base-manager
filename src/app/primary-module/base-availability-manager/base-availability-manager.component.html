@@ -1,3 +1,8 @@
 <div class="wrapper">
-    <ss-table-control [dataSourceTemp]="data"></ss-table-control>
+    <ss-table-control [isAwaiting]="isLoading" [dataSource]="data"
+        (onAddNodes)="handleAddNodes($event)"
+        (onRemoveNodes)="handleRemoveNodes($event)"
+        (onEditedNodes)="handleEditNodes($event)"
+    
+    ></ss-table-control>
 </div>

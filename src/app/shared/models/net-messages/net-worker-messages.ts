@@ -1,13 +1,21 @@
 ﻿import { BaseWorkerMessage } from "../base-worker-message";
-import { AvailableBaseAdditionInfo } from "../server-models/normative-base-info";
+import { AvailableBaseAdditionInfo } from "../server-models/AvailableBaseAdditionInfo";
+import { AvailableNormativeBaseType, BaseType } from "../server-models/AvailableNormativeBaseType";
 
 
 export enum NetMessageTypes {
-    init,
-    getAvailableNormoBases,
-    sendFormulsUpload,
-    sendNormativesUpload,
-    serverTest
+  init,
+  getAvailableNormoBases,
+  getAvailableBaseTypes,
+
+  managerAddNodes,
+  managerRemoveNodes,
+  managerEditNodes,
+
+  sendFormulsUpload,
+  sendNormativesUpload,
+
+  serverTest
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -16,7 +24,20 @@ export interface NetWorkerRequestBase<T extends NetMessageTypes> extends BaseWor
   messageType: T,
 }
 
+export interface NetWorkerRequestAvailableBaseTypes extends NetWorkerRequestBase<NetMessageTypes.getAvailableBaseTypes> {
+}
 export interface NetWorkerRequestAvailableBases extends NetWorkerRequestBase<NetMessageTypes.getAvailableNormoBases> {
+  data: { type: BaseType },
+}
+
+export interface NetWorkerAddAvailableBases extends NetWorkerRequestBase<NetMessageTypes.managerAddNodes> {
+  data: { nodes: AvailableNormativeBaseType[] },
+}
+export interface NetWorkerRemoveAvailableBases extends NetWorkerRequestBase<NetMessageTypes.managerRemoveNodes> {
+  data: { guids: string[] },
+}
+export interface NetWorkerEditAvailableBases extends NetWorkerRequestBase<NetMessageTypes.managerEditNodes> {
+  data: { rootNodes: AvailableNormativeBaseType[], normoNodes: AvailableBaseAdditionInfo[] },
 }
 
 export interface NetWorkerRequestUploadFormuls extends NetWorkerRequestBase<NetMessageTypes.sendFormulsUpload> {
@@ -47,7 +68,9 @@ export interface NetWorkerRequestUploadNormatives extends NetWorkerRequestBase<N
 export interface NetWorkerRequestInit extends NetWorkerRequestBase<NetMessageTypes.init> {
 }
 
-export type NetWorkerRequest = NetWorkerRequestAvailableBases | NetWorkerRequestInit | NetWorkerRequestUploadFormuls | NetWorkerRequestUploadNormatives;
+export type NetWorkerRequest = NetWorkerRequestAvailableBaseTypes | NetWorkerRequestAvailableBases
+  | NetWorkerRequestInit | NetWorkerRequestUploadFormuls | NetWorkerRequestUploadNormatives
+  | NetWorkerAddAvailableBases | NetWorkerRemoveAvailableBases | NetWorkerEditAvailableBases;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -58,18 +81,22 @@ export interface NetWorkerResponseBase<T extends NetMessageTypes> extends BaseWo
   messageType: T,
 }
 
+export interface NetWorkerResponseAvailableBaseTypes extends NetWorkerResponseBase<NetMessageTypes.getAvailableBaseTypes> {
+  data: AvailableNormativeBaseType[] | null;
+}
 export interface NetWorkerResponseAvailableBases extends NetWorkerResponseBase<NetMessageTypes.getAvailableNormoBases> {
   data: AvailableBaseAdditionInfo[] | null;
 }
-
 export interface NetWorkerResponseUploadFormuls extends NetWorkerResponseBase<NetMessageTypes.sendFormulsUpload> {
 }
 export interface NetWorkerResponseUploadNormatives extends NetWorkerResponseBase<NetMessageTypes.sendNormativesUpload> {
 }
-export interface NetWorkerResponseCommon extends NetWorkerResponseBase<NetMessageTypes.init> {
+export interface NetWorkerResponseCommon extends NetWorkerResponseBase<NetMessageTypes.init 
+  | NetMessageTypes.managerAddNodes | NetMessageTypes.managerRemoveNodes | NetMessageTypes.managerEditNodes> {
 }
 
-export type NetWorkerResponse = NetWorkerResponseAvailableBases | NetWorkerResponseCommon | NetWorkerResponseUploadFormuls | NetWorkerResponseUploadNormatives;
+export type NetWorkerResponse = NetWorkerResponseAvailableBaseTypes | NetWorkerResponseAvailableBases | NetWorkerResponseCommon
+  | NetWorkerResponseUploadFormuls | NetWorkerResponseUploadNormatives;
 
 export interface NetData<T extends boolean> {
   isSuccess: T;
