@@ -8,7 +8,6 @@ export abstract class BaseWorkerService<TRequest, TResponse> {
     protected worker: Worker | undefined;
     protected timoutResponse = 8000;
 
-    private timeout: any;
 
     constructor() { }
 
@@ -22,25 +21,30 @@ export abstract class BaseWorkerService<TRequest, TResponse> {
 
     public async postMessageToWorkerAsync(workerMessage: TRequest, ignoreTimout = false): Promise<TResponse | null> {
         let sub: Subject<TResponse>;
+        let timeout: any = null;
         const promise = new Promise<TResponse | null>((resolve, reject) => {
-            try {
-                sub = this.postMessageToWorker(workerMessage);
-                sub.subscribe(response => {
-                    sub.unsubscribe();
-                    clearTimeout(this.timeout);
-                    resolve(response);
-                });
-            } catch (error) {
-                sub.unsubscribe();
-                resolve(null);
-            }
             if (!ignoreTimout) {
-                this.timeout = setTimeout(() => {
+                timeout = setTimeout(() => {
                     console.warn("!! error timeout request", workerMessage);
                     sub.unsubscribe();
                     resolve(null);
                 }, this.timoutResponse);
             }
+            try {
+                sub = this.postMessageToWorker(workerMessage);
+                sub.subscribe(response => {
+                    sub.unsubscribe();
+                    clearTimeout(timeout);
+                    resolve(response);
+                });
+            } catch (error) {
+                sub.unsubscribe();
+                console.warn("!! error: ", workerMessage);
+
+                clearTimeout(timeout);
+                resolve(null);
+            }
+
         });
         return await promise;
     }

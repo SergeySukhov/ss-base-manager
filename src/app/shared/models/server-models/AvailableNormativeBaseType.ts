@@ -43,17 +43,17 @@ export enum AvailabilityNodes {
     /// <summary>
     /// Нормативы
     /// </summary>
-    Normatives = "Normatives",
+    Normatives,
 
     /// <summary>
     /// Индексы
     /// </summary>
-    Indexes = "Indexes",
+    Indexes,
 
     /// <summary>
     /// Поправки
     /// </summary>
-    Corrections = "Corrections"
+    Corrections
 }
 
 export enum BaseType {

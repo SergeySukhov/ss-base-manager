@@ -2,11 +2,9 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatTable } from '@angular/material/table';
 import { DatePipe } from '@angular/common'
-import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { v4 } from 'uuid';
 import { AvailabilityNodes } from 'src/app/shared/models/server-models/AvailableNormativeBaseType';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { observable } from 'mobx';
 
 export interface BaseDataView {
   guid: string;
@@ -34,7 +32,6 @@ export class TableControlComponent implements OnInit {
 
   @Input() isAwaiting = false;
   @Input() set dataSource(value: BaseDataView[]) {
-    console.log("!! | @Input | value", value)
     this.data.splice(0);
     this.data.push(...value);
     if (this.table) {
@@ -56,7 +53,8 @@ export class TableControlComponent implements OnInit {
   displayedColumns: string[] = ['select', 'name', 'availability', 'baseType', 'cancelled', 'availableChilds'];
   selection = new SelectionModel<BaseDataView>(true, []);
 
-  constructor(public datepipe: DatePipe) { }
+  constructor(public datepipe: DatePipe) {
+  }
 
   ngOnInit(): void {
     if (this.table) {
@@ -89,6 +87,8 @@ export class TableControlComponent implements OnInit {
   toggleChange(value: boolean, rowData: BaseDataView) {
     if (!!rowData.isRoot) {
       rowData.availability = value;
+      this.onEditedNodes.emit([rowData]);
+
       this.data.filter(x => x.parentGuid === rowData.guid).forEach(x => {
         this.toggleChange(value, x);
       });
@@ -96,9 +96,10 @@ export class TableControlComponent implements OnInit {
       rowData.availability = "awaiting";
       setTimeout(() => {
         rowData.availability = value;
+        this.onEditedNodes.emit([rowData]);
+        this.updateAllAvailableState();
       }, 1000);
     }
-    this.onEditedNodes.emit([rowData]);
     this.updateAllAvailableState();
   }
 
@@ -111,7 +112,7 @@ export class TableControlComponent implements OnInit {
     this.onEditedNodes.emit(this.data);
   }
 
-  startNameEdit(row: BaseDataView, editInput: HTMLInputElement) {
+  startNameEdit(row: BaseDataView, editInput: any) {
     setTimeout(() => {
       editInput.focus();
     });
@@ -203,9 +204,9 @@ export class TableControlComponent implements OnInit {
 
   rowSelected(value: boolean, row: BaseDataView) {
     if (row.hasChildren) {
-      this.data.filter(x => x.parentGuid === row.guid).forEach(x => {
-        this.rowSelected(value, x);
-      });
+      // this.data.filter(x => x.parentGuid === row.guid).forEach(x => {
+      //   this.rowSelected(value, x);
+      // });
     }
     if (value) {
       this.selection.select(...[row])

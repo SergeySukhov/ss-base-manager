@@ -20,10 +20,14 @@ export class BaseAvailabilityManagerComponent implements OnInit {
   constructor(private endpointService: AvailabilityBaseEndpointService) {
   }
 
-  async ngOnInit() {
+  ngOnInit() {
+    this.loadData();
+  }
+
+  async loadData() {
     this.isLoading = true;
     const allAvTypes = await this.endpointService.getAvailableBaseTypes();
-    console.log("!! | ngOnInit | allAvTypes", allAvTypes)
+    console.log("!! | loadData | allAvTypes", allAvTypes)
 
     const allBasesPromises: Promise<AvailableBaseAdditionInfo[] | null>[] = [];
     if (!allAvTypes?.length) {
@@ -43,7 +47,7 @@ export class BaseAvailabilityManagerComponent implements OnInit {
         availableBases.push(...x);
       }
     });
-    console.log("!! | ngOnInit | availableBases", availableBases)
+    console.log("!! | loadData | availableBases", availableBases)
 
     const viewBaseModel: BaseDataView[] = [];
 
@@ -60,18 +64,18 @@ export class BaseAvailabilityManagerComponent implements OnInit {
         availableChilds: baseTypeInfo.availabilityNodes,
       };
       viewBaseModel.push(rootNode);
+      const basesByType = availableBases.filter(x => x.type === baseTypeInfo.type);
+      rootNode.hasChildren = !!basesByType.length;
 
-      for (let baseInfo of availableBases.filter(x => !!x.parentBaseType && x.parentBaseType === baseTypeInfo.type)) {
-        if (!baseInfo) continue;
-        rootNode.hasChildren = true;
+      for (let normoDataBaseInfo of basesByType) {
         viewBaseModel.push({
-          guid: baseInfo.guid,
-          availability: baseInfo.isAvailable,
-          name: baseInfo.name,
+          guid: normoDataBaseInfo.guid,
+          availability: normoDataBaseInfo.isAvailable,
+          name: normoDataBaseInfo.name,
           baseTypeName: baseTypeInfo.typeName,
-          isCancelled: baseInfo.isCancelled,
+          isCancelled: normoDataBaseInfo.isCancelled,
 
-          data: baseInfo,
+          data: normoDataBaseInfo,
           parentGuid: baseTypeInfo.guid,
         });
       }
@@ -99,18 +103,16 @@ export class BaseAvailabilityManagerComponent implements OnInit {
   }
 
   handleEditNodes(nodes: BaseDataView[]) {
-    const rootNodes = nodes.filter(x => x.isRoot);
+    const rootNodes = nodes.filter(x => !!x.isRoot);
     const normoNodes = nodes.filter(x => !x.isRoot);
 
     this.endpointService.sendEditNodes(rootNodes.map(x => {
-      const mappedRootNode: AvailableNormativeBaseType = {
-        guid: x.guid,
-        availabilityNodes: x.availableChilds ?? [],
-        isAvailable: !!x.availability,
-        isCancelled: x.isCancelled,
-        type: BaseType.TSN_MGE,
-        typeName: x.name,
-      };
+      const mappedRootNode: AvailableNormativeBaseType = x.data;
+      
+      mappedRootNode.availabilityNodes = x.availableChilds ?? [];
+      mappedRootNode.isAvailable = !!x.availability;
+      mappedRootNode.isCancelled = x.isCancelled;
+      mappedRootNode.typeName = x.name;
       return mappedRootNode;
     }),
       normoNodes.map(x => {

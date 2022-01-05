@@ -24,19 +24,13 @@
                             [aria-label]="checkboxLabel(row)">
                         </mat-checkbox>
 
-                        <mat-icon (click)="onRootExpandClick(row)" *ngIf="row.hasChildren && row.isRoot"
+                        <mat-icon (click)="$event.stopPropagation();onRootExpandClick(row)" *ngIf="row.hasChildren && row.isRoot"
                             class="mat-icon-rtl-mirror tree-icon">
                             {{row.isExpand ? 'expand_more' : 'chevron_right'}}
                         </mat-icon>
                     </span>
                 </td>
             </ng-container>
-
-            <!-- Position Column -->
-            <!-- <ng-container matColumnDef="position">
-                <th mat-header-cell *matHeaderCellDef> № </th>
-                <td mat-cell *matCellDef="let element"><span> {{element.isRoot? "" : element.position}} </span></td>
-            </ng-container> -->
 
             <!-- Name Column -->
             <ng-container matColumnDef="name">
@@ -49,8 +43,9 @@
                         </div>
                         <div [ngClass]="{'show-name-input': editingRow?.guid === element.guid}" class="hide-name-input"
                             (click)="$event.stopPropagation();">
-                            <input #editInput class="name-input" matInput autofocus autocomplete="off" type="text"
-                                (blur)="finishEditing('', true)" (keyup)="onNameEditing($event, editInput.value)">
+                                <textarea  matInput #editInput class="name-input" autofocus autocomplete="off" type="text"
+                                    (blur)="finishEditing('', true)" (keyup)="onNameEditing($event, editInput.value)">
+                                </textarea>
                         </div>
                     </span>
                 </td>
@@ -60,7 +55,7 @@
             <ng-container matColumnDef="availability">
                 <th mat-header-cell *matHeaderCellDef>
                     Доступность
-                    <mat-checkbox style="margin-left: 10px;"
+                    <mat-checkbox
                             (click)="$event.stopPropagation()"
                         [checked]="allAvailableState === 'checked'"
                         [disabled]="allAvailableState === 'checked'"
@@ -68,7 +63,7 @@
                         (change)="toggleGlobalChange(true)">
                         Все доступны
                    </mat-checkbox>
-                   <mat-checkbox style="margin-left: 5px;"
+                   <mat-checkbox
                             (click)="$event.stopPropagation()"
                             [checked]="allAvailableState === 'unchecked'"
                         [disabled]="allAvailableState === 'unchecked'"
@@ -79,7 +74,7 @@
                 </th>
                 <td mat-cell *matCellDef="let element">
                     <span>
-                        <div>
+                    <div class="centred">
                             <mat-slide-toggle (click)="$event.stopPropagation()"
                                 (change)="toggleChange($event.checked, element)"
                                 *ngIf="element.availability !== 'awaiting'" [checked]="element.availability"
@@ -106,12 +101,11 @@
             <ng-container matColumnDef="cancelled">
                 <th mat-header-cell *matHeaderCellDef> Отменена </th>
                 <td mat-cell *matCellDef="let element">
-                    <span>
+                    <span style="margin: 10px;">
                         <mat-checkbox style="margin-left: 10px;"
                             [checked]="element.isCancelled"
                             (click)="$event.stopPropagation()"
                             (change)="toggleCancelChange($event.checked, element)">
-                        Отменена
                    </mat-checkbox>
                     </span>
                  </td>
@@ -155,7 +149,7 @@
             </tr>
         </table>
     </div>
-    <!-- <div class="load-spinner-container" *ngIf="!data.length">
+    <div class="load-spinner-container" *ngIf="isAwaiting">
         <mat-progress-spinner diameter="300" mode="indeterminate" color="accent"></mat-progress-spinner>
-    </div> -->
+    </div>
 </div>

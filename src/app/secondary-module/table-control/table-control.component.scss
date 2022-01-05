@@ -25,43 +25,62 @@
     margin: 5px;
     margin-top: 0;
   }
+  .mat-icon { 
+    width: 30px;
+  }
+
   .show-name-input {
     display: flex !important;
     z-index: 99;
-    height: 30px;
-    margin-right: 20px;
+    max-height: 50px;
   }
+  .name-input {
+    display: flex;
+    width: 400px;
+    min-width: 400px;
+    max-width: 400px;
+    height: 100px;
+    max-height: 150px;
+  }
+
   .name-value {
     display: flex;
-    min-width: 400px;
+    min-width: 440px;
+    width: 440px;
+    max-width: 400px;
+
   }
 
   .row-common {
     transition: all 0.5s ease-in ;
     height: 48px;
     opacity: 1;
+
+    span {
+      display: flex;
+      padding-right: 10px;
+    }
   }
   .root-row {
     background: #525377;
   }
   .hide-row {
-    transition: all 0.4s ease-in ;
-    height:  0 !important;
-    border: none;
-    opacity: 0;
-    * {
-      display: none;
-    }
-    
+    display: none;
+    // transition: all 0.4s ease-in ;
+    // height:  0 !important;
+    // opacity: 0;
+    // border: none;
+    // * {
+    //   height:  0 !important;
+    //   opacity: 0;
+    //   font-size: 0;
+    // }
   }
   .hide-name-value,
   .hide-name-input {
     display: none;
   }
 
-  .name-input {
-    width: 100%;
-  }
   .dark-mode, .mat-header-row {
     background: #323232;
   }
@@ -80,13 +99,48 @@
     justify-content: space-between;
     width: 300px;
   }
+
+  .centred {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .mat-row {
+    font-size: 12px;
+  }
+
   .mat-column-select {
     max-width: 64px;
     width: 64px;
   }
-  .mat-column-availability {
-    max-width: 350px;
-    min-width: 350px;
-    width: 350px;
+  .mat-column-name {
+    font-size: 12px;
+    
+    width: 450px;
   }
+  .mat-column-baseType {
+    width: 350px;
+    font-size: 12px;
+    
+    max-width: 350px;
+  }
+  .mat-column-availability {
+    font-size: 12px;
+
+    max-width: 160px;
+    min-width: 160px;
+    width: 160px;
+  }
+  .mat-column-cancelled {
+    max-width: 150px;
+    min-width: 150px;
+    width: 150px;
+  }
+  .mat-column-availableChilds {
+    font-size: 12px;
+
+  }
+  
+
 
