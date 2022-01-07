@@ -34,6 +34,7 @@ import { A11yModule } from '@angular/cdk/a11y';
 import { MatSortModule } from '@angular/material/sort';
 import { AddNodeDialogComponent } from './table-control/table-add-node-dialog/add-node-dialog/add-node-dialog.component';
 import { BaseTypePipe } from '../core/pipes/base-type.pipe';
+import { LogViewerComponent } from './log-viewer/log-viewer.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { BaseTypePipe } from '../core/pipes/base-type.pipe';
     PreviewComponent,
     TableControlDialogComponent,
     AddNodeDialogComponent,
+    LogViewerComponent,
   ],
   exports: [
     ListSelectorComponent,
@@ -59,6 +61,8 @@ import { BaseTypePipe } from '../core/pipes/base-type.pipe';
     PreviewComponent,
     TableControlDialogComponent,
     AddNodeDialogComponent,
+    LogViewerComponent,
+
   ],
   imports: [
     CommonModule,

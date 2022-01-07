@@ -12,28 +12,28 @@ export abstract class EndpointBaseService {
     }
 
     public async getAvailableBaseTypes(): Promise<AvailableNormativeBaseType[] | null> {
-        const a = new Promise<AvailableNormativeBaseType[]>((resolve, reject) => {
-            setTimeout(() => {
-                resolve([{
-                    guid: v4(),
-                    isCancelled: false,
-                    availabilityNodes: [AvailabilityNodes.Normatives],
-                    isAvailable: true,
-                    type: BaseType.TSN,
-                    typeName: "qeqwqew"
+        // const a = new Promise<AvailableNormativeBaseType[]>((resolve, reject) => {
+        //     setTimeout(() => {
+        //         resolve([{
+        //             guid: v4(),
+        //             isCancelled: false,
+        //             availabilityNodes: [AvailabilityNodes.Normatives],
+        //             isAvailable: true,
+        //             type: BaseType.TSN,
+        //             typeName: "qeqwqew"
 
-                },{
-                    guid: v4(),
-                    isCancelled: false,
-                    availabilityNodes: [AvailabilityNodes.Normatives],
-                    isAvailable: false,
-                    type: BaseType.TSN_MGE_13,
-                    typeName: "xxxxxxxxxx"
+        //         },{
+        //             guid: v4(),
+        //             isCancelled: false,
+        //             availabilityNodes: [AvailabilityNodes.Normatives],
+        //             isAvailable: false,
+        //             type: BaseType.TSN_MGE_13,
+        //             typeName: "xxxxxxxxxx"
 
-                }, ]);
-            }, 100);
-        });
-        return a;
+        //         }, ]);
+        //     }, 100);
+        // });
+        // return a;
 
         const avBT = await this.netWorker.postMessageToWorkerAsync({
             messageType: NetMessageTypes.getAvailableBaseTypes,
@@ -47,32 +47,32 @@ export abstract class EndpointBaseService {
     }
 
     public async getAvailableNormativeBases(baseType: BaseType): Promise<AvailableBaseAdditionInfo[] | null> {
-        const a = new Promise<AvailableBaseAdditionInfo[]>((resolve, reject) => {
-            setTimeout(() => {
-                resolve([{
-                    guid: v4(),
-                    name: "Dopolnenie idi naxuy 1",
-                    additionNumber: 1,
-                    additionRegexp: "",
-                    isAvailable: true,
-                    isCancelled: false,
-                    shortName: "rew     eqe e   weew",
-                    type: BaseType.TSN,
-                    parentBaseType: BaseType.TSN,
-                },{
-                    guid: v4(),
-                    name: "Dopolnenie idi naxuy 2",
-                    additionNumber: 1,
-                    additionRegexp: "",
-                    isAvailable: false,
-                    isCancelled: false,
-                    shortName: "rew     eqe e   weew",
-                    type: BaseType.TSN,
-                    parentBaseType: BaseType.TSN,
-                },].filter(x => x.type === baseType));
-            }, 100);
-        });
-        return a;
+        // const a = new Promise<AvailableBaseAdditionInfo[]>((resolve, reject) => {
+        //     setTimeout(() => {
+        //         resolve([{
+        //             guid: v4(),
+        //             name: "Dopolnenie idi naxuy 1",
+        //             additionNumber: 1,
+        //             additionRegexp: "",
+        //             isAvailable: true,
+        //             isCancelled: false,
+        //             shortName: "rew     eqe e   weew",
+        //             type: BaseType.TSN,
+        //             parentBaseType: BaseType.TSN,
+        //         },{
+        //             guid: v4(),
+        //             name: "Dopolnenie idi naxuy 2",
+        //             additionNumber: 1,
+        //             additionRegexp: "",
+        //             isAvailable: false,
+        //             isCancelled: false,
+        //             shortName: "rew     eqe e   weew",
+        //             type: BaseType.TSN,
+        //             parentBaseType: BaseType.TSN,
+        //         },].filter(x => x.type === baseType));
+        //     }, 100);
+        // });
+        // return a;
 
         const avNB = await this.netWorker.postMessageToWorkerAsync({
             messageType: NetMessageTypes.getAvailableNormoBases,

@@ -23,10 +23,19 @@
             <div *ngSwitchCase="ManagerContext.manager" class="content-container">
                 <ss-base-availability-manager></ss-base-availability-manager>
             </div>
+
+            <div *ngSwitchCase="ManagerContext.manager" class="content-container">
+                <ss-base-availability-manager></ss-base-availability-manager>
+            </div>
+
+            <div *ngSwitchCase="ManagerContext.logs" class="content-container">
+                <ss-base-logs-monitoring></ss-base-logs-monitoring>
+            </div>
+
         </div>
         <div *ngIf="stateService.context===ManagerContext.start" class="preview-content">
             <ss-preview></ss-preview>
         </div>
     </div>
     
-</div>
+</div>ss-base-logs-monitoring

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { DeclarationBaseService } from "src/app/core/services/base-services/declaration-base.service";
 import { OptionType, SelectorOption, StepperData, StepperDataStep, StepperSelectorField, StepFields, StepperLabelField } from "src/app/secondary-module/stepper/models/stepper-model";
 import { AvailableBaseAdditionInfo } from "src/app/shared/models/server-models/AvailableBaseAdditionInfo";
-import { BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
+import { AvailableNormativeBaseType, BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { v4 } from "uuid";
 import { BaseTypeInfo } from "../../formula-base/models/form-base.models";
 import { NormBaseResultParams } from "../models/norm-base.models";
@@ -18,7 +18,7 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Norm
         super();
     }
 
-    public getStepperModel(context: NormativeBaseComponent): StepperData {
+    public getStepperModel(context: NormativeBaseComponent, avTypes: AvailableNormativeBaseType[]): StepperData {
         const stepperModel: StepperData = {
             isLinear: true,
             steps: [

@@ -43,12 +43,14 @@ import { ThemeService } from "../secondary-module/toolbar/services/theme.service
 import { NormativeBaseComponent } from './normative-base/normative-base.component';
 import { FormulaBaseComponent } from './formula-base/formula-base.component';
 import { BaseAvailabilityManagerComponent } from './base-availability-manager/base-availability-manager.component';
+import { BaseLogsMonitoringComponent } from './base-logs-monitoring/base-logs-monitoring.component';
 @NgModule({
   declarations: [
     MainComponent,
     NormativeBaseComponent,
     FormulaBaseComponent,
     BaseAvailabilityManagerComponent,
+    BaseLogsMonitoringComponent,
   ],
   exports: [
     MainComponent,
@@ -64,6 +66,7 @@ import { BaseAvailabilityManagerComponent } from './base-availability-manager/ba
     MatIconModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
+    MatTabsModule,
     SecondaryModule,
 
   ],

@@ -5,7 +5,7 @@ import { ManagerContext } from "src/app/shared/models/common/enums";
 
 @Injectable()
 export class MainStateService {
-    @observable context: ManagerContext | undefined ;
+    @observable context: ManagerContext | undefined;
     @observable tooltipUserImageSrc = "";
 
     constructor(private userService: UserService,) {
@@ -28,6 +28,8 @@ export class MainStateService {
                 return "Менеджер баз формул Estimate Office";
             case ManagerContext.manager:
                 return "Менеджер управления доступностью баз Estimate Office";
+            case ManagerContext.logs:
+                return "Мониторинг сообщений";
             default:
                 return "Неизвестный контекст";
         }

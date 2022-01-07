@@ -70,6 +70,14 @@ export class MainComponent implements OnInit {
     action: () => {
       // this.stateService.context = ManagerContext.manager;
     }
+  }, {
+    name: "Мониторинг сообщений",
+    available: false,
+    level: 0,
+    expandable: false,
+    action: () => {
+      this.stateService.context = ManagerContext.logs;
+    }
   },
   ]
 

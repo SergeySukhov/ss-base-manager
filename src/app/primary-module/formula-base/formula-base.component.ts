@@ -18,10 +18,17 @@ export class FormulaBaseComponent implements OnInit {
   public data: StepperData | null = null;
   public resultParams: FormBaseResultParams = new FormBaseResultParams();
   public tempProgress = 0;
+  public errorMessages = "";
+
   constructor(private declarationService: FormulaBaseDeclarationService, private endpointService: FormulaBaseEndpointService) { }
 
-  ngOnInit(): void {
-    this.data = this.declarationService.getStepperModel(this);
+  async ngOnInit() {
+    const avTypes = await this.endpointService.getAvailableBaseTypes();
+    if (avTypes?.length) {
+      this.data = this.declarationService.getStepperModel(this, avTypes);
+    } else {
+      this.errorMessages = "!! ошибка загрузки";
+    }
   }
 
   onFinish() {

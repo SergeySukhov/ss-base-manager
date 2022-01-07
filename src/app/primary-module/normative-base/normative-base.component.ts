@@ -18,12 +18,18 @@ export class NormativeBaseComponent implements OnInit {
 
   public data: StepperData | null = null;
   public resultParams: NormBaseResultParams = new NormBaseResultParams();
+  public errorMessages = "";
 
   constructor(public declarationService: NormativeBaseDeclarationService, private endpointService: NormativeBaseEndpointService) {
   }
 
-  ngOnInit(): void {
-    this.data = this.declarationService.getStepperModel(this);
+  async ngOnInit() {
+    const avTypes = await this.endpointService.getAvailableBaseTypes();
+    if (avTypes?.length) {
+      this.data = this.declarationService.getStepperModel(this, avTypes);
+    } else {
+      this.errorMessages = "!! ошибка загрузки";
+    }
   }
 
   onFinish() {

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { DeclarationBaseService } from "src/app/core/services/base-services/declaration-base.service";
 import { OptionType, SelectorOption, StepperData, StepperDataStep, StepperSelectorField, StepFields, StepperLabelField } from "src/app/secondary-module/stepper/models/stepper-model";
 import { AvailableBaseAdditionInfo } from "src/app/shared/models/server-models/AvailableBaseAdditionInfo";
-import { BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
+import { AvailableNormativeBaseType, BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { FormulaBaseComponent } from "../formula-base.component";
 import { BaseTypeInfo, FormBaseResultParams } from "../models/form-base.models";
 import { FormulaBaseEndpointService } from "./formula-base.endpoint.service";
@@ -16,7 +16,7 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<FormBa
         super();
     }
 
-    public getStepperModel(context: FormulaBaseComponent): StepperData {
+    public getStepperModel(context: FormulaBaseComponent, avTypes: AvailableNormativeBaseType[]): StepperData {
         const stepperModel: StepperData = {
             isLinear: true,
             steps: [
@@ -50,22 +50,7 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<FormBa
                             this.updateResultParams(context.resultParams);
 
                         },
-                        fieldOptions: [{
-                            isAvailable: true,
-                            value: "ТСН МГЭ",
-                            data: { type: BaseType.TSN_MGE, name: "ТСН МГЭ" },
-                            action: () => { }
-                        }, {
-                            isAvailable: true,
-                            value: "ТСН МГЭ глава 13",
-                            data: { type: BaseType.TSN_MGE_13, name: "ТСН МГЭ. глава 13" },
-                            action: () => { }
-                        }, {
-                            isAvailable: false,
-                            value: "ФЕР",
-                            data: { type: BaseType.FER, name: "ФЕР" },
-                            action: () => { }
-                        }]
+                        fieldOptions: this.toSelectorBaseTypeOptions(avTypes),
                     }],
                 },
                 ////////////////////////////////////////////////////////////////////
@@ -166,6 +151,20 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<FormBa
             selectorOptions.push({
                 isAvailable: true,
                 value: x.name,
+                data: x,
+                action: () => {
+                }
+            });
+        });
+        return selectorOptions;
+    }
+
+        private toSelectorBaseTypeOptions(baseData: AvailableNormativeBaseType[]): SelectorOption<AvailableNormativeBaseType>[] {
+        const selectorOptions: SelectorOption<AvailableBaseAdditionInfo>[] = [];
+        baseData.forEach(x => {
+            selectorOptions.push({
+                isAvailable: true,
+                value: x.typeName,
                 data: x,
                 action: () => {
                 }
