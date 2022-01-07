@@ -32,7 +32,7 @@
   .show-name-input {
     display: flex !important;
     z-index: 99;
-    max-height: 50px;
+    max-height: 30px;
   }
   .name-input {
     display: flex;
@@ -41,13 +41,15 @@
     max-width: 400px;
     height: 100px;
     max-height: 150px;
+    min-height: 30px;
+    resize: vertical;
   }
 
   .name-value {
     display: flex;
     min-width: 440px;
     width: 440px;
-    max-width: 400px;
+    max-width: 440px;
 
   }
 
@@ -97,12 +99,13 @@
   .button-group {
     display: flex;
     justify-content: space-between;
-    width: 300px;
+    width: 275px;
   }
 
   .centred {
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
   }
 
@@ -128,9 +131,9 @@
   .mat-column-availability {
     font-size: 12px;
 
-    max-width: 160px;
-    min-width: 160px;
-    width: 160px;
+    max-width: 140px;
+    min-width: 140px;
+    width: 140px;
   }
   .mat-column-cancelled {
     max-width: 150px;
@@ -139,8 +142,12 @@
   }
   .mat-column-availableChilds {
     font-size: 12px;
-
+    width: 300px;
+    max-width: 300px;
+    min-width: 300px;
   }
   
-
+  th.mat-sort-header-sorted {
+    color: black;
+  }
 

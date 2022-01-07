@@ -6,14 +6,6 @@ import { TreeSelectorOption } from 'src/app/secondary-module/models/list-selecto
 import { ManagerContext } from 'src/app/shared/models/common/enums';
 import { AuthViewService } from "src/app/auth.module/auth/services/auth.view.service";
 
-
-/** Flat node with expandable and level information */
-interface ExampleFlatNode {
-  expandable: boolean;
-  name: string;
-  level: number;
-}
-
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -27,14 +19,14 @@ export class MainComponent implements OnInit {
     available: true,
     expandable: true,
     level: 0,
-    action: () => {},
+    action: () => { },
     children: [{
       name: "Нормативные базы",
       available: true,
       level: 1,
       expandable: false,
       action: () => {
-        this.stateService.context = ManagerContext.base;
+        this.stateService.setContext(ManagerContext.base)
       }
     }, {
       name: "Базы формул",
@@ -42,7 +34,7 @@ export class MainComponent implements OnInit {
       level: 1,
       expandable: false,
       action: () => {
-        this.stateService.context = ManagerContext.formula;
+        this.stateService.setContext(ManagerContext.formula)
       },
     }, {
       name: "Базы индексов",
@@ -50,7 +42,7 @@ export class MainComponent implements OnInit {
       level: 1,
       expandable: false,
       action: () => {
-        this.stateService.context = ManagerContext.indexes;
+        this.stateService.setContext(ManagerContext.indexes)
       }
     }, {
       name: "Базы поправок",
@@ -58,7 +50,7 @@ export class MainComponent implements OnInit {
       level: 1,
       expandable: false,
       action: () => {
-        this.stateService.context = ManagerContext.correction;
+        this.stateService.setContext(ManagerContext.correction)
       }
     },]
 
@@ -68,7 +60,7 @@ export class MainComponent implements OnInit {
     level: 0,
     expandable: false,
     action: () => {
-      this.stateService.context = ManagerContext.manager;
+      this.stateService.setContext(ManagerContext.manager)
     }
   }, {
     name: "Шаблоны добавления",
@@ -92,13 +84,16 @@ export class MainComponent implements OnInit {
     this.userService.userChange.subscribe(name => {
       this.stateService.tooltipUserImageSrc = this.userService.vipUserImgSrc;
     });
+    this.stateService.context = this.userService.lastContext;
+
   }
 
   toStart() {
-    this.stateService.context = ManagerContext.start;
+    this.stateService.setContext(ManagerContext.start)
   }
 
   onLogout() {
+    this.stateService.setContext(ManagerContext.start)
     this.authService.logout();
   }
 

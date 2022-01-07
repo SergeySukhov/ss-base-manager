@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from "@angular/core";
+import { ManagerContext } from "src/app/shared/models/common/enums";
 import { GachiType } from "../common/models/models";
 import { LocalStorageConst, LocalStorageService } from "./local-storage.service";
 
@@ -10,7 +11,18 @@ type MuscleMap = {
 export class UserService {
 
     public username: string = "guest";
+
     public vipUserImgSrc = "";
+
+    public set lastContext(value: ManagerContext) {
+        this.pLastContext = value;
+        this.storageService.setItem(LocalStorageConst.lastContext, value);
+    }
+    public get lastContext(): ManagerContext {
+        return this.pLastContext;
+    }
+    
+    public pLastContext: ManagerContext;
 
     public userChange = new EventEmitter<string>();
 
@@ -23,6 +35,7 @@ export class UserService {
     };
 
     constructor(private storageService: LocalStorageService) {
+        this.pLastContext = storageService.getItem(LocalStorageConst.lastContext) ?? ManagerContext.start;
     }
 
     setName(name?: string) {

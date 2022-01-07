@@ -7,7 +7,7 @@
         </button>
     </div>
     <div class="example-container mat-elevation-z8">
-        <table mat-table [dataSource]="data" class="mat-elevation-z8">
+        <table mat-table [dataSource]="data" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
             <!-- Checkbox Column -->
             <ng-container matColumnDef="select">
                 <th mat-header-cell *matHeaderCellDef>
@@ -34,7 +34,7 @@
 
             <!-- Name Column -->
             <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef> Наименование базы </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Наименование базы </th>
                 <td mat-cell *matCellDef="let element">
                     <span>
                         <div [ngClass]="{'hide-name-value': editingRow?.guid === element.guid}" class="name-value">
@@ -52,11 +52,13 @@
             </ng-container>
 
             <!-- availability Column -->
-            <ng-container matColumnDef="availability">
+            <ng-container matColumnDef="availability" >
                 <th mat-header-cell *matHeaderCellDef>
+                    <div class="centred">
                     Доступность
-                    <mat-checkbox
-                            (click)="$event.stopPropagation()"
+                   <br>
+                   <mat-checkbox
+                        (click)="$event.stopPropagation()"
                         [checked]="allAvailableState === 'checked'"
                         [disabled]="allAvailableState === 'checked'"
                         [indeterminate]="allAvailableState === 'mixed'"
@@ -64,13 +66,14 @@
                         Все доступны
                    </mat-checkbox>
                    <mat-checkbox
-                            (click)="$event.stopPropagation()"
-                            [checked]="allAvailableState === 'unchecked'"
+                        (click)="$event.stopPropagation()"
+                        [checked]="allAvailableState === 'unchecked'"
                         [disabled]="allAvailableState === 'unchecked'"
                         [indeterminate]="allAvailableState === 'mixed'"
                         (change)="toggleGlobalChange(false)">
-                       Все не доступны
+                       Все недоступны
                   </mat-checkbox>
+                </div>
                 </th>
                 <td mat-cell *matCellDef="let element">
                     <span>
@@ -78,7 +81,7 @@
                             <mat-slide-toggle (click)="$event.stopPropagation()"
                                 (change)="toggleChange($event.checked, element)"
                                 *ngIf="element.availability !== 'awaiting'" [checked]="element.availability"
-                                labelPosition="after">{{element.availability ? "Доступна" : "Не доступна"}}
+                                labelPosition="after">{{element.availability ? "Доступна" : "Недоступна"}}
                             </mat-slide-toggle>
                             <mat-progress-spinner color="accent" diameter="30"
                                 *ngIf="element.availability === 'awaiting'" mode="indeterminate">
@@ -89,7 +92,7 @@
             </ng-container>
             <!-- baseType Column -->
             <ng-container matColumnDef="baseType">
-                <th mat-header-cell *matHeaderCellDef> Тип базы </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Тип базы </th>
                 <td mat-cell *matCellDef="let element">
                     <span>
                         {{element.baseTypeName}}
@@ -110,7 +113,7 @@
                     </span>
                  </td>
             </ng-container>
-
+            
             <!-- availableChilds Column -->
             <ng-container matColumnDef="availableChilds">
                 <th mat-header-cell *matHeaderCellDef> Доступные дочерние типы </th>
@@ -135,11 +138,19 @@
                         </div>
                      </span>
                      <span *ngIf="!element.isRoot">
-                        --
+
                     </span>
                  </td>
             </ng-container>
-
+            <!-- handleEdit Column -->
+            <ng-container matColumnDef="handleEdit">
+                <th mat-header-cell *matHeaderCellDef> Доп. параметры </th>
+                <td mat-cell *matCellDef="let element">
+                    <span *ngIf="!element.isRoot">
+                        <button mat-stroked-button (click)="onHandleEdit(element)"> Редактировать вручную</button>
+                    </span>
+                </td>
+            </ng-container>
            
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="header-row"></tr>

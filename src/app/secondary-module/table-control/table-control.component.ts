@@ -1,10 +1,14 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { MatTable } from '@angular/material/table';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { DatePipe } from '@angular/common'
 import { v4 } from 'uuid';
 import { AvailabilityNodes } from 'src/app/shared/models/server-models/AvailableNormativeBaseType';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
+import { TableControlDialogComponent } from './table-control-dialog/table-control-dialog.component';
+import { MatSort, Sort } from '@angular/material/sort';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 export interface BaseDataView {
   guid: string;
@@ -27,9 +31,9 @@ export interface BaseDataView {
   styleUrls: ['./table-control.component.scss'],
   providers: [DatePipe]
 })
-export class TableControlComponent implements OnInit {
+export class TableControlComponent implements OnInit, AfterViewInit {
   @ViewChild(MatTable) table!: MatTable<BaseDataView>;
-
+  @ViewChild(MatSort) sort!: MatSort;
   @Input() isAwaiting = false;
   @Input() set dataSource(value: BaseDataView[]) {
     this.data.splice(0);
@@ -44,22 +48,62 @@ export class TableControlComponent implements OnInit {
   @Output() onRemoveNodes = new EventEmitter<BaseDataView[]>();
   @Output() onEditedNodes = new EventEmitter<BaseDataView[]>();
 
+
   availabilityNodes = AvailabilityNodes;
   allAvailableState: "checked" | "unchecked" | "mixed" = "mixed";
 
   editingRow: BaseDataView | null = null;
   data: BaseDataView[] = [];
+  dataSourceTest = new MatTableDataSource(this.data);
 
-  displayedColumns: string[] = ['select', 'name', 'availability', 'baseType', 'cancelled', 'availableChilds'];
+  displayedColumns: string[] = ['select', 'name', 'availability', 'baseType', 'cancelled', 'availableChilds', "handleEdit"];
   selection = new SelectionModel<BaseDataView>(true, []);
 
-  constructor(public datepipe: DatePipe) {
+  constructor(public dialog: MatDialog, public datepipe: DatePipe, private _liveAnnouncer: LiveAnnouncer) {
   }
 
   ngOnInit(): void {
     if (this.table) {
       this.table.renderRows();
     }
+  }
+
+  ngAfterViewInit() {
+  }
+
+  announceSortChange(sortState: any) {
+    const unsorted = this.data.splice(0);
+    if (sortState.active === "name") {
+      if (sortState.direction === "desc") {
+        const rootNodes = unsorted.filter(x => x.isRoot).sort(this.sortName).reverse();
+        rootNodes.forEach(x => {
+          this.data.push(x);
+          this.data.push(...unsorted.filter(xx => xx.parentGuid === x.guid).sort(this.sortName).reverse());
+        });
+      } else {
+        const rootNodes = unsorted.filter(x => x.isRoot).sort(this.sortName);
+        rootNodes.forEach(x => {
+          this.data.push(x);
+          this.data.push(...unsorted.filter(xx => xx.parentGuid === x.guid).sort(this.sortName));
+        });
+      }
+    }
+    if (sortState.active === "baseType") {
+      if (sortState.direction === "desc") {
+        const rootNodes = unsorted.filter(x => x.isRoot).sort(this.sortType).reverse();
+        rootNodes.forEach(x => {
+          this.data.push(x);
+          this.data.push(...unsorted.filter(xx => xx.parentGuid === x.guid).sort(this.sortType).reverse());
+        });
+      } else {
+        const rootNodes = unsorted.filter(x => x.isRoot).sort(this.sortType);
+        rootNodes.forEach(x => {
+          this.data.push(x);
+          this.data.push(...unsorted.filter(xx => xx.parentGuid === x.guid).sort(this.sortType));
+        });
+      }
+    }
+    this.table.renderRows();
   }
 
   onRootExpandClick(row: BaseDataView) {
@@ -172,6 +216,7 @@ export class TableControlComponent implements OnInit {
 
   toggleAvailableChildChange(event: MatCheckboxChange, row: BaseDataView) {
     // TODO:
+
   }
 
   toggleCancelChange(value: boolean, row: BaseDataView) {
@@ -223,6 +268,27 @@ export class TableControlComponent implements OnInit {
     return !!row.availableChilds?.includes(nodeType);
   }
 
+  onHandleEdit(row: BaseDataView) {
+    const forbiddenKeys = ["guid", "type", "isAvailable", "parentBaseType"]
+    const dialogRef = this.dialog.open(TableControlDialogComponent, {
+      width: '650px',
+      data: { data: row.data, disabledKeys: forbiddenKeys },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+      row.data = result;
+      this.onEditedNodes.emit([row]);
+    });
+  }
+  private sortName(a: BaseDataView, b: BaseDataView): number {
+    return a.name === b.name ? 0 : a.name > b.name ? 1 : -1;
+  }
+  private sortType(a: BaseDataView, b: BaseDataView): number {
+    return a.name === b.name ? 0 : a.name > b.name ? 1 : -1;
+  }
   private updateAllAvailableState() {
     const allAvailable = this.data.filter(this.filterDataSource).every(x => x.availability === true);
     const noAvailable = this.data.filter(this.filterDataSource).every(x => x.availability === false);

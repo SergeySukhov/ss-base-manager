@@ -1,16 +1,22 @@
 import { Injectable } from "@angular/core";
 import { action, computed, observable, reaction } from "mobx";
+import { UserService } from "src/app/core/services/user.service";
 import { ManagerContext } from "src/app/shared/models/common/enums";
 
 @Injectable()
 export class MainStateService {
-    @observable context = ManagerContext.start;
+    @observable context: ManagerContext | undefined ;
     @observable tooltipUserImageSrc = "";
 
-    constructor() {
+    constructor(private userService: UserService,) {
+    }
+
+    @action setContext(value: ManagerContext) {
+        this.context = value;
     }
 
     @computed({ keepAlive: true }) get mainTitle() {
+        this.userService.lastContext = this.context ?? ManagerContext.start;
         switch (this.context) {
             case ManagerContext.start:
                 return "Менеджер микросервисов баз Estimate Office";

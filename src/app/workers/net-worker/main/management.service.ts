@@ -312,7 +312,7 @@ export class ManagementSystem extends ManagementSystemBase {
       messageType: request.messageType,
     }
 
-    var data = new FormData();
+    let data = new FormData();
     data.append("nrSpCsv", request.data.file);
     data.append("addonNumber", "" + request.data.addonNumber);
     data.append("normoGuid", request.data.normoGuid);
