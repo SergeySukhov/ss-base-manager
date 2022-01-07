@@ -45,11 +45,9 @@ export class TableControlComponent implements OnInit, AfterViewInit {
     this.updateAllAvailableState();
   }
   @Input() set updNode(value: BaseDataView | null) {
-    console.log("!! | @Input | value", value)
     if (!value) {
       return;
     }
-    value.name = "!!!!!!";
     this.data.push(value);
     this.updateAllAvailableState();
 
