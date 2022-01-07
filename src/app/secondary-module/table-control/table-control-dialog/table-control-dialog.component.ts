@@ -47,7 +47,7 @@ export class TableControlDialogComponent implements OnInit {
     }
 
     if (event.key === "Enter" && !this.errorMessage) {
-      this.dialogRef.close(this.data);
+      this.dialogRef.close(this.editingCopy);
     }
   }
 
@@ -65,7 +65,6 @@ export class TableControlDialogComponent implements OnInit {
       for (const pair of this.objKeyValues) {
         this.editingCopy[pair.key] = JSON.parse(pair.value);
       }
-      console.log("!! | toObj | this.editingCopy", this.editingCopy)
       if (this.editingCopy && this.isInstanseOfObj(this.editingCopy)) {
         this.errorMessage = "Некорректный тип поля";
       }

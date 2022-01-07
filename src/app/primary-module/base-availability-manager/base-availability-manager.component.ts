@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BaseDataView } from 'src/app/secondary-module/table-control/table-control.component';
 import { AvailableBaseAdditionInfo } from 'src/app/shared/models/server-models/AvailableBaseAdditionInfo';
-import { AvailableNormativeBaseType, BaseType } from 'src/app/shared/models/server-models/AvailableNormativeBaseType';
+import { AvailabilityNodes, AvailableNormativeBaseType, BaseType } from 'src/app/shared/models/server-models/AvailableNormativeBaseType';
 import { AvailabilityBaseEndpointService } from './services/availability-base.endpoint.service';
 
 @Component({
@@ -27,7 +27,6 @@ export class BaseAvailabilityManagerComponent implements OnInit {
   async loadData() {
     this.isLoading = true;
     const allAvTypes = await this.endpointService.getAvailableBaseTypes();
-    console.log("!! | loadData | allAvTypes", allAvTypes)
 
     const allBasesPromises: Promise<AvailableBaseAdditionInfo[] | null>[] = [];
     if (!allAvTypes?.length) {
@@ -47,7 +46,6 @@ export class BaseAvailabilityManagerComponent implements OnInit {
         availableBases.push(...x);
       }
     });
-    console.log("!! | loadData | availableBases", availableBases)
 
     const viewBaseModel: BaseDataView[] = [];
 
@@ -84,16 +82,22 @@ export class BaseAvailabilityManagerComponent implements OnInit {
     this.isLoading = false;
   }
 
-  handleAddNodes(nodes: BaseDataView[]) {
+  handleAddNodes(nodes: {viewData: BaseDataView, type: BaseType}[]) {
     this.endpointService.sendAddNodes(nodes.map(x => {
       const mappedRootNode: AvailableNormativeBaseType = {
-        guid: x.guid,
-        availabilityNodes: x.availableChilds ?? [],
-        isAvailable: !!x.availability,
-        isCancelled: x.isCancelled,
-        type: BaseType.TSN_MGE,
-        typeName: x.name,
+        guid: x.viewData.guid,
+        availabilityNodes: [AvailabilityNodes.Normatives, AvailabilityNodes.Indexes, AvailabilityNodes.Corrections],
+        isAvailable: !!x.viewData.availability,
+        isCancelled: x.viewData.isCancelled,
+        type: x.type,
+        typeName: x.viewData.name,
       };
+      const idx = this.data.findIndex(x => x.guid === mappedRootNode.guid);
+      if (idx > -1) {
+        x.viewData.name = "!!!!!!";
+        x.viewData.data = mappedRootNode;
+        this.data.splice(idx, 1, x.viewData);
+      }
       return mappedRootNode;
     }));
   }

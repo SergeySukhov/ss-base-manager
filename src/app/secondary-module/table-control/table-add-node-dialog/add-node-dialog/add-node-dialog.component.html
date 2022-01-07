@@ -1,0 +1,13 @@
+<div (keyup)="handleKey($event)">
+    <h2 class="title-dialog" mat-dialog-title>Добавление корневого узла</h2>
+    <div class="table-like" mat-dialog-content>
+        <div *ngFor="let type of allTypes" class="pair-row">
+            <button mat-flat-button class="type-row"
+            [disabled]="isTypeDisabled(type)" (click)="valueChange(type)">{{type}}</button>
+        </div>
+    </div>
+
+    <div mat-dialog-actions>
+        <button mat-stroked-button autofocus (click)="onNoClick()">Отменить</button>
+    </div>
+</div>

@@ -3,12 +3,14 @@ import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChil
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { DatePipe } from '@angular/common'
 import { v4 } from 'uuid';
-import { AvailabilityNodes } from 'src/app/shared/models/server-models/AvailableNormativeBaseType';
+import { AvailabilityNodes, BaseType } from 'src/app/shared/models/server-models/AvailableNormativeBaseType';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { TableControlDialogComponent } from './table-control-dialog/table-control-dialog.component';
 import { MatSort, Sort } from '@angular/material/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { AddNodeDialogComponent } from './table-add-node-dialog/add-node-dialog/add-node-dialog.component';
+import { BaseTypePipe } from 'src/app/core/pipes/base-type.pipe';
 
 export interface BaseDataView {
   guid: string;
@@ -29,7 +31,6 @@ export interface BaseDataView {
   selector: 'ss-table-control',
   templateUrl: './table-control.component.html',
   styleUrls: ['./table-control.component.scss'],
-  providers: [DatePipe]
 })
 export class TableControlComponent implements OnInit, AfterViewInit {
   @ViewChild(MatTable) table!: MatTable<BaseDataView>;
@@ -44,7 +45,7 @@ export class TableControlComponent implements OnInit, AfterViewInit {
     this.updateAllAvailableState();
   }
 
-  @Output() onAddNodes = new EventEmitter<BaseDataView[]>();
+  @Output() onAddNodes = new EventEmitter<{viewData: BaseDataView, type: BaseType}[]>();
   @Output() onRemoveNodes = new EventEmitter<BaseDataView[]>();
   @Output() onEditedNodes = new EventEmitter<BaseDataView[]>();
 
@@ -59,7 +60,7 @@ export class TableControlComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['select', 'name', 'availability', 'baseType', 'cancelled', 'availableChilds', "handleEdit"];
   selection = new SelectionModel<BaseDataView>(true, []);
 
-  constructor(public dialog: MatDialog, public datepipe: DatePipe, private _liveAnnouncer: LiveAnnouncer) {
+  constructor(public dialog: MatDialog, private baseTypePipe: BaseTypePipe) {
   }
 
   ngOnInit(): void {
@@ -181,21 +182,35 @@ export class TableControlComponent implements OnInit, AfterViewInit {
   }
 
   addData() {
-    const newNode: BaseDataView = {
-      guid: v4(),
-      availability: false,
-      name: "Новый корневой узел",
-      baseTypeName: "",
-      isCancelled: false,
-      isRoot: true,
-      hasChildren: false,
-    }
+    const dialogRef = this.dialog.open(AddNodeDialogComponent, {
+      width: '650px',
+      data: this.data.filter(x => x.isRoot).map(x => x.data.type),
+    });
 
-    this.data.push(newNode);
-    this.onAddNodes.emit([newNode]);
+    dialogRef.afterClosed().subscribe(result => {
+      console.log("!! | dialogRef.afterClosed | result", result)
+      if (!result) {
+        return;
+      }
 
-    this.table.renderRows();
-    this.updateAllAvailableState();
+      const newNode: BaseDataView = {
+        guid: v4(),
+        availability: false,
+        name: this.baseTypePipe.transform(result),
+        baseTypeName: this.baseTypePipe.transform(result),
+        isCancelled: false,
+        isRoot: true,
+        hasChildren: false,
+      }
+
+      this.data.push(newNode);
+      this.onAddNodes.emit([{viewData: newNode, type: result}]);
+
+      this.table.renderRows();
+      this.updateAllAvailableState();
+    });
+
+
   }
 
   removeData() {

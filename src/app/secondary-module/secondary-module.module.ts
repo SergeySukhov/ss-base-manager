@@ -32,6 +32,8 @@ import { PreviewComponent } from './preview/preview.component';
 import { TableControlDialogComponent } from './table-control/table-control-dialog/table-control-dialog.component';
 import { A11yModule } from '@angular/cdk/a11y';
 import { MatSortModule } from '@angular/material/sort';
+import { AddNodeDialogComponent } from './table-control/table-add-node-dialog/add-node-dialog/add-node-dialog.component';
+import { BaseTypePipe } from '../core/pipes/base-type.pipe';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,8 @@ import { MatSortModule } from '@angular/material/sort';
     ToolbarComponent,
     TableControlComponent,
     PreviewComponent,
-    TableControlDialogComponent
+    TableControlDialogComponent,
+    AddNodeDialogComponent,
   ],
   exports: [
     ListSelectorComponent,
@@ -54,7 +57,8 @@ import { MatSortModule } from '@angular/material/sort';
     ToolbarComponent,
     TableControlComponent,
     PreviewComponent,
-    TableControlDialogComponent
+    TableControlDialogComponent,
+    AddNodeDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -86,7 +90,9 @@ import { MatSortModule } from '@angular/material/sort';
 
   ],
   providers: [
+    BaseTypePipe,
   ],
-  bootstrap: [TableControlDialogComponent]
+
+  bootstrap: [TableControlDialogComponent, AddNodeDialogComponent]
 })
 export class SecondaryModule { }
