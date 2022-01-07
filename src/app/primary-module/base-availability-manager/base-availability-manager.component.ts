@@ -16,6 +16,7 @@ export class BaseAvailabilityManagerComponent implements OnInit {
 
   isLoading = false;
   data: BaseDataView[] = [];
+  updNode: BaseDataView | null = null;
 
   constructor(private endpointService: AvailabilityBaseEndpointService) {
   }
@@ -92,12 +93,8 @@ export class BaseAvailabilityManagerComponent implements OnInit {
         type: x.type,
         typeName: x.viewData.name,
       };
-      const idx = this.data.findIndex(x => x.guid === mappedRootNode.guid);
-      if (idx > -1) {
-        x.viewData.name = "!!!!!!";
-        x.viewData.data = mappedRootNode;
-        this.data.splice(idx, 1, x.viewData);
-      }
+      x.viewData.data = mappedRootNode;
+      this.updNode = x.viewData;
       return mappedRootNode;
     }));
   }

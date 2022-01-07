@@ -2,12 +2,12 @@
     <h2 class="title-dialog" mat-dialog-title>Добавление корневого узла</h2>
     <div class="table-like" mat-dialog-content>
         <div *ngFor="let type of allTypes" class="pair-row">
-            <button mat-flat-button class="type-row"
+            <button mat-flat-button class="type-row" tabindex="-1"
             [disabled]="isTypeDisabled(type)" (click)="valueChange(type)">{{type}}</button>
         </div>
     </div>
 
     <div mat-dialog-actions>
-        <button mat-stroked-button autofocus (click)="onNoClick()">Отменить</button>
+        <button mat-stroked-button autofocus (click)="onNoClick()" tabindex="-1">Отменить</button>
     </div>
 </div>
