@@ -35,5 +35,6 @@ export enum LocalStorageConst {
     username = "username",
     serverUrls = "serverUrls",
     lastContext = "lastContext",
+    userId = "userId",
 
 }

@@ -97,12 +97,13 @@ export class MainComponent implements OnInit {
   }
 
   toStart() {
-    this.stateService.setContext(ManagerContext.start)
+    this.stateService.setContext(ManagerContext.start);
   }
 
   onLogout() {
-    this.stateService.setContext(ManagerContext.start)
+    this.stateService.setContext(ManagerContext.start);
     this.authService.logout();
+    this.userService.onLogout();
   }
 
 }

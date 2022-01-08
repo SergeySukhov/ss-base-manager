@@ -15,36 +15,42 @@ export class ManagementSystem extends ManagementSystemBase {
   private hubService = new HubConnectionService(this.messageHandler);
 
   public async handleMessage(request: NetWorkerRequest | NetWorkerRequestSub) {
-    switch (request.messageType) {
-      case NetMessageTypes.init:
-        this.replySuccess(request.guid, request.messageType);
-        break;
-      case NetMessageTypes.getAvailableNormoBases:
-        this.sendRequestGetBases(request);
-        break;
-      case NetMessageTypes.getAvailableBaseTypes:
-        this.sendRequestGetBasesTypes(request);
-        break;
-      case NetMessageTypes.sendFormulsUpload:
-        this.sendUploadFormulas(request);
-        break;
-      case NetMessageTypes.sendNormativesUpload:
-        this.sendUploadNormatives(request);
-        break;
-      case NetMessageTypes.managerAddNodes:
-        this.sendManagerAddNodes(request);
-        break;
-      case NetMessageTypes.managerRemoveNodes:
-        this.sendManagerRemoveNodes(request);
-        break;
-      case NetMessageTypes.managerEditNodes:
-        this.sendManagerEditNodes(request);
-        break;
-      /////////////////////
-      case NetSubTypes.notificationSub:
-
-        break;
+    console.log("!! | handleMessage | request", request)
+    if (request.needSub) {
+      switch (request.messageType) {
+        case NetSubTypes.notificationSub:
+          this.hubService.createSub(request);
+          break;
+      }
+    } else {
+      switch (request.messageType) {
+        case NetMessageTypes.init:
+          this.replySuccess(request.guid, request.messageType);
+          break;
+        case NetMessageTypes.getAvailableNormoBases:
+          this.sendRequestGetBases(request);
+          break;
+        case NetMessageTypes.getAvailableBaseTypes:
+          this.sendRequestGetBasesTypes(request);
+          break;
+        case NetMessageTypes.sendFormulsUpload:
+          this.sendUploadFormulas(request);
+          break;
+        case NetMessageTypes.sendNormativesUpload:
+          this.sendUploadNormatives(request);
+          break;
+        case NetMessageTypes.managerAddNodes:
+          this.sendManagerAddNodes(request);
+          break;
+        case NetMessageTypes.managerRemoveNodes:
+          this.sendManagerRemoveNodes(request);
+          break;
+        case NetMessageTypes.managerEditNodes:
+          this.sendManagerEditNodes(request);
+          break;
+      }
     }
+
   }
 
   private async sendManagerAddNodes(request: NetWorkerAddAvailableBases) {

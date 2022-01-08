@@ -31,7 +31,7 @@ export class HubConnectionService {
             guid: initSubRequest.guid,
             messageType: initSubRequest.messageType,
             needSub: true,
-            data: "",
+            data: "!!",
         }
         setInterval(() => {
             this.messageHandler.toClient(netSubMessage);

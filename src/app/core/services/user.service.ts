@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from "@angular/core";
 import { ManagerContext } from "src/app/shared/models/common/enums";
+import { v4 } from "uuid";
 import { GachiType } from "../common/models/models";
 import { LocalStorageConst, LocalStorageService } from "./local-storage.service";
 
@@ -21,10 +22,13 @@ export class UserService {
     public get lastContext(): ManagerContext {
         return this.pLastContext;
     }
-    
-    public pLastContext: ManagerContext;
+    public get userId(): string {
+        return this.pUserId;
+    }
 
     public userChange = new EventEmitter<string>();
+    private pLastContext: ManagerContext;
+    private pUserId: string;
 
     private readonly muscleSrcMap: MuscleMap = {
         none: "",
@@ -36,6 +40,9 @@ export class UserService {
 
     constructor(private storageService: LocalStorageService) {
         this.pLastContext = storageService.getItem(LocalStorageConst.lastContext) ?? ManagerContext.start;
+        this.pUserId = storageService.getItem(LocalStorageConst.userId) ?? v4();
+        
+        storageService.setItem(LocalStorageConst.userId, this.pUserId);
     }
 
     setName(name?: string) {
@@ -62,5 +69,8 @@ export class UserService {
         this.userChange.emit(this.username);
     }
 
+    onLogout() {
+        this.userChange.emit();
+    }
 
 }
