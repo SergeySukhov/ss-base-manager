@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from "rxjs";
+import { NetWorkerSub } from '../../models/net-messages/net-worker-messages';
 
 @Injectable()
 export abstract class BaseWorkerService<TRequest, TResponse> {

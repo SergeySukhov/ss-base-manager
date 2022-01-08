@@ -26,7 +26,7 @@ export class AuthWorkerService extends BaseWorkerService<AuthWorkerRequest, Auth
 
     protected handleMessage(message: AuthWorkerResponse) {
         if (!message.guid) {
-            throw ("!! Worker message has no id");
+            throw ("!! AuthWorker message has no id");
         }
         const sub = this.responseSubs.get(message.guid);
         if (sub) {
@@ -34,7 +34,7 @@ export class AuthWorkerService extends BaseWorkerService<AuthWorkerRequest, Auth
             sub.unsubscribe();
             this.responseSubs.delete(message.guid);
         } else {
-            console.warn("!! Необработанный ответ:" + message);
+            console.warn("!! AuthWorker Необработанный ответ:" + message);
         }
     }
 

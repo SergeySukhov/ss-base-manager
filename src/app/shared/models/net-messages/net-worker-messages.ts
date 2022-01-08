@@ -2,7 +2,6 @@
 import { AvailableBaseAdditionInfo } from "../server-models/AvailableBaseAdditionInfo";
 import { AvailableNormativeBaseType, BaseType } from "../server-models/AvailableNormativeBaseType";
 
-
 export enum NetMessageTypes {
   init,
   getAvailableNormoBases,
@@ -15,7 +14,11 @@ export enum NetMessageTypes {
   sendFormulsUpload,
   sendNormativesUpload,
 
-  serverTest
+  serverTest,
+}
+
+export enum NetSubTypes {
+  notSub,
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -23,6 +26,11 @@ export enum NetMessageTypes {
 export interface NetWorkerRequestBase<T extends NetMessageTypes> extends BaseWorkerMessage {
   messageType: T,
 }
+
+export interface NetWorkerInitSubBase<T extends NetSubTypes> extends BaseWorkerMessage {
+  messageType: T,
+}
+// ///////////////////////////////////////////////////////////////////////////////////////////////
 
 export interface NetWorkerRequestAvailableBaseTypes extends NetWorkerRequestBase<NetMessageTypes.getAvailableBaseTypes> {
 }
@@ -71,15 +79,29 @@ export interface NetWorkerRequestInit extends NetWorkerRequestBase<NetMessageTyp
 export type NetWorkerRequest = NetWorkerRequestAvailableBaseTypes | NetWorkerRequestAvailableBases
   | NetWorkerRequestInit | NetWorkerRequestUploadFormuls | NetWorkerRequestUploadNormatives
   | NetWorkerAddAvailableBases | NetWorkerRemoveAvailableBases | NetWorkerEditAvailableBases;
+//////////////////////////////////////////////////////////
+
+export interface NetWorkerRequestNotificationSub extends NetWorkerInitSubBase<NetSubTypes.notSub> {
+}
+
+export type NetWorkerRequestSub = NetWorkerRequestNotificationSub;
+
 
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
 
 /** Ответное сообщение с воркера */
-export interface NetWorkerResponseBase<T extends NetMessageTypes> extends BaseWorkerMessage {
+export interface NetWorkerResponseBase<T extends NetMessageTypes> extends BaseWorkerMessage  {
   messageType: T,
+  needSub: false,
+
 }
+export interface NetWorkerSubBase<T extends NetSubTypes> extends BaseWorkerMessage  {
+  messageType: T,
+  needSub: true,
+}
+// ///////////////////////////////////////////////////////////////////////////////////////////////
 
 export interface NetWorkerResponseAvailableBaseTypes extends NetWorkerResponseBase<NetMessageTypes.getAvailableBaseTypes> {
   data: AvailableNormativeBaseType[] | null;
@@ -91,12 +113,20 @@ export interface NetWorkerResponseUploadFormuls extends NetWorkerResponseBase<Ne
 }
 export interface NetWorkerResponseUploadNormatives extends NetWorkerResponseBase<NetMessageTypes.sendNormativesUpload> {
 }
-export interface NetWorkerResponseCommon extends NetWorkerResponseBase<NetMessageTypes.init 
+export interface NetWorkerResponseCommon extends NetWorkerResponseBase<NetMessageTypes.init
   | NetMessageTypes.managerAddNodes | NetMessageTypes.managerRemoveNodes | NetMessageTypes.managerEditNodes> {
 }
 
 export type NetWorkerResponse = NetWorkerResponseAvailableBaseTypes | NetWorkerResponseAvailableBases | NetWorkerResponseCommon
   | NetWorkerResponseUploadFormuls | NetWorkerResponseUploadNormatives;
+
+// ///////////////////////////////////////////////////////////////////////////////////////////////
+export interface NetWorkerNotificationSub extends NetWorkerSubBase<NetSubTypes.notSub> {
+}
+
+export type NetWorkerSub = NetWorkerNotificationSub;
+
+// ///////////////////////////////////////////////////////////////////////////////////////////////
 
 export interface NetData<T extends boolean> {
   isSuccess: T;

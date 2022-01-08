@@ -10,6 +10,8 @@ export class AuthEndpointService {
     public async sendAuth(username: string, password: string): Promise<AuthWorkerResponseLogin | null> {
         const requestAuth: AuthWorkerRequestLogin = {
             messageType: AuthMessageTypes.login,
+            needSub: false,
+
             data: {
                 username,
                 password
@@ -26,6 +28,8 @@ export class AuthEndpointService {
     public async sendAuthRefresh(): Promise<AuthWorkerResponseRefresh | null> {
         const requestRefAuth: AuthWorkerRequestRefresh = {
             messageType: AuthMessageTypes.refresh,
+            needSub: false,
+
             data: {},
         }
         const responseAuth = await this.authWorker.postMessageToWorkerAsync(requestRefAuth);
@@ -39,6 +43,8 @@ export class AuthEndpointService {
     public async sendLogout() {
         const requestRefAuth: AuthWorkerRequestLogout = {
             messageType: AuthMessageTypes.logout,
+            needSub: false,
+
             data: {},
         }
         await this.authWorker.postMessageToWorkerAsync(requestRefAuth);

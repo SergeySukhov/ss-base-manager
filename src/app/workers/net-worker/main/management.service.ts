@@ -1,5 +1,5 @@
 ﻿import { Subject } from "rxjs";
-import { NetWorkerRequest, NetMessageTypes, NetWorkerResponse, NetWorkerResponseAvailableBases, NetWorkerRequestAvailableBases, NetWorkerRequestUploadFormuls, NetWorkerResponseUploadFormuls, NetWorkerRequestUploadNormatives, NetWorkerResponseUploadNormatives, NetWorkerAddAvailableBases, NetWorkerEditAvailableBases, NetWorkerRemoveAvailableBases, NetWorkerResponseCommon, NetWorkerRequestAvailableBaseTypes, NetWorkerResponseAvailableBaseTypes } from "src/app/shared/models/net-messages/net-worker-messages";
+import { NetWorkerRequest, NetMessageTypes, NetWorkerResponse, NetWorkerResponseAvailableBases, NetWorkerRequestAvailableBases, NetWorkerRequestUploadFormuls, NetWorkerResponseUploadFormuls, NetWorkerRequestUploadNormatives, NetWorkerResponseUploadNormatives, NetWorkerAddAvailableBases, NetWorkerEditAvailableBases, NetWorkerRemoveAvailableBases, NetWorkerResponseCommon, NetWorkerRequestAvailableBaseTypes, NetWorkerResponseAvailableBaseTypes, NetSubTypes, NetWorkerInitSubBase, NetWorkerRequestSub } from "src/app/shared/models/net-messages/net-worker-messages";
 import { AvailableBaseAdditionInfo } from "src/app/shared/models/server-models/AvailableBaseAdditionInfo";
 import { AvailableNormativeBaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { ManagementSystemBase } from "src/app/shared/models/worker-models/management-system-base";
@@ -11,7 +11,7 @@ export class ManagementSystem extends ManagementSystemBase {
     super();
   }
 
-  public async handleMessage(request: NetWorkerRequest) {
+  public async handleMessage(request: NetWorkerRequest | NetWorkerRequestSub) {
     switch (request.messageType) {
       case NetMessageTypes.init:
         this.replySuccess(request.guid, request.messageType);
@@ -37,6 +37,10 @@ export class ManagementSystem extends ManagementSystemBase {
       case NetMessageTypes.managerEditNodes:
         this.sendManagerEditNodes(request);
         break;
+      /////////////////////
+      case NetSubTypes.notSub:
+        
+        break;
     }
   }
 
@@ -45,6 +49,7 @@ export class ManagementSystem extends ManagementSystemBase {
     const response: NetWorkerResponseCommon = {
       guid: request.guid,
       messageType: request.messageType,
+      needSub: false,
     }
     const timeout = setTimeout(() => {
       this.messageHandler.toClient(response);
@@ -99,6 +104,7 @@ export class ManagementSystem extends ManagementSystemBase {
     const response: NetWorkerResponseCommon = {
       guid: request.guid,
       messageType: request.messageType,
+      needSub: false,
     }
 
     const timeout = setTimeout(() => {
@@ -150,12 +156,12 @@ export class ManagementSystem extends ManagementSystemBase {
     return resultSub;
   }
 
-
   private async sendManagerEditNodes(request: NetWorkerEditAvailableBases) {
 
     const response: NetWorkerResponseCommon = {
       guid: request.guid,
       messageType: request.messageType,
+      needSub: false,
     }
 
     const sentNodeGuids: string[] = request.data.rootNodes.map(x => x.guid);
@@ -245,7 +251,8 @@ export class ManagementSystem extends ManagementSystemBase {
     const response: NetWorkerResponseAvailableBaseTypes = {
       guid: request.guid,
       messageType: NetMessageTypes.getAvailableBaseTypes,
-      data: null
+      needSub: false,
+      data: null,
     }
 
     sender.withCredentials = false;
@@ -277,6 +284,7 @@ export class ManagementSystem extends ManagementSystemBase {
     const response: NetWorkerResponseAvailableBases = {
       guid: request.guid,
       messageType: NetMessageTypes.getAvailableNormoBases,
+      needSub: false,
       data: null
     }
 
@@ -310,6 +318,7 @@ export class ManagementSystem extends ManagementSystemBase {
     const response: NetWorkerResponseUploadFormuls = {
       guid: request.guid,
       messageType: request.messageType,
+      needSub: false,
     }
 
     let data = new FormData();
@@ -350,6 +359,7 @@ export class ManagementSystem extends ManagementSystemBase {
     const response: NetWorkerResponseUploadNormatives = {
       guid: request.guid,
       messageType: request.messageType,
+      needSub: false,
     }
 
     var data = new FormData();
@@ -402,6 +412,7 @@ export class ManagementSystem extends ManagementSystemBase {
     this.messageHandler.toClient({
       guid,
       messageType,
+      needSub: false,
     });
   }
 }
