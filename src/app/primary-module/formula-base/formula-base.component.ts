@@ -32,8 +32,6 @@ export class FormulaBaseComponent implements OnInit {
   }
 
   onFinish() {
-    console.log("!! | onFinish | Finish", this.resultParams)
-
     this.endpointService.sendFormuls(this.resultParams);
     this.tempProgress = 1;
     const tempInterval = setInterval(() => {
@@ -45,7 +43,6 @@ export class FormulaBaseComponent implements OnInit {
   }
 
   onModelChange() {
-    
     console.log("!! | onModelChange | this.data", this.data)
   }
 

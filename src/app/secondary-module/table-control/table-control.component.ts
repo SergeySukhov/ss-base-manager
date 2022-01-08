@@ -198,7 +198,6 @@ addData() {
   });
 
   dialogRef.afterClosed().subscribe(result => {
-    console.log("!! | dialogRef.afterClosed | result", result)
     if (!result) {
       return;
     }

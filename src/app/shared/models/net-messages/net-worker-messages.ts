@@ -18,7 +18,7 @@ export enum NetMessageTypes {
 }
 
 export enum NetSubTypes {
-  notSub,
+  notificationSub,
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -81,7 +81,7 @@ export type NetWorkerRequest = NetWorkerRequestAvailableBaseTypes | NetWorkerReq
   | NetWorkerAddAvailableBases | NetWorkerRemoveAvailableBases | NetWorkerEditAvailableBases;
 //////////////////////////////////////////////////////////
 
-export interface NetWorkerRequestNotificationSub extends NetWorkerInitSubBase<NetSubTypes.notSub> {
+export interface NetWorkerRequestNotificationSub extends NetWorkerInitSubBase<NetSubTypes.notificationSub> {
 }
 
 export type NetWorkerRequestSub = NetWorkerRequestNotificationSub;
@@ -121,7 +121,7 @@ export type NetWorkerResponse = NetWorkerResponseAvailableBaseTypes | NetWorkerR
   | NetWorkerResponseUploadFormuls | NetWorkerResponseUploadNormatives;
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////
-export interface NetWorkerNotificationSub extends NetWorkerSubBase<NetSubTypes.notSub> {
+export interface NetWorkerNotificationSub extends NetWorkerSubBase<NetSubTypes.notificationSub> {
 }
 
 export type NetWorkerSub = NetWorkerNotificationSub;

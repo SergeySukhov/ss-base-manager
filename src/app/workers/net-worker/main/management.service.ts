@@ -5,11 +5,14 @@ import { AvailableNormativeBaseType } from "src/app/shared/models/server-models/
 import { ManagementSystemBase } from "src/app/shared/models/worker-models/management-system-base";
 import { environment } from "src/environments/environment";
 import { MessageHandler } from "../message-services/message-handler.service";
+import { HubConnectionService } from "./hub-connection.service";
 
 export class ManagementSystem extends ManagementSystemBase {
   constructor(private messageHandler: MessageHandler) {
     super();
   }
+
+  private hubService = new HubConnectionService(this.messageHandler);
 
   public async handleMessage(request: NetWorkerRequest | NetWorkerRequestSub) {
     switch (request.messageType) {
@@ -38,8 +41,8 @@ export class ManagementSystem extends ManagementSystemBase {
         this.sendManagerEditNodes(request);
         break;
       /////////////////////
-      case NetSubTypes.notSub:
-        
+      case NetSubTypes.notificationSub:
+
         break;
     }
   }
@@ -72,7 +75,6 @@ export class ManagementSystem extends ManagementSystemBase {
   managerAddNodeCommand(node: AvailableNormativeBaseType): Subject<boolean> {
     const resultSub = new Subject<boolean>();
     const data = JSON.stringify(node);
-    console.log("!! | sendManagerAddNodes | data", data)
     const sender = new XMLHttpRequest();
 
     sender.withCredentials = false;
@@ -85,7 +87,6 @@ export class ManagementSystem extends ManagementSystemBase {
     sender.timeout = 5000;
     sender.onreadystatechange = async () => {
       if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
-        console.log("!! | sender.onreadystatechange= | sender", sender)
         if (sender.status === 200) {
           resultSub.next(true);
         } else {
@@ -100,7 +101,6 @@ export class ManagementSystem extends ManagementSystemBase {
   }
 
   private async sendManagerRemoveNodes(request: NetWorkerRemoveAvailableBases) {
-    console.log("!! | sendManagerRemoveNodes | request", request)
     const response: NetWorkerResponseCommon = {
       guid: request.guid,
       messageType: request.messageType,
@@ -142,7 +142,6 @@ export class ManagementSystem extends ManagementSystemBase {
 
     sender.onreadystatechange = async () => {
       if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
-        console.log("!! | sender.onreadystatechange= | sender", sender)
         if (sender.status === 200) {
           resultSub.next(true);
         } else {
@@ -232,9 +231,7 @@ export class ManagementSystem extends ManagementSystemBase {
 
     sender.onreadystatechange = async () => {
       if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
-        console.log("!! | sender.onreadystatechange= | sender", sender)
         if (sender.status === 200) {
-          console.log("!! | sender.onreadystatechange= | OK", sender)
           resultSub.next(true);
         } else {
           resultSub.next(false);
@@ -267,7 +264,6 @@ export class ManagementSystem extends ManagementSystemBase {
       if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
         if (sender.status === 200) {
           const senderObj = JSON.parse(sender.response);
-          console.log("!! | sender.onreadystatechange= | senderObj", senderObj)
           response.data = senderObj;
           this.messageHandler.toClient(response);
         } else {
@@ -300,7 +296,6 @@ export class ManagementSystem extends ManagementSystemBase {
       if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
         if (sender.status === 200) {
           const senderObj = JSON.parse(sender.response);
-          console.log("!! | sender.onreadystatechange= | senderObj", senderObj)
           response.data = senderObj;
           this.messageHandler.toClient(response);
         } else {
@@ -336,12 +331,9 @@ export class ManagementSystem extends ManagementSystemBase {
     sender.timeout = 5000;
 
     sender.onreadystatechange = async () => {
-      console.log("!! | sender.onreadystatechange= | sender", sender)
-      console.log("!! | sender.onreadystatechange= | sender.status", sender.status)
       if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
         if (sender.status === 200) {
           const senderObj = JSON.parse(sender.response);
-          console.log("!! | sender.onreadystatechange= | senderObj", senderObj)
 
           this.messageHandler.toClient(response);
         } else {

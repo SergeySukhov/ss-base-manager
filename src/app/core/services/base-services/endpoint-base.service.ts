@@ -7,7 +7,7 @@ import { v4 } from "uuid";
 
 @Injectable()
 export abstract class EndpointBaseService {
-    testServerless = false;
+    testServerless = true;
     constructor(protected netWorker: NetWorkerService) {
     }
 

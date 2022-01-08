@@ -51,11 +51,6 @@ export class ListSelectorComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  test(event: any) {
-    console.log("!! | test | event", event)
-
-  }
-
   public onOptionClicked(event: TreeSelectorOption) {
     this.currentOption = event;
     this.selectedOption.emit(event);
