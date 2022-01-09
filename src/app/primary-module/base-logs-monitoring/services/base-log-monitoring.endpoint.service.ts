@@ -10,32 +10,11 @@ import { EndpointBaseService } from "../../../core/services/base-services/endpoi
 @Injectable()
 export class BaseLogMonitoringEndpointService extends EndpointBaseService {
 
-    private innerSub: Subject<any>[] = [];
 
     constructor(protected netWorker: NetWorkerService) {
         super(netWorker);
     }
 
-    subNotifications(userContextId: string): Subject<string> {
-        const sub = this.netWorker.initSub({
-            guid: v4(),
-            messageType: NetSubTypes.notificationSub,
-            needSub: true,
-            data: userContextId,
-        });
-        this.innerSub.push(sub);
-        const resultSub = new Subject<string>();
-        sub.subscribe(x => {
-            resultSub.next(x.data);
-        });
-        return resultSub;
-    }
-
-    closeAllSubs() {
-        this.innerSub.forEach(s => {
-            s.complete();
-        });
-        this.innerSub = [];
-    }
+   
 
 }

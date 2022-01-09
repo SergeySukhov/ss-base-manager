@@ -34,7 +34,7 @@ export class HubConnectionService {
             data: "!!",
         }
         setInterval(() => {
-            this.messageHandler.toClient(netSubMessage);
+            // this.messageHandler.toClient(netSubMessage);
         }, 2000)
 
 

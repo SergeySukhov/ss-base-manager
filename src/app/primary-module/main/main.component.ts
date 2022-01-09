@@ -5,11 +5,14 @@ import { UserService } from '../../core/services/user.service';
 import { TreeSelectorOption } from 'src/app/secondary-module/models/list-selector.model';
 import { ManagerContext } from 'src/app/shared/models/common/enums';
 import { AuthViewService } from "src/app/auth.module/auth/services/auth.view.service";
+import { MessageService, PrimeNGConfig } from 'primeng/api';
+import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
+  providers: []
 })
 export class MainComponent implements OnInit {
 
@@ -82,10 +85,10 @@ export class MainComponent implements OnInit {
   ]
 
   constructor(public stateService: MainStateService,
-    private userService: UserService, private authService: AuthViewService) {
+    private userService: UserService, private authService: AuthViewService,
+    private notificationService: NotificationService
+    ) {
   }
-
-
 
   ngOnInit(): void {
     this.stateService.tooltipUserImageSrc = this.userService.vipUserImgSrc;
@@ -93,7 +96,7 @@ export class MainComponent implements OnInit {
       this.stateService.tooltipUserImageSrc = this.userService.vipUserImgSrc;
     });
     this.stateService.context = this.userService.lastContext;
-
+    this.notificationService.initNotifications(this.userService.userId);
   }
 
   toStart() {

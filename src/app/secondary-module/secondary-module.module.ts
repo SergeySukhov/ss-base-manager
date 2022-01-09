@@ -35,6 +35,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { AddNodeDialogComponent } from './table-control/table-add-node-dialog/add-node-dialog/add-node-dialog.component';
 import { BaseTypePipe } from '../core/pipes/base-type.pipe';
 import { LogViewerComponent } from './log-viewer/log-viewer.component';
+import { NotificationComponent } from './notification/notification.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { LogViewerComponent } from './log-viewer/log-viewer.component';
     TableControlDialogComponent,
     AddNodeDialogComponent,
     LogViewerComponent,
+    NotificationComponent,
   ],
   exports: [
     ListSelectorComponent,

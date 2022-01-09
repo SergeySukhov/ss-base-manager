@@ -44,6 +44,15 @@ import { NormativeBaseComponent } from './normative-base/normative-base.componen
 import { FormulaBaseComponent } from './formula-base/formula-base.component';
 import { BaseAvailabilityManagerComponent } from './base-availability-manager/base-availability-manager.component';
 import { BaseLogsMonitoringComponent } from './base-logs-monitoring/base-logs-monitoring.component';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
+import { MessagesModule } from 'primeng/messages';
+import { RippleModule } from 'primeng/ripple';
+import { MessageService } from 'primeng/api';
+import {ToastModule} from 'primeng/toast';
+import { NotificationService } from '../core/services/notification.service';
+
 @NgModule({
   declarations: [
     MainComponent,
@@ -67,12 +76,23 @@ import { BaseLogsMonitoringComponent } from './base-logs-monitoring/base-logs-mo
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatTabsModule,
+    ///////////////////
+    MessagesModule,
+    MessageModule,
+    ButtonModule,
+    InputTextModule,
+    RippleModule,
+    ToastModule,
+    /////////////////
+    
     SecondaryModule,
 
   ],
   providers: [
     MainStateService,
     ThemeService,
+    MessageService,
+    NotificationService
   ]
 })
 export class PrimaryModule { }

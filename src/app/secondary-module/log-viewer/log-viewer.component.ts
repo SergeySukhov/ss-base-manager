@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'ss-log-viewer',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./log-viewer.component.scss']
 })
 export class LogViewerComponent implements OnInit {
+
+  @Input() logs: string[] | undefined;
 
   constructor() { }
 

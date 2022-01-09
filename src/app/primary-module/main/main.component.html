@@ -3,6 +3,9 @@
         [vipImageSrc]="stateService.tooltipUserImageSrc" [hideBackArrow]="stateService.context===ManagerContext.start"
         [title]="stateService.mainTitle">
     </ss-toolbar>
+    <p-toast ></p-toast>
+
+
     <!-- нужен динамик компонент -->
     <div class="main-content">
         <div [ngSwitch]="stateService.context" class="content-wrapper">
@@ -38,4 +41,4 @@
         </div>
     </div>
     
-</div>ss-base-logs-monitoring
+</div>

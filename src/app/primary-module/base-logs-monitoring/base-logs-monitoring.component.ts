@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { NotificationService } from 'src/app/core/services/notification.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { BaseLogMonitoringEndpointService } from './services/base-log-monitoring.endpoint.service';
 
@@ -6,23 +7,20 @@ import { BaseLogMonitoringEndpointService } from './services/base-log-monitoring
   selector: 'ss-base-logs-monitoring',
   templateUrl: './base-logs-monitoring.component.html',
   styleUrls: ['./base-logs-monitoring.component.scss'],
-  providers: [BaseLogMonitoringEndpointService,
+  providers: [
+    BaseLogMonitoringEndpointService,
   ]
 })
 export class BaseLogsMonitoringComponent implements OnInit {
 
+  readonly allLogs: string[] = [];
 
-
-  constructor(private userService: UserService, private endpointService: BaseLogMonitoringEndpointService) { }
+  constructor(private userService: UserService, private endpointService: BaseLogMonitoringEndpointService,
+    private notificationService: NotificationService) { }
 
   ngOnInit() {
-    const sub = this.endpointService.subNotifications(this.userService.userId);
-    sub.subscribe(x => {
-      console.log("!! | ngOnInit | x", x)
-
-    })
-    this.userService.userChange.subscribe(() => {
-      this.endpointService.closeAllSubs();
+    this.notificationService.notificationChange?.subscribe(notification => {
+      this.allLogs.push(notification);
     });
   }
 
