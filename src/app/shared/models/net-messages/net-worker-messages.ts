@@ -1,4 +1,5 @@
-﻿import { BaseWorkerMessage } from "../base-worker-message";
+﻿import { NotificationMessage } from "src/app/core/common/models/notification.models";
+import { BaseWorkerMessage } from "../base-worker-message";
 import { AvailableBaseAdditionInfo } from "../server-models/AvailableBaseAdditionInfo";
 import { AvailableNormativeBaseType, BaseType } from "../server-models/AvailableNormativeBaseType";
 
@@ -122,6 +123,7 @@ export type NetWorkerResponse = NetWorkerResponseAvailableBaseTypes | NetWorkerR
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////
 export interface NetWorkerNotificationSub extends NetWorkerSubBase<NetSubTypes.notificationSub> {
+  data: NotificationMessage
 }
 
 export type NetWorkerSub = NetWorkerNotificationSub;

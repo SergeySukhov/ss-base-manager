@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { GachiType } from "src/app/core/common/models/models";
 import { ThemeService } from './services/theme.service';
 
 @Component({

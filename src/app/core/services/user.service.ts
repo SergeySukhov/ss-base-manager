@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from "@angular/core";
 import { ManagerContext } from "src/app/shared/models/common/enums";
 import { v4 } from "uuid";
-import { GachiType } from "../common/models/models";
+import { GachiType } from "../common/models/user.models";
 import { LocalStorageConst, LocalStorageService } from "./local-storage.service";
 
 type MuscleMap = {

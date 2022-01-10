@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { NotificationMessage } from 'src/app/core/common/models/notification.models';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { BaseLogMonitoringEndpointService } from './services/base-log-monitoring.endpoint.service';
@@ -13,7 +14,7 @@ import { BaseLogMonitoringEndpointService } from './services/base-log-monitoring
 })
 export class BaseLogsMonitoringComponent implements OnInit {
 
-  readonly allLogs: string[] = [];
+  readonly allLogs: NotificationMessage[] = [];
 
   constructor(private userService: UserService, private endpointService: BaseLogMonitoringEndpointService,
     private notificationService: NotificationService) { }
