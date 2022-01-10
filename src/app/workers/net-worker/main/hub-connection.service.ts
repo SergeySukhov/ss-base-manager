@@ -10,18 +10,21 @@ export class HubConnectionService {
 
     }
 
-    createSub(initSubRequest: NetWorkerRequestSub, url?: string,) {
+    createSub(initSubRequest: NetWorkerRequestSub, url?: string) {
+        console.log("!! | createSub | initSubRequest", initSubRequest)
         const netSubMessage: NetWorkerSub = {
             guid: initSubRequest.guid,
             messageType: initSubRequest.messageType,
-            needSub: true,
+            isSub: true,
             data: {
-                guid: v4(),
-                fromService: "Воркер клиента",
-                imoprtance: ImoprtanceLevel.high,
-                type: NotificationType.error,
-                message: "Не удалось установить подключение к серверу",
-                timeStamp: "0.00"
+                message: {
+                    guid: v4(),
+                    fromService: "Воркер клиента",
+                    imoprtance: ImoprtanceLevel.high,
+                    type: NotificationType.error,
+                    message: "Не удалось установить подключение к серверу",
+                    timeStamp: "0.00"
+                }
             },
         }
 
@@ -35,7 +38,7 @@ export class HubConnectionService {
                 netSubMessage.data = JSON.parse(data);
                 this.messageHandler.toClient(netSubMessage);
             });
-
+            // TODO: send user context
             connection.start()
                 .then(() => connection.invoke("send", "Hello"));
         } catch (ex) {

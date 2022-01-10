@@ -18,7 +18,7 @@ export class FormulaBaseEndpointService extends EndpointBaseService {
 
         const avNB = await this.netWorker.postMessageToWorkerAsync({
             messageType: NetMessageTypes.sendFormulsUpload,
-            needSub: false,
+            isSub: false,
             data: {
                 addonNumber: finalData.normBaseChoice.additionNumber,
                 file: finalData.file,

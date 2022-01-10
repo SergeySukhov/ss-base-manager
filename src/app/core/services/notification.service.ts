@@ -29,14 +29,14 @@ export class NotificationService {
         this.endpointSub = this.netWorker.initSub({
             guid: v4(),
             messageType: NetSubTypes.notificationSub,
-            needSub: true,
-            data: userContextId,
+            isSub: true,
+            data: {userContextId: userContextId },
         });
         this.notificationChange = new Subject<NotificationMessage>();
         this.endpointSub.subscribe(x => {
-            this.notificationChange?.next(x.data);
-            if (x.data.imoprtance === ImoprtanceLevel.high) {
-                this.showNotification(x.data, x.data.type === NotificationType.error);
+            this.notificationChange?.next(x.data.message);
+            if (x.data.message.imoprtance === ImoprtanceLevel.high) {
+                this.showNotification(x.data.message, x.data.message.type === NotificationType.error);
             }
         });
     }

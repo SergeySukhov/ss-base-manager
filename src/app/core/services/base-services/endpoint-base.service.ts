@@ -38,7 +38,7 @@ export abstract class EndpointBaseService {
         }
         const avBT = await this.netWorker.postMessageToWorkerAsync({
             messageType: NetMessageTypes.getAvailableBaseTypes,
-            needSub: false,
+            isSub: false,
         });
         const mappedAvailableBases = avBT?.data as AvailableNormativeBaseType[]
         if (!!mappedAvailableBases?.length) {
@@ -79,7 +79,7 @@ export abstract class EndpointBaseService {
         }
         const avNB = await this.netWorker.postMessageToWorkerAsync({
             messageType: NetMessageTypes.getAvailableNormoBases,
-            needSub: false,
+            isSub: false,
             data: { type: baseType },
         });
         const mappedAvailableBases = avNB?.data as AvailableBaseAdditionInfo[]

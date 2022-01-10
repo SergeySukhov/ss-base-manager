@@ -83,6 +83,7 @@ export type NetWorkerRequest = NetWorkerRequestAvailableBaseTypes | NetWorkerReq
 //////////////////////////////////////////////////////////
 
 export interface NetWorkerRequestNotificationSub extends NetWorkerInitSubBase<NetSubTypes.notificationSub> {
+  data: { userContextId: string }
 }
 
 export type NetWorkerRequestSub = NetWorkerRequestNotificationSub;
@@ -93,14 +94,14 @@ export type NetWorkerRequestSub = NetWorkerRequestNotificationSub;
 ///////////////////////////////////////////////////////////////////////////
 
 /** Ответное сообщение с воркера */
-export interface NetWorkerResponseBase<T extends NetMessageTypes> extends BaseWorkerMessage  {
+export interface NetWorkerResponseBase<T extends NetMessageTypes> extends BaseWorkerMessage {
   messageType: T,
-  needSub: false,
+  isSub: false,
 
 }
-export interface NetWorkerSubBase<T extends NetSubTypes> extends BaseWorkerMessage  {
+export interface NetWorkerSubBase<T extends NetSubTypes> extends BaseWorkerMessage {
   messageType: T,
-  needSub: true,
+  isSub: true,
 }
 // ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -123,7 +124,7 @@ export type NetWorkerResponse = NetWorkerResponseAvailableBaseTypes | NetWorkerR
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////
 export interface NetWorkerNotificationSub extends NetWorkerSubBase<NetSubTypes.notificationSub> {
-  data: NotificationMessage
+  data: { message: NotificationMessage }
 }
 
 export type NetWorkerSub = NetWorkerNotificationSub;

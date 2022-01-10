@@ -61,7 +61,7 @@ export class ManagementSystem {
     const response: AuthWorkerResponseLogin = {
       guid: request.guid,
       messageType: AuthMessageTypes.login,
-      needSub: false,
+      isSub: false,
       data: undefined
     }
 
@@ -91,7 +91,7 @@ export class ManagementSystem {
     const response: AuthWorkerResponseRefresh = {
       guid: request.guid,
       messageType: AuthMessageTypes.refresh,
-      needSub: false,
+      isSub: false,
       data: undefined
     }
     const lastAuthToken = await this.tokenService.getRefreshToken();
@@ -153,7 +153,7 @@ export class ManagementSystem {
       guid,
       messageType,
       data: null,
-      needSub: false,
+      isSub: false,
 
     });
   }

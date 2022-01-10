@@ -15,7 +15,7 @@ export class AvailabilityBaseEndpointService extends EndpointBaseService {
     async sendAddNodes(nodes: AvailableNormativeBaseType[]) {
         const avBT = await this.netWorker.postMessageToWorkerAsync({
             messageType: NetMessageTypes.managerAddNodes,
-            needSub: false,
+            isSub: false,
 
             data: {rootNodes: nodes}
         });
@@ -25,7 +25,7 @@ export class AvailabilityBaseEndpointService extends EndpointBaseService {
     async sendRemoveNodes(guids: string[]) {
         const avBT = await this.netWorker.postMessageToWorkerAsync({
             messageType: NetMessageTypes.managerRemoveNodes,
-            needSub: false,
+            isSub: false,
 
             data: {guids}
         });
@@ -34,7 +34,7 @@ export class AvailabilityBaseEndpointService extends EndpointBaseService {
     async sendEditNodes(rootNodes: AvailableNormativeBaseType[], normoNodes: AvailableBaseAdditionInfo[]) {
         const avBT = await this.netWorker.postMessageToWorkerAsync({
             messageType: NetMessageTypes.managerEditNodes,
-            needSub: false,
+            isSub: false,
 
             data: {rootNodes, normoNodes}
         });

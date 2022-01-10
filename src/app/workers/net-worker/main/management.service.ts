@@ -16,7 +16,7 @@ export class ManagementSystem extends ManagementSystemBase {
 
   public async handleMessage(request: NetWorkerRequest | NetWorkerRequestSub) {
     console.log("!! | handleMessage | request", request)
-    if (request.needSub) {
+    if (request.isSub) {
       switch (request.messageType) {
         case NetSubTypes.notificationSub:
           this.hubService.createSub(request);
@@ -58,7 +58,7 @@ export class ManagementSystem extends ManagementSystemBase {
     const response: NetWorkerResponseCommon = {
       guid: request.guid,
       messageType: request.messageType,
-      needSub: false,
+      isSub: false,
     }
     const timeout = setTimeout(() => {
       this.messageHandler.toClient(response);
@@ -110,7 +110,7 @@ export class ManagementSystem extends ManagementSystemBase {
     const response: NetWorkerResponseCommon = {
       guid: request.guid,
       messageType: request.messageType,
-      needSub: false,
+      isSub: false,
     }
 
     const timeout = setTimeout(() => {
@@ -166,7 +166,7 @@ export class ManagementSystem extends ManagementSystemBase {
     const response: NetWorkerResponseCommon = {
       guid: request.guid,
       messageType: request.messageType,
-      needSub: false,
+      isSub: false,
     }
 
     const sentNodeGuids: string[] = request.data.rootNodes.map(x => x.guid);
@@ -254,7 +254,7 @@ export class ManagementSystem extends ManagementSystemBase {
     const response: NetWorkerResponseAvailableBaseTypes = {
       guid: request.guid,
       messageType: NetMessageTypes.getAvailableBaseTypes,
-      needSub: false,
+      isSub: false,
       data: null,
     }
 
@@ -286,7 +286,7 @@ export class ManagementSystem extends ManagementSystemBase {
     const response: NetWorkerResponseAvailableBases = {
       guid: request.guid,
       messageType: NetMessageTypes.getAvailableNormoBases,
-      needSub: false,
+      isSub: false,
       data: null
     }
 
@@ -319,7 +319,7 @@ export class ManagementSystem extends ManagementSystemBase {
     const response: NetWorkerResponseUploadFormuls = {
       guid: request.guid,
       messageType: request.messageType,
-      needSub: false,
+      isSub: false,
     }
 
     let data = new FormData();
@@ -357,7 +357,7 @@ export class ManagementSystem extends ManagementSystemBase {
     const response: NetWorkerResponseUploadNormatives = {
       guid: request.guid,
       messageType: request.messageType,
-      needSub: false,
+      isSub: false,
     }
 
     var data = new FormData();
@@ -410,7 +410,7 @@ export class ManagementSystem extends ManagementSystemBase {
     this.messageHandler.toClient({
       guid,
       messageType,
-      needSub: false,
+      isSub: false,
     });
   }
 }

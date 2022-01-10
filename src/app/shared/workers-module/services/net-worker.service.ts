@@ -44,7 +44,7 @@ export class NetWorkerService extends BaseWorkerService<NetWorkerRequest, NetWor
         if (!message.guid) {
             throw ("!! Worker message has no id");
         }
-        if (message.needSub) {
+        if (message.isSub) {
             const sub = this.subSubs.get(message.guid);
             if (sub) {
                 sub.next(message);
