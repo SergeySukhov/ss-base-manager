@@ -16,10 +16,15 @@ export class HubConnectionService {
     }
 
     async initHub(url?: string): Promise<string> {
+        const connectionOptions: signalR.IHttpConnectionOptions = {
+            transport: signalR.HttpTransportType.WebSockets,
+            skipNegotiation: true
+        };
+        
         this.hub = new signalR.HubConnectionBuilder()
-        .withUrl(url ?? environment.logger)
-        .withAutomaticReconnect()
-        .build();
+            .withUrl(url ?? environment.logger, connectionOptions)
+            .withAutomaticReconnect()
+            .build();
 
         await this.hub.start();
         // TODO: чек
