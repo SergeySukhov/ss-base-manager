@@ -26,7 +26,6 @@ export class NetWorkerService extends BaseWorkerService<NetWorkerRequest, NetWor
     }
 
     public initSub(message: NetWorkerRequestSub): Subject<NetWorkerSub> {
-        console.log("!! | initSub | message", message)
         if (!this.isInit || !this.worker) {
             throw ("!! Worker was not inited");
         }
@@ -40,7 +39,6 @@ export class NetWorkerService extends BaseWorkerService<NetWorkerRequest, NetWor
     }
 
     protected handleMessage(message: NetWorkerResponse | NetWorkerSub) {
-        console.log("!! | handleMessage | message", message)
         if (!message.guid) {
             throw ("!! Worker message has no id");
         }

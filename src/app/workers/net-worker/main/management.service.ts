@@ -15,7 +15,6 @@ export class ManagementSystem extends ManagementSystemBase {
   private hubService = new HubConnectionService(this.messageHandler);
 
   public async handleMessage(request: NetWorkerRequest | NetWorkerRequestSub) {
-    console.log("!! | handleMessage | request", request)
     if (request.isSub) {
       switch (request.messageType) {
         case NetSubTypes.notificationSub:
@@ -323,10 +322,10 @@ export class ManagementSystem extends ManagementSystemBase {
     }
 
     let data = new FormData();
-    data.append("nrSpCsv", request.data.file);
-    data.append("addonNumber", "" + request.data.addonNumber);
-    data.append("normoGuid", request.data.normoGuid);
-    data.append("deploy", "" + request.data.isDeploy);
+    data.append("SourceFile", request.data.file);
+    data.append("AdditionNumber", "" + request.data.addonNumber);
+    data.append("Guid", request.data.normoGuid);
+    data.append("Deploy", "" + request.data.isDeploy);
 
     sender.withCredentials = false;
     sender.open("POST", environment.formuls + "uploader");
