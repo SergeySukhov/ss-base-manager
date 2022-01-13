@@ -6,12 +6,31 @@ import { v4 } from "uuid";
 import { MessageHandler } from "../message-services/message-handler.service";
 
 export class HubConnectionService {
+
+    public get connectionId(): string | null {
+        return this.pConnectionId;
+    }
+    private pConnectionId: string | null = null;
+    private hub: signalR.HubConnection | null = null;
     constructor(private messageHandler: MessageHandler) {
 
     }
 
+    async initHub(url?: string): Promise<string> {
+        this.hub = new signalR.HubConnectionBuilder()
+        .withUrl(url ?? environment.logger)
+        .withAutomaticReconnect()
+        .build();
+
+        await this.hub.start();
+        // TODO: чек
+        return this.hub.connectionId ?? "";
+    }
+
     createSub(initSubRequest: NetWorkerRequestSub, url?: string) {
-        console.log("!! | createSub | initSubRequest", initSubRequest)
+        if (!this.hub) {
+            return;
+        }
         const netSubMessage: NetWorkerSub = {
             guid: initSubRequest.guid,
             messageType: initSubRequest.messageType,
@@ -23,24 +42,17 @@ export class HubConnectionService {
                     imoprtance: ImoprtanceLevel.high,
                     type: NotificationType.error,
                     message: "Не удалось установить подключение к серверу",
-                    timeStamp: "0.00"
+                    timeStamp: Date.now().toLocaleString()
                 }
             },
         }
 
         try {
-            let connection = new signalR.HubConnectionBuilder()
-                .withUrl(url ?? environment.logger)
-                .build();
-
-            connection.on("send", data => {
+            this.hub.on("Notification", data => {
                 console.log(data);
                 netSubMessage.data = JSON.parse(data);
                 this.messageHandler.toClient(netSubMessage);
             });
-            // TODO: send user context
-            connection.start()
-                .then(() => connection.invoke("send", "Hello"));
         } catch (ex) {
             this.messageHandler.toClient(netSubMessage);
         }

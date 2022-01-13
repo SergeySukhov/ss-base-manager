@@ -8,11 +8,12 @@ import { MessageHandler } from "../message-services/message-handler.service";
 import { HubConnectionService } from "./hub-connection.service";
 
 export class ManagementSystem extends ManagementSystemBase {
+  private hubService = new HubConnectionService(this.messageHandler);
+
   constructor(private messageHandler: MessageHandler) {
     super();
   }
 
-  private hubService = new HubConnectionService(this.messageHandler);
 
   public async handleMessage(request: NetWorkerRequest | NetWorkerRequestSub) {
     if (request.isSub) {
@@ -326,6 +327,7 @@ export class ManagementSystem extends ManagementSystemBase {
     data.append("AdditionNumber", "" + request.data.addonNumber);
     data.append("Guid", request.data.normoGuid);
     data.append("Deploy", "" + request.data.isDeploy);
+    data.append("ContextId", this.hubService.connectionId ?? "");
 
     sender.withCredentials = false;
     sender.open("POST", environment.formuls + "uploader");
@@ -364,6 +366,7 @@ export class ManagementSystem extends ManagementSystemBase {
     data.append("normoGuid", request.data.normoGuid);
     data.append("type", request.data.normoGuid);
     data.append("deploy", "" + request.data.isDeploy);
+    data.append("ContextId", this.hubService.connectionId ?? "");
 
     sender.withCredentials = false;
     sender.open("POST", environment.normo + "uploader");
