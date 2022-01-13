@@ -8,27 +8,30 @@ import { MessageHandler } from "../message-services/message-handler.service";
 export class HubConnectionService {
 
     public get connectionId(): string | null {
-        return this.hub?.connectionId ?? null;
+        return this.pConnectionId;
     }
+
+    private pConnectionId = "";
     private hub: signalR.HubConnection | null = null;
     constructor(private messageHandler: MessageHandler) {
 
     }
 
-    async initHub(url?: string): Promise<string> {
+    async initHub(url?: string) {
         const connectionOptions: signalR.IHttpConnectionOptions = {
             transport: signalR.HttpTransportType.WebSockets,
             skipNegotiation: true
         };
-        
+
         this.hub = new signalR.HubConnectionBuilder()
             .withUrl(url ?? environment.logger, connectionOptions)
             .withAutomaticReconnect()
             .build();
 
         await this.hub.start();
-        // TODO: чек
-        return this.hub.connectionId ?? "";
+        const id = await this.hub.invoke("GetConnectionId");
+        console.log("!! | initHub | id", id)
+        this.pConnectionId = id;
     }
 
     createSub(initSubRequest: NetWorkerRequestSub, url?: string) {
