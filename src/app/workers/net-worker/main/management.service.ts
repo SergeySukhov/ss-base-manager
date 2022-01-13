@@ -12,6 +12,7 @@ export class ManagementSystem extends ManagementSystemBase {
 
   constructor(private messageHandler: MessageHandler) {
     super();
+    this.hubService.initHub();
   }
 
 
