@@ -8,9 +8,8 @@ import { MessageHandler } from "../message-services/message-handler.service";
 export class HubConnectionService {
 
     public get connectionId(): string | null {
-        return this.pConnectionId;
+        return this.hub?.connectionId ?? null;
     }
-    private pConnectionId: string | null = null;
     private hub: signalR.HubConnection | null = null;
     constructor(private messageHandler: MessageHandler) {
 
