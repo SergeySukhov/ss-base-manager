@@ -43,7 +43,6 @@ export class FormulaBaseComponent implements OnInit {
   }
 
   onModelChange() {
-    console.log("!! | onModelChange | this.data", this.data)
   }
 
 }

@@ -1,5 +1,5 @@
 import * as signalR from "@microsoft/signalr";
-import { ImoprtanceLevel, NotificationType } from "src/app/core/common/models/notification.models";
+import { ImoprtanceLevel, NotificationMessage, NotificationType } from "src/app/core/common/models/notification.models";
 import { NetWorkerRequestSub, NetWorkerSub } from "src/app/shared/models/net-messages/net-worker-messages";
 import { environment } from "src/environments/environment";
 import { v4 } from "uuid";
@@ -30,7 +30,6 @@ export class HubConnectionService {
 
         await this.hub.start();
         const id = await this.hub.invoke("GetConnectionId");
-        console.log("!! | initHub | id", id)
         this.pConnectionId = id;
     }
 
@@ -47,22 +46,16 @@ export class HubConnectionService {
                     guid: v4(),
                     fromService: "Воркер клиента",
                     imoprtance: ImoprtanceLevel.high,
-                    type: NotificationType.error,
+                    type: NotificationType.info,
                     message: "Не удалось установить подключение к серверу",
                     timeStamp: Date.now().toLocaleString()
                 }
             },
         }
-
-        try {
-            this.hub.on("Notification", data => {
-                console.log(data);
-                netSubMessage.data = JSON.parse(data);
-                this.messageHandler.toClient(netSubMessage);
-            });
-        } catch (ex) {
+        this.hub.on("Notification", (data: NotificationMessage) => {
+            netSubMessage.data.message = data;
             this.messageHandler.toClient(netSubMessage);
-        }
+        });
 
         // setInterval(() => {
         //     this.messageHandler.toClient(netSubMessage);

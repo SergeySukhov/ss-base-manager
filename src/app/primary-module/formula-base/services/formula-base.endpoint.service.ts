@@ -26,6 +26,7 @@ export class FormulaBaseEndpointService extends EndpointBaseService {
                 isAdd: false,
                 isDeploy: finalData.needDeploy
             },
-        });
+        }, false);
+        console.log("!! | sendFormuls | avNB", avNB)
     }
 }

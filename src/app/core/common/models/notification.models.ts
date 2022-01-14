@@ -15,5 +15,6 @@ export interface NotificationMessage {
     fromService: string;
     message: string;
     imoprtance: ImoprtanceLevel,
-    type: NotificationType
+    type: NotificationType,
+    contextId?: string,
 }

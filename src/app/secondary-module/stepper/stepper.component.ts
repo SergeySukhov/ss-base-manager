@@ -58,7 +58,6 @@ export class StepperComponent implements OnInit {
   }
 
   test(event: any) {
-    console.log("!! | test | event", event)
     this.modelChange.emit();
   }
 
