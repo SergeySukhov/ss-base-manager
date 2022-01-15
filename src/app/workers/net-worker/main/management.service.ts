@@ -1,14 +1,18 @@
 ﻿import { Subject } from "rxjs";
-import { NetWorkerRequest, NetMessageTypes, NetWorkerResponse, NetWorkerResponseAvailableBases, NetWorkerRequestAvailableBases, NetWorkerRequestUploadFormuls, NetWorkerResponseUploadFormuls, NetWorkerRequestUploadNormatives, NetWorkerResponseUploadNormatives, NetWorkerAddAvailableBases, NetWorkerEditAvailableBases, NetWorkerRemoveAvailableBases, NetWorkerResponseCommon, NetWorkerRequestAvailableBaseTypes, NetWorkerResponseAvailableBaseTypes, NetSubTypes, NetWorkerInitSubBase, NetWorkerRequestSub } from "src/app/shared/models/net-messages/net-worker-messages";
+import { ImoprtanceLevel, NotificationType } from "src/app/core/common/models/notification.models";
+import { NetWorkerRequest, NetMessageTypes, NetWorkerResponse, NetWorkerResponseAvailableBases, NetWorkerRequestAvailableBases, NetWorkerRequestUploadFormuls, NetWorkerResponseUploadFormuls, NetWorkerRequestUploadNormatives, NetWorkerResponseUploadNormatives, NetWorkerAddAvailableBases, NetWorkerEditAvailableBases, NetWorkerRemoveAvailableBases, NetWorkerResponseCommon, NetWorkerRequestAvailableBaseTypes, NetWorkerResponseAvailableBaseTypes, NetSubTypes, NetWorkerInitSubBase, NetWorkerRequestSub, NetWorkerSub, NetWorkerRequestNotificationSub } from "src/app/shared/models/net-messages/net-worker-messages";
 import { AvailableBaseAdditionInfo } from "src/app/shared/models/server-models/AvailableBaseAdditionInfo";
 import { AvailableNormativeBaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { ManagementSystemBase } from "src/app/shared/models/worker-models/management-system-base";
 import { environment } from "src/environments/environment";
+import { v4 } from "uuid";
 import { MessageHandler } from "../message-services/message-handler.service";
 import { HubConnectionService } from "./hub-connection.service";
 
 export class ManagementSystem extends ManagementSystemBase {
-  private hubService = new HubConnectionService(this.messageHandler);
+  private netWorkerEvents = new Subject<{ message: string, type: NotificationType, importance: ImoprtanceLevel }>();
+  private hubService = new HubConnectionService(this.messageHandler, this.netWorkerEvents);
+
 
   constructor(private messageHandler: MessageHandler) {
     super();
@@ -20,7 +24,10 @@ export class ManagementSystem extends ManagementSystemBase {
     if (request.isSub) {
       switch (request.messageType) {
         case NetSubTypes.notificationSub:
-          this.hubService.createSub(request);
+          this.hubService.createNotificationSub(request);
+          this.createWorkerNotificationSub(request);
+          break;
+        case NetSubTypes.closeAllSubs:
           break;
       }
     } else {
@@ -54,6 +61,28 @@ export class ManagementSystem extends ManagementSystemBase {
 
   }
 
+  private createWorkerNotificationSub(initSubRequest: NetWorkerRequestNotificationSub) {
+    this.netWorkerEvents.subscribe(x => {
+      const netSubMessage: NetWorkerSub = {
+        guid: initSubRequest.guid,
+        messageType: initSubRequest.messageType,
+        isSub: true,
+        data: {
+          message: {
+            guid: v4(),
+            fromService: "Воркер клиента",
+            imoprtance: x.importance,
+            type: x.type,
+            message: x.message,
+            timeStamp: Date.now().toLocaleString()
+          }
+        },
+      }
+      this.messageHandler.toClient(netSubMessage);
+    });
+
+  }
+
   private async sendManagerAddNodes(request: NetWorkerAddAvailableBases) {
 
     const response: NetWorkerResponseCommon = {
@@ -76,10 +105,9 @@ export class ManagementSystem extends ManagementSystemBase {
         }
       });
     });
-
   }
 
-  managerAddNodeCommand(node: AvailableNormativeBaseType): Subject<boolean> {
+  private managerAddNodeCommand(node: AvailableNormativeBaseType): Subject<boolean> {
     const resultSub = new Subject<boolean>();
     const data = JSON.stringify(node);
     const sender = new XMLHttpRequest();
@@ -134,7 +162,7 @@ export class ManagementSystem extends ManagementSystemBase {
 
   }
 
-  managerRemoveNodeCommand(guid: string): Subject<boolean> {
+  private managerRemoveNodeCommand(guid: string): Subject<boolean> {
     const resultSub = new Subject<boolean>();
 
     const sender = new XMLHttpRequest();
@@ -194,7 +222,7 @@ export class ManagementSystem extends ManagementSystemBase {
     });
   }
 
-  managerEditRootNodeCommand(node: AvailableNormativeBaseType): Subject<boolean> {
+  private managerEditRootNodeCommand(node: AvailableNormativeBaseType): Subject<boolean> {
     const resultSub = new Subject<boolean>();
     const data = JSON.stringify(node);
     const sender = new XMLHttpRequest();
@@ -222,7 +250,7 @@ export class ManagementSystem extends ManagementSystemBase {
     sender.send(data);
     return resultSub;
   }
-  managerEditNormoNodeCommand(node: AvailableBaseAdditionInfo): Subject<boolean> {
+  private managerEditNormoNodeCommand(node: AvailableBaseAdditionInfo): Subject<boolean> {
     const resultSub = new Subject<boolean>();
     const data = JSON.stringify(node);
     const sender = new XMLHttpRequest();
@@ -341,8 +369,6 @@ export class ManagementSystem extends ManagementSystemBase {
     sender.onreadystatechange = async () => {
       if (sender.readyState == XMLHttpRequest.DONE) {
         if (sender.status === 200) {
-          console.log("!! | sender.onreadystatechange= | sender", sender)
-
           this.messageHandler.toClient(response);
         } else {
           this.errorHandler(response);
@@ -406,6 +432,7 @@ export class ManagementSystem extends ManagementSystemBase {
       isSuccess: false,
       errorDescription: errMesage ?? "Нет доступа к сервисам"
     }
+    this.netWorkerEvents.next({ message: "При выполнении операции возникла ошибка", importance: ImoprtanceLevel.high, type: NotificationType.warn })
     this.messageHandler.toClient(response);
   }
 

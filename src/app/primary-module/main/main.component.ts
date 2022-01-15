@@ -96,7 +96,7 @@ export class MainComponent implements OnInit {
       this.stateService.tooltipUserImageSrc = this.userService.vipUserImgSrc;
     });
     this.stateService.context = this.userService.lastContext;
-    this.notificationService.initNotifications(this.userService.userId);
+    this.notificationService.initNotifications();
   }
 
   toStart() {

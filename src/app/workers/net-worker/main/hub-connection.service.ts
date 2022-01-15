@@ -1,6 +1,7 @@
 import * as signalR from "@microsoft/signalr";
+import { Subject } from "rxjs";
 import { ImoprtanceLevel, NotificationMessage, NotificationType } from "src/app/core/common/models/notification.models";
-import { NetWorkerRequestSub, NetWorkerSub } from "src/app/shared/models/net-messages/net-worker-messages";
+import { NetWorkerRequestNotificationSub, NetWorkerRequestSub, NetWorkerSub } from "src/app/shared/models/net-messages/net-worker-messages";
 import { environment } from "src/environments/environment";
 import { v4 } from "uuid";
 import { MessageHandler } from "../message-services/message-handler.service";
@@ -13,7 +14,8 @@ export class HubConnectionService {
 
     private pConnectionId = "";
     private hub: signalR.HubConnection | null = null;
-    constructor(private messageHandler: MessageHandler) {
+    constructor(private messageHandler: MessageHandler,
+        private events: Subject<{ message: string, type: NotificationType, importance: ImoprtanceLevel }>) {
 
     }
 
@@ -22,18 +24,27 @@ export class HubConnectionService {
             transport: signalR.HttpTransportType.WebSockets,
             skipNegotiation: true
         };
+        try {
+            this.hub = new signalR.HubConnectionBuilder()
+                .withUrl(url ?? environment.logger, connectionOptions)
+                .withAutomaticReconnect()
+                .build();
+                
+            await this.hub.start();
+            const id = await this.hub.invoke("GetConnectionId");
+            this.pConnectionId = id;
+        } catch (ex) {
 
-        this.hub = new signalR.HubConnectionBuilder()
-            .withUrl(url ?? environment.logger, connectionOptions)
-            .withAutomaticReconnect()
-            .build();
+        }
 
-        await this.hub.start();
-        const id = await this.hub.invoke("GetConnectionId");
-        this.pConnectionId = id;
+        if (!!this.pConnectionId) {
+            this.events.next({ message: "Соединение установлено", type: NotificationType.info, importance: ImoprtanceLevel.high });
+        } else {
+            this.events.next({ message: "Соединение не установлено", type: NotificationType.warn, importance: ImoprtanceLevel.high });
+        }
     }
 
-    createSub(initSubRequest: NetWorkerRequestSub, url?: string) {
+    createNotificationSub(initSubRequest: NetWorkerRequestNotificationSub, url?: string) {
         if (!this.hub) {
             return;
         }
@@ -57,8 +68,9 @@ export class HubConnectionService {
             this.messageHandler.toClient(netSubMessage);
         });
 
-        // setInterval(() => {
-        //     this.messageHandler.toClient(netSubMessage);
-        // }, 2000)
+        setInterval(() => {
+            netSubMessage.data.message.imoprtance = 1;
+            this.messageHandler.toClient(netSubMessage);
+        }, 1000)
     }
 }

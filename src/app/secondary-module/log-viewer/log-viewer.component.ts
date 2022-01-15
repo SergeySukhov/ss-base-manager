@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { NotificationMessage, NotificationType } from 'src/app/core/common/models/notification.models';
+
 
 @Component({
   selector: 'ss-log-viewer',
@@ -7,11 +9,28 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class LogViewerComponent implements OnInit {
 
-  @Input() logs: string[] | undefined;
+  @Input() filter: { serviceName: string, time: string, message: string } | undefined;
+
+  @Input() logsData: NotificationMessage[] | undefined
+
+  get logs(): NotificationMessage[] {
+      if (!!this.filter && this.logsData) {
+      return this.logsData.filter(x => !this.filter?.serviceName || x.fromService.includes(this.filter.serviceName));
+    } else {
+      return this.logsData ?? [];
+    }
+  }
+
+
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  logTypeClass(log: NotificationMessage): string {
+    return log.type === NotificationType.error ? "err-log"
+      : log.type === NotificationType.warn ? "warn-log" : "";
   }
 
 }

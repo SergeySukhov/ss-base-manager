@@ -1,7 +1,15 @@
-<mat-tab-group>
-    <mat-tab label="Все"> <ss-log-viewer></ss-log-viewer> </mat-tab>
+<div class="wrapper">
+
+  <mat-tab-group>
+    <mat-tab label="Все">
+      <div class="tab-container">
+        <ss-log-viewer [logsData]="allLogs"></ss-log-viewer>
+      </div>
+    </mat-tab>
     <mat-tab label="Системные"> Content 1 </mat-tab>
     <mat-tab label="Нормативы"> Content 2 </mat-tab>
     <mat-tab label="Индексы"> Content 2 </mat-tab>
     <mat-tab label="Поправки"> Content 3 </mat-tab>
   </mat-tab-group>
+
+</div>

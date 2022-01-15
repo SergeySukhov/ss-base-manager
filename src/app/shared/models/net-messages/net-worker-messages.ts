@@ -20,6 +20,8 @@ export enum NetMessageTypes {
 
 export enum NetSubTypes {
   notificationSub,
+  closeAllSubs,
+
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -83,10 +85,12 @@ export type NetWorkerRequest = NetWorkerRequestAvailableBaseTypes | NetWorkerReq
 //////////////////////////////////////////////////////////
 
 export interface NetWorkerRequestNotificationSub extends NetWorkerInitSubBase<NetSubTypes.notificationSub> {
-  data: { userContextId: string }
 }
 
-export type NetWorkerRequestSub = NetWorkerRequestNotificationSub;
+export interface NetWorkerRequestCloseAllSubs extends NetWorkerInitSubBase<NetSubTypes.closeAllSubs> {
+}
+
+export type NetWorkerRequestSub = NetWorkerRequestNotificationSub | NetWorkerRequestCloseAllSubs;
 
 
 ///////////////////////////////////////////////////////////////////////////

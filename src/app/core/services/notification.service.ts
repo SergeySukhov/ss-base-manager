@@ -22,7 +22,7 @@ export class NotificationService {
 
     }
 
-    initNotifications(userContextId: string) {
+    initNotifications() {
         if (this.notificationChange !== null) {
             return;
         }
@@ -30,11 +30,9 @@ export class NotificationService {
             guid: v4(),
             messageType: NetSubTypes.notificationSub,
             isSub: true,
-            data: { userContextId: userContextId },
         });
         this.notificationChange = new Subject<NotificationMessage>();
         this.endpointSub.subscribe(x => {
-            console.log("!! | initNotifications | x", x)
             this.notificationChange?.next(x.data.message);
             if (x.data.message.imoprtance === ImoprtanceLevel.high) {
                 this.showNotification(x.data.message, x.data.message.type === NotificationType.error);
