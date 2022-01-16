@@ -8,15 +8,15 @@
   .title {
     display: flex;
     justify-content: center;
-    background: mat.get-color-from-palette($primary-palette, 400);
+    background: mat.get-color-from-palette($primary-palette, 300);
     height: 50px;
-    padding: 10px;
     line-height: 50px;
   }
   .remeber-checkbox {
       width: 100%;
       padding-left: 20px;
   }
+  
   .sub-button {
     width: 50%;
     background: mat.get-color-from-palette($primary-palette, 300);
@@ -24,6 +24,13 @@
     align-self: center;
     margin: auto;
     margin-bottom: 20px;
+  }
+
+  .progress-bar-addons {
+    height: 7px;
+    *::after {
+      background-color: mat.get-color-from-palette($primary-palette, 300) !important;
+    }
   }
 }
 
@@ -96,11 +103,11 @@
   }
 }
 
-.progress-bar-addons {
-  height: 7px;
-}
 .light-mode .mat-card {
   color: #363636 !important;
+  .icon {
+    filter: brightness(0.4);
+  }
 }
 
 ::ng-deep .dark-mode .mat-primary .mat-option.mat-selected {

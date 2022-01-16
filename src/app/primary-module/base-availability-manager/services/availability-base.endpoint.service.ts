@@ -16,7 +16,6 @@ export class AvailabilityBaseEndpointService extends EndpointBaseService {
         const avBT = await this.netWorker.postMessageToWorkerAsync({
             messageType: NetMessageTypes.managerAddNodes,
             isSub: false,
-
             data: {rootNodes: nodes}
         });
         

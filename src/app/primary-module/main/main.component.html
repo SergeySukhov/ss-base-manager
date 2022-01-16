@@ -5,8 +5,6 @@
     </ss-toolbar>
     <p-toast ></p-toast>
 
-
-    <!-- нужен динамик компонент -->
     <div class="main-content">
         <div [ngSwitch]="stateService.context" class="content-wrapper">
 
@@ -21,10 +19,6 @@
 
             <div *ngSwitchCase="ManagerContext.formula" class="content-container">
                 <ss-formula-base></ss-formula-base>
-            </div>
-
-            <div *ngSwitchCase="ManagerContext.manager" class="content-container">
-                <ss-base-availability-manager></ss-base-availability-manager>
             </div>
 
             <div *ngSwitchCase="ManagerContext.manager" class="content-container">

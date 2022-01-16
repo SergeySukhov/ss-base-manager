@@ -1,7 +1,7 @@
 import * as signalR from "@microsoft/signalr";
 import { Subject } from "rxjs";
 import { ImoprtanceLevel, NotificationMessage, NotificationType } from "src/app/core/common/models/notification.models";
-import { NetWorkerRequestNotificationSub, NetWorkerRequestSub, NetWorkerSub } from "src/app/shared/models/net-messages/net-worker-messages";
+import { NWRequestNotificationSub, NWRequestSub, NWSubMessage } from "src/app/shared/models/net-messages/net-worker-messages";
 import { environment } from "src/environments/environment";
 import { v4 } from "uuid";
 import { MessageHandler } from "../message-services/message-handler.service";
@@ -16,7 +16,6 @@ export class HubConnectionService {
     private hub: signalR.HubConnection | null = null;
     constructor(private messageHandler: MessageHandler,
         private events: Subject<{ message: string, type: NotificationType, importance: ImoprtanceLevel }>) {
-
     }
 
     async initHub(url?: string) {
@@ -44,11 +43,11 @@ export class HubConnectionService {
         }
     }
 
-    createNotificationSub(initSubRequest: NetWorkerRequestNotificationSub, url?: string) {
+    createNotificationSub(initSubRequest: NWRequestNotificationSub, url?: string) {
         if (!this.hub) {
             return;
         }
-        const netSubMessage: NetWorkerSub = {
+        const netSubMessage: NWSubMessage = {
             guid: initSubRequest.guid,
             messageType: initSubRequest.messageType,
             isSub: true,
@@ -59,7 +58,7 @@ export class HubConnectionService {
                     imoprtance: ImoprtanceLevel.high,
                     type: NotificationType.info,
                     message: "Не удалось установить подключение к серверу",
-                    timeStamp: Date.now().toLocaleString()
+                    timeStamp: Date.now().toString()
                 }
             },
         }
@@ -68,9 +67,9 @@ export class HubConnectionService {
             this.messageHandler.toClient(netSubMessage);
         });
 
-        setInterval(() => {
-            netSubMessage.data.message.imoprtance = 1;
-            this.messageHandler.toClient(netSubMessage);
-        }, 1000)
+        // setInterval(() => {
+        //     netSubMessage.data.message.imoprtance = 1;
+        //     this.messageHandler.toClient(netSubMessage);
+        // }, 1000)
     }
 }

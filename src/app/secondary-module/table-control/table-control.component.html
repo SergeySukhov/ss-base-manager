@@ -1,12 +1,13 @@
-<div class="wrapper">
+<div class="wrapper" >
     <div class="control-container">
-        <button class="control-button" mat-stroked-button (click)="addData()">Добавить узел
+        <button class="control-button" mat-stroked-button [disabled]="isAwaiting"
+            (click)="addData()">Добавить узел
         </button>
         <button class="control-button" mat-stroked-button [disabled]="!selection.selected?.length"
             (click)="removeData()">Удалить узел
         </button>
     </div>
-    <div class="example-container mat-elevation-z8">
+    <div class="example-container mat-elevation-z8" *ngIf="!isAwaiting">
         <table mat-table [dataSource]="data" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
             <!-- Checkbox Column -->
             <ng-container matColumnDef="select">

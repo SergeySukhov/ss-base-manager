@@ -5,7 +5,7 @@
         (ngModelChange)="updateOptionalLabel()">
 </span>
 
-    <mat-stepper #stepper orientation="vertical" [linear]="true" *ngIf="!!firstFormGroup" color="accent"
+    <mat-stepper #stepper orientation="vertical" [linear]="true" *ngIf="!!firstFormGroup" color="primary"
         (selectionChange)="test($event)">
 
         <mat-step [editable]="isEditable" [completed]="stepModel.isCompleted" [optional]="stepModel.isOptional"
@@ -72,20 +72,24 @@
             </div>
             <div class="buttons-container">
                 <button class="step-button action-button" 
-                    *ngIf="stepModel.actionButton?.needShow && !!stepModel.actionButtonAction" [disabled]="stepModel.actionButton?.isDisable"
+                    *ngIf="stepModel.actionButton?.needShow && !!stepModel.actionButtonAction" 
+                    [disabled]="stepModel.actionButton?.isDisable"
                     mat-button (click)="stepModel.actionButtonAction()">Готово</button>
                 
                 <button class="step-button" 
-                    *ngIf="stepModel.nextButton?.needShow" [disabled]="stepModel.nextButton?.isDisable"
+                    *ngIf="stepModel.nextButton?.needShow" 
+                    [disabled]="stepModel.nextButton?.isDisable"
                      mat-button (click)="stepper.next()">Вперед</button>
                 
                 <button class="step-button" 
-                    *ngIf="stepModel.backButton?.needShow" [disabled]="stepModel.backButton?.isDisable"
+                    *ngIf="stepModel.backButton?.needShow" 
+                    [disabled]="stepModel.backButton?.isDisable"
                      mat-button (click)="stepper.previous()">Назад</button>
                
                 <button class="step-button" 
-                    *ngIf="stepModel.resetButton?.needShow" [disabled]="stepModel.resetButton?.isDisable"
-                 mat-button (click)="stepper.reset()">Заново</button>
+                    *ngIf="stepModel.resetButton?.needShow" 
+                    [disabled]="stepModel.resetButton?.isDisable"
+                    mat-button (click)="stepper.reset()">Заново</button>
 
 
             </div>

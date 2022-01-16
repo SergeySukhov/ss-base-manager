@@ -1,22 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { v4 } from "uuid";
-import { NetSubTypes, NetWorkerRequest, NetWorkerRequestSub, NetWorkerResponse, NetWorkerSub } from "../../models/net-messages/net-worker-messages";
+import { NWRequest, NWRequestSub, NWResponse, NWSubMessage } from "../../models/net-messages/net-worker-messages";
 import { BaseWorkerService } from './base-worker.service';
 
 @Injectable({
     providedIn: 'root',
 })
-export class NetWorkerService extends BaseWorkerService<NetWorkerRequest, NetWorkerResponse> {
+export class NetWorkerService extends BaseWorkerService<NWRequest, NWResponse> {
 
-    private responseSubs = new Map<string, Subject<NetWorkerResponse>>();
-    private subSubs = new Map<string, Subject<NetWorkerSub>>();
+    private responseSubs = new Map<string, Subject<NWResponse>>();
+    private subSubs = new Map<string, Subject<NWSubMessage>>();
 
-    public postMessageToWorker(message: NetWorkerRequest): Subject<NetWorkerResponse> {
+
+    public postMessageToWorker(message: NWRequest): Subject<NWResponse> {
         if (!this.isInit || !this.worker) {
             throw ("!! Worker was not inited");
         }
-        const sub = new Subject<NetWorkerResponse>();
+        const sub = new Subject<NWResponse>();
         if (!message.guid) {
             message.guid = v4();
         }
@@ -25,11 +26,11 @@ export class NetWorkerService extends BaseWorkerService<NetWorkerRequest, NetWor
         return sub;
     }
 
-    public initSub(message: NetWorkerRequestSub): Subject<NetWorkerSub> {
+    public requestSub(message: NWRequestSub): Subject<NWSubMessage> {
         if (!this.isInit || !this.worker) {
             throw ("!! Worker was not inited");
         }
-        const sub = new Subject<NetWorkerSub>();
+        const sub = new Subject<NWSubMessage>();
         if (!message.guid) {
             message.guid = v4();
         }
@@ -38,7 +39,7 @@ export class NetWorkerService extends BaseWorkerService<NetWorkerRequest, NetWor
         return sub;
     }
 
-    protected handleMessage(message: NetWorkerResponse | NetWorkerSub) {
+    protected handleMessage(message: NWResponse | NWSubMessage) {
         if (!message.guid) {
             throw ("!! Worker message has no id");
         }

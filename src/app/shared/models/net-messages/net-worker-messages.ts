@@ -1,4 +1,5 @@
-﻿import { NotificationMessage } from "src/app/core/common/models/notification.models";
+﻿import { Subject } from "rxjs";
+import { NotificationMessage } from "src/app/core/common/models/notification.models";
 import { BaseWorkerMessage } from "../base-worker-message";
 import { AvailableBaseAdditionInfo } from "../server-models/AvailableBaseAdditionInfo";
 import { AvailableNormativeBaseType, BaseType } from "../server-models/AvailableNormativeBaseType";
@@ -26,32 +27,32 @@ export enum NetSubTypes {
 
 ///////////////////////////////////////////////////////////////////////////
 
-export interface NetWorkerRequestBase<T extends NetMessageTypes> extends BaseWorkerMessage {
+export interface NWRequestBase<T extends NetMessageTypes> extends BaseWorkerMessage {
   messageType: T,
 }
 
-export interface NetWorkerInitSubBase<T extends NetSubTypes> extends BaseWorkerMessage {
+export interface NWInitSubBase<T extends NetSubTypes> extends BaseWorkerMessage {
   messageType: T,
 }
 // ///////////////////////////////////////////////////////////////////////////////////////////////
 
-export interface NetWorkerRequestAvailableBaseTypes extends NetWorkerRequestBase<NetMessageTypes.getAvailableBaseTypes> {
+export interface NWRequestAvailableBaseTypes extends NWRequestBase<NetMessageTypes.getAvailableBaseTypes> {
 }
-export interface NetWorkerRequestAvailableBases extends NetWorkerRequestBase<NetMessageTypes.getAvailableNormoBases> {
+export interface NWRequestAvailableBases extends NWRequestBase<NetMessageTypes.getAvailableNormoBases> {
   data: { type: BaseType },
 }
 
-export interface NetWorkerAddAvailableBases extends NetWorkerRequestBase<NetMessageTypes.managerAddNodes> {
+export interface NWAddAvailableBases extends NWRequestBase<NetMessageTypes.managerAddNodes> {
   data: { rootNodes: AvailableNormativeBaseType[] },
 }
-export interface NetWorkerRemoveAvailableBases extends NetWorkerRequestBase<NetMessageTypes.managerRemoveNodes> {
+export interface NWRemoveAvailableBases extends NWRequestBase<NetMessageTypes.managerRemoveNodes> {
   data: { guids: string[] },
 }
-export interface NetWorkerEditAvailableBases extends NetWorkerRequestBase<NetMessageTypes.managerEditNodes> {
+export interface NWEditAvailableBases extends NWRequestBase<NetMessageTypes.managerEditNodes> {
   data: { rootNodes: AvailableNormativeBaseType[], normoNodes: AvailableBaseAdditionInfo[] },
 }
 
-export interface NetWorkerRequestUploadFormuls extends NetWorkerRequestBase<NetMessageTypes.sendFormulsUpload> {
+export interface NWRequestUploadFormuls extends NWRequestBase<NetMessageTypes.sendFormulsUpload> {
   data: {
     file: File,
     addonNumber: number,
@@ -61,7 +62,7 @@ export interface NetWorkerRequestUploadFormuls extends NetWorkerRequestBase<NetM
   }
 }
 
-export interface NetWorkerRequestUploadNormatives extends NetWorkerRequestBase<NetMessageTypes.sendNormativesUpload> {
+export interface NWRequestUploadNormatives extends NWRequestBase<NetMessageTypes.sendNormativesUpload> {
   data: {
     fileNormatives: File,
     fileFormuls?: File,
@@ -76,21 +77,21 @@ export interface NetWorkerRequestUploadNormatives extends NetWorkerRequestBase<N
   }
 }
 
-export interface NetWorkerRequestInit extends NetWorkerRequestBase<NetMessageTypes.init> {
+export interface NWRequestInit extends NWRequestBase<NetMessageTypes.init> {
 }
 
-export type NetWorkerRequest = NetWorkerRequestAvailableBaseTypes | NetWorkerRequestAvailableBases
-  | NetWorkerRequestInit | NetWorkerRequestUploadFormuls | NetWorkerRequestUploadNormatives
-  | NetWorkerAddAvailableBases | NetWorkerRemoveAvailableBases | NetWorkerEditAvailableBases;
+export type NWRequest = NWRequestAvailableBaseTypes | NWRequestAvailableBases
+  | NWRequestInit | NWRequestUploadFormuls | NWRequestUploadNormatives
+  | NWAddAvailableBases | NWRemoveAvailableBases | NWEditAvailableBases;
 //////////////////////////////////////////////////////////
 
-export interface NetWorkerRequestNotificationSub extends NetWorkerInitSubBase<NetSubTypes.notificationSub> {
+export interface NWRequestNotificationSub extends NWInitSubBase<NetSubTypes.notificationSub> {
 }
 
-export interface NetWorkerRequestCloseAllSubs extends NetWorkerInitSubBase<NetSubTypes.closeAllSubs> {
+export interface NWRequestCloseAllSubs extends NWInitSubBase<NetSubTypes.closeAllSubs> {
 }
 
-export type NetWorkerRequestSub = NetWorkerRequestNotificationSub | NetWorkerRequestCloseAllSubs;
+export type NWRequestSub = NWRequestNotificationSub | NWRequestCloseAllSubs;
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -98,50 +99,40 @@ export type NetWorkerRequestSub = NetWorkerRequestNotificationSub | NetWorkerReq
 ///////////////////////////////////////////////////////////////////////////
 
 /** Ответное сообщение с воркера */
-export interface NetWorkerResponseBase<T extends NetMessageTypes> extends BaseWorkerMessage {
+export interface NWResponseBase<T extends NetMessageTypes> extends BaseWorkerMessage {
   messageType: T,
   isSub: false,
 
 }
-export interface NetWorkerSubBase<T extends NetSubTypes> extends BaseWorkerMessage {
+export interface NWSubMessageBase<T extends NetSubTypes> extends BaseWorkerMessage {
   messageType: T,
   isSub: true,
 }
+
 // ///////////////////////////////////////////////////////////////////////////////////////////////
 
-export interface NetWorkerResponseAvailableBaseTypes extends NetWorkerResponseBase<NetMessageTypes.getAvailableBaseTypes> {
+export interface NWResponseAvailableBaseTypes extends NWResponseBase<NetMessageTypes.getAvailableBaseTypes> {
   data: AvailableNormativeBaseType[] | null;
 }
-export interface NetWorkerResponseAvailableBases extends NetWorkerResponseBase<NetMessageTypes.getAvailableNormoBases> {
+export interface NWResponseAvailableBases extends NWResponseBase<NetMessageTypes.getAvailableNormoBases> {
   data: AvailableBaseAdditionInfo[] | null;
 }
-export interface NetWorkerResponseUploadFormuls extends NetWorkerResponseBase<NetMessageTypes.sendFormulsUpload> {
+export interface NWResponseUploadFormuls extends NWResponseBase<NetMessageTypes.sendFormulsUpload> {
 }
-export interface NetWorkerResponseUploadNormatives extends NetWorkerResponseBase<NetMessageTypes.sendNormativesUpload> {
+export interface NWResponseUploadNormatives extends NWResponseBase<NetMessageTypes.sendNormativesUpload> {
 }
-export interface NetWorkerResponseCommon extends NetWorkerResponseBase<NetMessageTypes.init
+export interface NWResponseCommon extends NWResponseBase<NetMessageTypes.init
   | NetMessageTypes.managerAddNodes | NetMessageTypes.managerRemoveNodes | NetMessageTypes.managerEditNodes> {
 }
 
-export type NetWorkerResponse = NetWorkerResponseAvailableBaseTypes | NetWorkerResponseAvailableBases | NetWorkerResponseCommon
-  | NetWorkerResponseUploadFormuls | NetWorkerResponseUploadNormatives;
+export type NWResponse = NWResponseAvailableBaseTypes | NWResponseAvailableBases | NWResponseCommon
+  | NWResponseUploadFormuls | NWResponseUploadNormatives;
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////
-export interface NetWorkerNotificationSub extends NetWorkerSubBase<NetSubTypes.notificationSub> {
+export interface NWSubNotificationMessage extends NWSubMessageBase<NetSubTypes.notificationSub> {
   data: { message: NotificationMessage }
 }
 
-export type NetWorkerSub = NetWorkerNotificationSub;
-
-// ///////////////////////////////////////////////////////////////////////////////////////////////
-
-export interface NetData<T extends boolean> {
-  isSuccess: T;
+export interface NWSubCommonResponse extends NWSubMessageBase<NetSubTypes.closeAllSubs> {
 }
-
-export interface NetError extends NetData<false> {
-  errorDescription: string;
-}
-
-export interface NetSuccess extends NetData<true> {
-}
+export type NWSubMessage = NWSubNotificationMessage | NWSubCommonResponse;

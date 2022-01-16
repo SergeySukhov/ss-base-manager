@@ -34,8 +34,9 @@
     width: 60%;
     margin: auto;
   }
+  
   .step-button {
-    background-color: mat.get-color-from-palette($primary-palette, 500);
+    background-color: mat.get-color-from-palette($primary-palette, 400);
     margin-right: 10px;
     width: 130px;
     height: 50px;

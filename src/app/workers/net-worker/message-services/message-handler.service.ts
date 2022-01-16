@@ -1,4 +1,4 @@
-﻿import { NetWorkerResponse, NetWorkerRequest, NetWorkerSub, NetWorkerRequestSub } from "src/app/shared/models/net-messages/net-worker-messages";
+﻿import { NWResponse, NWRequest, NWSubMessage, NWRequestSub } from "src/app/shared/models/net-messages/net-worker-messages";
 import { ManagementSystem } from "../main/management.service";
 
 export class MessageHandler {
@@ -10,11 +10,11 @@ export class MessageHandler {
         this.mangementSystem = new ManagementSystem(this);
     }
 
-    toClient(message: NetWorkerResponse | NetWorkerSub) {
+    toClient(message: NWResponse | NWSubMessage) {
         this.worker.postMessage(JSON.stringify(message));
     }
 
-    toWorker(message: NetWorkerRequest | NetWorkerRequestSub) {
+    toWorker(message: NWRequest | NWRequestSub) {
         this.mangementSystem.handleMessage(message);
     }
 

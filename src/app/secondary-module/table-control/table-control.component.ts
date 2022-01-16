@@ -34,8 +34,12 @@ export interface BaseDataView {
 })
 export class TableControlComponent implements OnInit, AfterViewInit {
   @ViewChild(MatTable) table!: MatTable<BaseDataView>;
+  
   @ViewChild(MatSort) sort!: MatSort;
+
+
   @Input() isAwaiting = false;
+
   @Input() set dataSource(value: BaseDataView[]) {
     this.data.splice(0);
     this.data.push(...value);

@@ -7,6 +7,7 @@ import { PrimaryModule } from './primary-module/primary.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthModule } from "./auth.module/auth.module";
 import { CoreModule } from './core/core.module';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,7 @@ import { CoreModule } from './core/core.module';
     BrowserAnimationsModule,
     
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

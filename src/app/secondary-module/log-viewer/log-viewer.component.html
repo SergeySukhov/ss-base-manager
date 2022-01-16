@@ -1,7 +1,7 @@
 <div class="wrapper">
 
     <div class="log" [ngClass]="logTypeClass(log)" *ngFor="let log of logs">
-        <span class="time-log">[{{log.timeStamp}}]</span>
+        <span class="time-log">[ {{log.timeStamp}} ]:</span>
         <span class="serv-log">{{log.fromService}}: </span>
         <span class="mess-log">{{log.message}}</span>
     </div>

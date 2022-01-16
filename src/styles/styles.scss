@@ -3,6 +3,7 @@
 @use '../app/secondary-module/file-loader/file-loader.component.scss' as fileLoader;
 @use '../app/secondary-module/login/login.component.scss' as login;
 @use '../app/secondary-module/toolbar/toolbar.component.scss' as toolbar;
+@use '../app/secondary-module/table-control/table-control.component.scss' as table;
 @import "~@angular/material/theming";
 
 @include mat-core();
@@ -14,14 +15,32 @@
   @include fileLoader.theme($theme);
   @include login.theme($theme);
   @include toolbar.theme($theme);
+  @include table.theme($theme);
 }
 
 $mat-primary-scheme: (
   background: whitesmoke,
   100: #cacff1,
-  300: #c5cae9,
-  400: #6b7de4,
-  500: #697ada,
+  200: #d3d4ff, // +
+  300: #9b96e2, // +
+  400: #9b96e2,
+  500: #4f5681, // +
+  700: #303f9f,
+  contrast: (
+    100: red,
+    300: whitesmoke,
+    500: whitesmoke,
+    700: whitesmoke,
+  ),
+);
+
+$mat-accent-scheme: (
+  background: whitesmoke,
+  100: #cacff1,
+  200: #d3d4ff,
+  300: #9b96e2,
+  400: #7082eb,
+  500: #4f5681,
   700: #303f9f,
   contrast: (
     100: red,
@@ -35,10 +54,10 @@ $mat-primary-scheme-dark: (
   background: #232323,
   background-color: #232323,
   100: #c5cae9,
-  200: #939ee4,
-  300: #737dbe,
+  200: #525377, // +
+  300: #737dbe, // 
   400: #4f5681,
-  500: #4f5681,
+  500: #4f5681, // +
   700: #293586,
   contrast: (
     100: red,

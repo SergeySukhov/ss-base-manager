@@ -1,15 +1,43 @@
-  .wrapper {
+@use 'sass:map';
+@use '@angular/material' as mat;
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}
+@mixin color($theme) {
+  $color-config: mat.get-color-config($theme);
+  $primary-palette: map.get($color-config, 'primary');
+  $accent-palette: map.get($color-config, 'accent');
+  $accentColor: mat.get-color-from-palette($accent-palette, 500);
+  $primaryColor: mat.get-color-from-palette($primary-palette, 300);
+  $primaryColorD: mat.get-color-from-palette($primary-palette, 200);
+
+  th {
+    background-color: $primaryColor !important;
+  }
+
+  .root-row {
+    background: $primaryColorD;
+  }
+}
+
+
+:host .wrapper {
     width: 100%;
     table {
         width: 100%;
       }
     user-select: none;
-  }
+  
   .control-container {
-    height: 50px;
+    min-height: 50px;
     display: flex;
     justify-content: flex-start;
     margin-left: 5px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #80808073;
 
   }
   .control-button {
@@ -25,6 +53,7 @@
     margin: 5px;
     margin-top: 0;
   }
+
   .mat-icon { 
     width: 30px;
   }
@@ -63,9 +92,7 @@
       padding-right: 10px;
     }
   }
-  .root-row {
-    background: #525377;
-  }
+
   .hide-row {
     display: none;
     // transition: all 0.4s ease-in ;
@@ -81,13 +108,6 @@
   .hide-name-value,
   .hide-name-input {
     display: none;
-  }
-
-  .dark-mode, .mat-header-row {
-    background: #323232;
-  }
-  .light-mode, .mat-header-row {
-    background: gray;
   }
 
   .load-spinner-container {
@@ -108,6 +128,7 @@
     flex-direction: column;
     justify-content: center;
   }
+}
 
   .mat-row {
     font-size: 12px;

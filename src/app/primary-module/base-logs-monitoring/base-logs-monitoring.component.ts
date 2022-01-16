@@ -14,15 +14,13 @@ import { BaseLogMonitoringEndpointService } from './services/base-log-monitoring
 })
 export class BaseLogsMonitoringComponent implements OnInit {
 
-  readonly allLogs: NotificationMessage[] = [];
+  public allLogs: NotificationMessage[] = this.notificationService.allLogs;
 
   constructor(private userService: UserService, private endpointService: BaseLogMonitoringEndpointService,
     private notificationService: NotificationService) { }
 
   ngOnInit() {
-    this.notificationService.notificationChange?.subscribe(notification => {
-      this.allLogs.push(notification);
-    });
+    
   }
 
 }

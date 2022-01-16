@@ -15,7 +15,8 @@
     </div>
 
     <div mat-dialog-actions>
-        <button mat-flat-button [mat-dialog-close]="editingCopy" cdkFocusInitial color="primary" [disabled]="!!errorMessage">Принять</button>
+        <button mat-flat-button cdkFocusInitial class="accept-button" color="primary"
+        [mat-dialog-close]="editingCopy" [disabled]="!!errorMessage">Принять</button>
         <button mat-stroked-button (click)="onNoClick()">Отменить</button>
     </div>
 </div>

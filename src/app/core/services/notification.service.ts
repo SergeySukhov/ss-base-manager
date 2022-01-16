@@ -1,7 +1,8 @@
+import { DatePipe } from "@angular/common";
 import { Injectable } from "@angular/core";
 import { MessageService, PrimeNGConfig } from "primeng/api";
 import { Subject } from "rxjs";
-import { NetSubTypes, NetWorkerNotificationSub } from "src/app/shared/models/net-messages/net-worker-messages";
+import { NetSubTypes, NWSubMessage, NWSubNotificationMessage } from "src/app/shared/models/net-messages/net-worker-messages";
 import { NetWorkerService } from "src/app/shared/workers-module/services/net-worker.service";
 import { v4 } from "uuid";
 import { ImoprtanceLevel, NotificationMessage, NotificationType } from "../common/models/notification.models";
@@ -13,10 +14,12 @@ export class NotificationService {
 
     public notificationChange: Subject<NotificationMessage> | null = null;
 
-    private endpointSub: Subject<NetWorkerNotificationSub> | null = null;
+    private endpointSub: Subject<NWSubMessage> | null = null;
+    readonly allLogs: NotificationMessage[] = [];
 
     constructor(
         private messageService: MessageService,
+        private datePipe: DatePipe,
         protected netWorker: NetWorkerService,
     ) {
 
@@ -26,13 +29,18 @@ export class NotificationService {
         if (this.notificationChange !== null) {
             return;
         }
-        this.endpointSub = this.netWorker.initSub({
+        this.endpointSub = this.netWorker.requestSub({
             guid: v4(),
             messageType: NetSubTypes.notificationSub,
             isSub: true,
         });
+        
         this.notificationChange = new Subject<NotificationMessage>();
         this.endpointSub.subscribe(x => {
+            const message = x.data.message as NotificationMessage;
+            message.timeStamp = this.datePipe.transform(Number.parseInt(message.timeStamp), "dd.MM | HH:mm:ss") ?? "";
+
+            this.allLogs.push(message)
             this.notificationChange?.next(x.data.message);
             if (x.data.message.imoprtance === ImoprtanceLevel.high) {
                 this.showNotification(x.data.message, x.data.message.type === NotificationType.error);
@@ -56,6 +64,11 @@ export class NotificationService {
         this.notificationChange = null;
         this.endpointSub?.complete();
         this.endpointSub = null;
+        this.netWorker.requestSub({
+            guid: v4(),
+            messageType: NetSubTypes.closeAllSubs,
+            isSub: true,
+        });
     }
 }
 
