@@ -23,6 +23,7 @@ export interface BaseDataView {
   parentGuid?: string;
   isExpand?: boolean;
   isHide?: boolean;
+  isVirtual?: boolean;
   availableChilds?: AvailabilityNodes[];
   data?: any;
 }

@@ -3,11 +3,12 @@ import { NetMessageTypes } from "src/app/shared/models/net-messages/net-worker-m
 import { AvailableBaseAdditionInfo, } from "src/app/shared/models/server-models/AvailableBaseAdditionInfo";
 import { AvailabilityNodes, AvailableNormativeBaseType, BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { NetWorkerService } from "src/app/shared/workers-module/services/net-worker.service";
+import { environment } from "src/environments/environment";
 import { v4 } from "uuid";
 
 @Injectable()
 export abstract class EndpointBaseService {
-    testServerless = true;
+    testServerless = environment.isTest;
     constructor(protected netWorker: NetWorkerService) {
     }
 
