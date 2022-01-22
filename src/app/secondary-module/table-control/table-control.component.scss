@@ -55,7 +55,7 @@
   }
 
   .mat-icon { 
-    width: 30px;
+    width: 27px;
   }
 
   .show-name-input {
@@ -65,21 +65,19 @@
   }
   .name-input {
     display: flex;
-    width: 400px;
-    min-width: 400px;
-    max-width: 400px;
+    width: 500px;
+    // min-width: 400px;
+    // max-width: 400px;
+    padding-right: 20px;
     height: 100px;
-    max-height: 150px;
+    max-height: 250px;
     min-height: 30px;
     resize: vertical;
   }
 
   .name-value {
     display: flex;
-    min-width: 440px;
-    width: 440px;
-    max-width: 440px;
-
+    padding-right: 20px;
   }
 
   .row-common {
@@ -137,11 +135,13 @@
   .mat-column-select {
     max-width: 64px;
     width: 64px;
+    padding-left: 15px !important;
   }
   .mat-column-name {
     font-size: 12px;
     
-    width: 450px;
+    width: 550px;
+    max-width: 650px;
   }
   .mat-column-baseType {
     width: 350px;
@@ -157,9 +157,9 @@
     width: 140px;
   }
   .mat-column-cancelled {
-    max-width: 150px;
-    min-width: 150px;
-    width: 150px;
+    max-width: 120px;
+    min-width: 120px;
+    width: 120px;
   }
   .mat-column-availableChilds {
     font-size: 12px;

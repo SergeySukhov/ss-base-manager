@@ -277,14 +277,18 @@ isAllSelected() {
 
 rowSelected(value: boolean, row: BaseDataView) {
   if (row.hasChildren) {
-    // this.data.filter(x => x.parentGuid === row.guid).forEach(x => {
-    //   this.rowSelected(value, x);
-    // });
+    this.data.filter(x => x.parentGuid === row.guid).forEach(x => {
+      this.rowSelected(value, x);
+    });
   }
   if (value) {
     this.selection.select(...[row])
   } else {
-    this.selection.deselect(...[row])
+    if (row.parentGuid) {
+      const parent = this.selection.selected.find(x => x.guid === row.parentGuid);
+      if (parent) this.selection.deselect(parent);
+    }
+    this.selection.deselect(row);
   }
 }
 
