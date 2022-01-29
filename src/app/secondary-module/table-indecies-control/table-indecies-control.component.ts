@@ -11,10 +11,10 @@ import { BaseTypePipe } from 'src/app/core/pipes/base-type.pipe';
 import { AddNodeDialogComponent } from 'src/app/shared/common-components/table-node-dialog/add-node-dialog/add-node-dialog.component';
 import { TableControlDialogComponent } from 'src/app/shared/common-components/table-node-dialog/table-control-dialog/table-control-dialog.component';
 
-export interface BaseDataView {
+export interface BaseIndeciesDataView {
   guid: string;
   name: string;
-  availability: boolean | "awaiting";
+  availability: boolean;
   baseTypeName: string;
   isCancelled: boolean;
   isRoot?: boolean;
@@ -29,18 +29,18 @@ export interface BaseDataView {
 
 @Component({
   selector: 'ss-table-control',
-  templateUrl: './table-control.component.html',
-  styleUrls: ['./table-control.component.scss'],
+  templateUrl: './table-indecies-control.component.html',
+  styleUrls: ['./table-indecies-control.component.scss'],
 })
-export class TableControlComponent implements OnInit, AfterViewInit {
-  @ViewChild(MatTable) table!: MatTable<BaseDataView>;
+export class TableIndeciesControlComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatTable) table!: MatTable<BaseIndeciesDataView>;
   
   @ViewChild(MatSort) sort!: MatSort;
 
 
   @Input() isAwaiting = false;
 
-  @Input() set dataSource(value: BaseDataView[]) {
+  @Input() set dataSource(value: BaseIndeciesDataView[]) {
     this.data.splice(0);
     this.data.push(...value);
     if (this.table) {
@@ -48,7 +48,7 @@ export class TableControlComponent implements OnInit, AfterViewInit {
     }
     this.updateAllAvailableState();
   }
-  @Input() set updNode(value: BaseDataView | null) {
+  @Input() set updNode(value: BaseIndeciesDataView | null) {
     if (!value) {
       return;
     }
@@ -59,20 +59,20 @@ export class TableControlComponent implements OnInit, AfterViewInit {
 
 }
 
-@Output() onAddNodes = new EventEmitter<{ viewData: BaseDataView, type: BaseType }[]>();
-@Output() onRemoveNodes = new EventEmitter<BaseDataView[]>();
-@Output() onEditedNodes = new EventEmitter<BaseDataView[]>();
+@Output() onAddNodes = new EventEmitter<{ viewData: BaseIndeciesDataView, type: BaseType }[]>();
+@Output() onRemoveNodes = new EventEmitter<BaseIndeciesDataView[]>();
+@Output() onEditedNodes = new EventEmitter<BaseIndeciesDataView[]>();
 
 
 availabilityNodes = AvailabilityNodes;
 allAvailableState: "checked" | "unchecked" | "mixed" = "mixed";
 
-editingRow: BaseDataView | null = null;
-data: BaseDataView[] = [];
+editingRow: BaseIndeciesDataView | null = null;
+data: BaseIndeciesDataView[] = [];
 dataSourceTest = new MatTableDataSource(this.data);
 
 displayedColumns: string[] = ['select', 'name', 'availability', 'baseType', 'cancelled', 'availableChilds', "handleEdit"];
-selection = new SelectionModel<BaseDataView>(true, []);
+selection = new SelectionModel<BaseIndeciesDataView>(true, []);
 
 constructor(public dialog: MatDialog, private baseTypePipe: BaseTypePipe) {
 }
@@ -121,7 +121,7 @@ announceSortChange(sortState: any) {
   this.table.renderRows();
 }
 
-onRootExpandClick(row: BaseDataView) {
+onRootExpandClick(row: BaseIndeciesDataView) {
   row.isExpand = !row.isExpand;
   if (row.isExpand) {
     this.showChildrenRows(row.guid);
@@ -143,7 +143,7 @@ hideChildrenRows(parentGuid: string) {
   });
 }
 
-toggleChange(value: boolean, rowData: BaseDataView) {
+toggleChange(value: boolean, rowData: BaseIndeciesDataView) {
   if (!!rowData.isRoot) {
     rowData.availability = value;
     this.onEditedNodes.emit([rowData]);
@@ -152,7 +152,6 @@ toggleChange(value: boolean, rowData: BaseDataView) {
       this.toggleChange(value, x);
     });
   } else {
-    rowData.availability = "awaiting";
     setTimeout(() => {
       rowData.availability = value;
       this.onEditedNodes.emit([rowData]);
@@ -171,7 +170,7 @@ toggleGlobalChange(isAllAvailable: boolean) {
   this.onEditedNodes.emit(this.data);
 }
 
-startNameEdit(row: BaseDataView, editInput: any) {
+startNameEdit(row: BaseIndeciesDataView, editInput: any) {
   setTimeout(() => {
     editInput.focus();
   });
@@ -206,7 +205,7 @@ addData() {
       return;
     }
 
-    const newNode: BaseDataView = {
+    const newNode: BaseIndeciesDataView = {
       guid: v4(),
       availability: false,
       name: this.baseTypePipe.transform(result),
@@ -241,12 +240,12 @@ removeData() {
   this.updateAllAvailableState();
 }
 
-toggleAvailableChildChange(event: MatCheckboxChange, row: BaseDataView) {
+toggleAvailableChildChange(event: MatCheckboxChange, row: BaseIndeciesDataView) {
   // TODO:
 
 }
 
-toggleCancelChange(value: boolean, row: BaseDataView) {
+toggleCancelChange(value: boolean, row: BaseIndeciesDataView) {
   row.isCancelled = value;
   this.onEditedNodes.emit([row]);
 
@@ -261,7 +260,7 @@ masterToggle() {
   this.selection.select(...this.data.filter(this.filterDataSource));
 }
 
-checkboxLabel(row ?: BaseDataView): string {
+checkboxLabel(row ?: BaseIndeciesDataView): string {
   if (!row) {
     return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
   }
@@ -274,7 +273,7 @@ isAllSelected() {
   return numSelected === numRows;
 }
 
-rowSelected(value: boolean, row: BaseDataView) {
+rowSelected(value: boolean, row: BaseIndeciesDataView) {
   if (row.hasChildren) {
     this.data.filter(x => x.parentGuid === row.guid).forEach(x => {
       this.rowSelected(value, x);
@@ -291,15 +290,15 @@ rowSelected(value: boolean, row: BaseDataView) {
   }
 }
 
-onRowClick(row: BaseDataView) {
+onRowClick(row: BaseIndeciesDataView) {
   this.rowSelected(!this.selection.isSelected(row), row)
 }
 
-isIncludeChildNodes(nodeType: AvailabilityNodes, row: BaseDataView): boolean {
+isIncludeChildNodes(nodeType: AvailabilityNodes, row: BaseIndeciesDataView): boolean {
   return !!row.availableChilds?.includes(nodeType);
 }
 
-onHandleEdit(row: BaseDataView) {
+onHandleEdit(row: BaseIndeciesDataView) {
   const forbiddenKeys = ["guid", "type", "isAvailable", "parentBaseType"]
   const dialogRef = this.dialog.open(TableControlDialogComponent, {
     width: '650px',
@@ -314,10 +313,10 @@ onHandleEdit(row: BaseDataView) {
     this.onEditedNodes.emit([row]);
   });
 }
-  private sortName(a: BaseDataView, b: BaseDataView): number {
+  private sortName(a: BaseIndeciesDataView, b: BaseIndeciesDataView): number {
   return a.name === b.name ? 0 : a.name > b.name ? 1 : -1;
 }
-  private sortType(a: BaseDataView, b: BaseDataView): number {
+  private sortType(a: BaseIndeciesDataView, b: BaseIndeciesDataView): number {
   return a.name === b.name ? 0 : a.name > b.name ? 1 : -1;
 }
   private updateAllAvailableState() {
@@ -326,7 +325,7 @@ onHandleEdit(row: BaseDataView) {
   this.allAvailableState = allAvailable ? "checked" : (noAvailable ? "unchecked" : "mixed");
 }
 
-  private filterDataSource(value: BaseDataView): boolean {
+  private filterDataSource(value: BaseIndeciesDataView): boolean {
   return true;
 }
 }

@@ -36,6 +36,7 @@ import { LogViewerComponent } from './log-viewer/log-viewer.component';
 import { NotificationComponent } from './notification/notification.component';
 import { AddNodeDialogComponent } from '../shared/common-components/table-node-dialog/add-node-dialog/add-node-dialog.component';
 import { TableControlDialogComponent } from '../shared/common-components/table-node-dialog/table-control-dialog/table-control-dialog.component';
+import { TableIndeciesControlComponent } from './table-indecies-control/table-indecies-control.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { TableControlDialogComponent } from '../shared/common-components/table-n
     AddNodeDialogComponent,
     LogViewerComponent,
     NotificationComponent,
+    TableIndeciesControlComponent
   ],
   exports: [
     ListSelectorComponent,
@@ -64,7 +66,7 @@ import { TableControlDialogComponent } from '../shared/common-components/table-n
     TableControlDialogComponent,
     AddNodeDialogComponent,
     LogViewerComponent,
-
+    TableIndeciesControlComponent,
   ],
   imports: [
     CommonModule,
