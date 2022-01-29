@@ -1,0 +1,174 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}
+@mixin color($theme) {
+  $color-config: mat.get-color-config($theme);
+  $primary-palette: map.get($color-config, 'primary');
+  $accent-palette: map.get($color-config, 'accent');
+  $accentColor: mat.get-color-from-palette($accent-palette, 500);
+  $primaryColor: mat.get-color-from-palette($primary-palette, 300);
+  $primaryColorD: mat.get-color-from-palette($primary-palette, 200);
+
+  th {
+    background-color: $primaryColor !important;
+  }
+
+  .root-row {
+    background: $primaryColorD;
+  }
+}
+
+
+:host .wrapper {
+    width: 100%;
+    table {
+        width: 100%;
+      }
+    user-select: none;
+  
+  .control-container {
+    min-height: 50px;
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 5px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #80808073;
+
+  }
+  .control-button {
+    width: 150px;
+    margin: 5px;
+    margin-left: 0;
+  }
+
+  .example-container {
+    height: 100%;
+    overflow: auto;
+    position: relative;
+    margin: 5px;
+    margin-top: 0;
+  }
+
+  .mat-icon { 
+    width: 27px;
+  }
+
+  .show-name-input {
+    display: flex !important;
+    z-index: 99;
+    max-height: 30px;
+  }
+  .name-input {
+    display: flex;
+    width: 500px;
+    // min-width: 400px;
+    // max-width: 400px;
+    padding-right: 20px;
+    height: 100px;
+    max-height: 250px;
+    min-height: 30px;
+    resize: vertical;
+  }
+
+  .name-value {
+    display: flex;
+    padding-right: 20px;
+  }
+
+  .row-common {
+    transition: all 0.5s ease-in ;
+    height: 48px;
+    opacity: 1;
+
+    span {
+      display: flex;
+      padding-right: 10px;
+    }
+  }
+
+  .hide-row {
+    display: none;
+    // transition: all 0.4s ease-in ;
+    // height:  0 !important;
+    // opacity: 0;
+    // border: none;
+    // * {
+    //   height:  0 !important;
+    //   opacity: 0;
+    //   font-size: 0;
+    // }
+  }
+  .hide-name-value,
+  .hide-name-input {
+    display: none;
+  }
+
+  .load-spinner-container {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    margin-top: 10px;
+  }
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    width: 275px;
+  }
+
+  .centred {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+  .mat-row {
+    font-size: 12px;
+  }
+
+  .mat-column-select {
+    max-width: 64px;
+    width: 64px;
+    padding-left: 15px !important;
+  }
+  .mat-column-name {
+    font-size: 12px;
+    
+    width: 550px;
+    max-width: 650px;
+  }
+  .mat-column-baseType {
+    width: 350px;
+    font-size: 12px;
+    
+    max-width: 350px;
+  }
+  .mat-column-availability {
+    font-size: 12px;
+
+    max-width: 140px;
+    min-width: 140px;
+    width: 140px;
+  }
+  .mat-column-cancelled {
+    max-width: 120px;
+    min-width: 120px;
+    width: 120px;
+  }
+  .mat-column-availableChilds {
+    font-size: 12px;
+    width: 300px;
+    max-width: 300px;
+    min-width: 300px;
+  }
+  
+  th.mat-sort-header-sorted {
+    color: black;
+  }
+

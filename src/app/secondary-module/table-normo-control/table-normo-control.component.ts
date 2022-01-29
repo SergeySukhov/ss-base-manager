@@ -6,11 +6,10 @@ import { v4 } from 'uuid';
 import { AvailabilityNodes, BaseType } from 'src/app/shared/models/server-models/AvailableNormativeBaseType';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
-import { TableControlDialogComponent } from './table-control-dialog/table-control-dialog.component';
 import { MatSort, Sort } from '@angular/material/sort';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { AddNodeDialogComponent } from './table-add-node-dialog/add-node-dialog/add-node-dialog.component';
 import { BaseTypePipe } from 'src/app/core/pipes/base-type.pipe';
+import { AddNodeDialogComponent } from 'src/app/shared/common-components/table-node-dialog/add-node-dialog/add-node-dialog.component';
+import { TableControlDialogComponent } from 'src/app/shared/common-components/table-node-dialog/table-control-dialog/table-control-dialog.component';
 
 export interface BaseDataView {
   guid: string;
@@ -30,10 +29,10 @@ export interface BaseDataView {
 
 @Component({
   selector: 'ss-table-control',
-  templateUrl: './table-control.component.html',
-  styleUrls: ['./table-control.component.scss'],
+  templateUrl: './table-normo-control.component.html',
+  styleUrls: ['./table-normo-control.component.scss'],
 })
-export class TableControlComponent implements OnInit, AfterViewInit {
+export class TableNormoControlComponent implements OnInit, AfterViewInit {
   @ViewChild(MatTable) table!: MatTable<BaseDataView>;
   
   @ViewChild(MatSort) sort!: MatSort;

@@ -2,6 +2,7 @@
 import { NotificationMessage } from "src/app/core/common/models/notification.models";
 import { BaseWorkerMessage } from "../base-worker-message";
 import { AvailableBaseAdditionInfo } from "../server-models/AvailableBaseAdditionInfo";
+import { AvailableBaseIndexInfo } from "../server-models/AvailableBaseIndexInfo";
 import { AvailableNormativeBaseType, BaseType } from "../server-models/AvailableNormativeBaseType";
 
 export enum NetMessageTypes {
@@ -49,7 +50,11 @@ export interface NWRemoveAvailableBases extends NWRequestBase<NetMessageTypes.ma
   data: { guids: string[] },
 }
 export interface NWEditAvailableBases extends NWRequestBase<NetMessageTypes.managerEditNodes> {
-  data: { rootNodes: AvailableNormativeBaseType[], normoNodes: AvailableBaseAdditionInfo[] },
+  data: {
+    rootNodes?: AvailableNormativeBaseType[],
+    normoNodes?: AvailableBaseAdditionInfo[],
+    indexNodes?: AvailableBaseIndexInfo[],
+  },
 }
 
 export interface NWRequestUploadFormuls extends NWRequestBase<NetMessageTypes.sendFormulsUpload> {

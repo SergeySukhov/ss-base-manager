@@ -5,6 +5,6 @@ export const environment = {
   formuls: "http://localhost:5002/",
   manager: "http://localhost:5001/",
   logger: "http://localhost:5008/ntfy",
-  isTest: false
+  isTest: true
 
 };

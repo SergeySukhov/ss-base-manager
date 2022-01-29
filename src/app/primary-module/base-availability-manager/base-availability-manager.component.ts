@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BaseDataView } from 'src/app/secondary-module/table-control/table-control.component';
+import { BaseDataView as BaseDataView } from 'src/app/secondary-module/table-normo-control/table-normo-control.component';
 import { AvailableBaseAdditionInfo } from 'src/app/shared/models/server-models/AvailableBaseAdditionInfo';
 import { AvailabilityNodes, AvailableNormativeBaseType, BaseType } from 'src/app/shared/models/server-models/AvailableNormativeBaseType';
 import { AvailabilityBaseEndpointService } from './services/availability-base.endpoint.service';
@@ -15,7 +15,8 @@ import { AvailabilityBaseEndpointService } from './services/availability-base.en
 export class BaseAvailabilityManagerComponent implements OnInit {
 
   isLoading = false;
-  data: BaseDataView[] = [];
+  normativeData: BaseDataView[] = [];
+  /** Обновление внутренних данных узла при добавлении */
   updNode: BaseDataView | null = null;
 
   constructor(private endpointService: AvailabilityBaseEndpointService) {
@@ -79,11 +80,11 @@ export class BaseAvailabilityManagerComponent implements OnInit {
         });
       }
     }
-    this.data = viewBaseModel;
+    this.normativeData = viewBaseModel;
     this.isLoading = false;
   }
 
-  handleAddNodes(nodes: {viewData: BaseDataView, type: BaseType}[]) {
+  handleAddRootNodes(nodes: { viewData: BaseDataView, type: BaseType }[]) {
     this.endpointService.sendAddNodes(nodes.map(x => {
       const mappedRootNode: AvailableNormativeBaseType = {
         guid: x.viewData.guid,
@@ -103,25 +104,29 @@ export class BaseAvailabilityManagerComponent implements OnInit {
     this.endpointService.sendRemoveNodes(nodes.map(x => x.guid));
   }
 
-  handleEditNodes(nodes: BaseDataView[]) {
+  handleEditRootAndNormoNodes(nodes: BaseDataView[]) {
     const rootNodes = nodes.filter(x => !!x.isRoot);
     const normoNodes = nodes.filter(x => !x.isRoot);
 
-    this.endpointService.sendEditNodes(rootNodes.map(x => {
+    this.endpointService.sendRootEditNodes(rootNodes.map(x => {
       const mappedRootNode: AvailableNormativeBaseType = x.data;
-      
+
       mappedRootNode.availabilityNodes = x.availableChilds ?? [];
       mappedRootNode.isAvailable = !!x.availability;
       mappedRootNode.isCancelled = x.isCancelled;
       mappedRootNode.typeName = x.name;
+
       return mappedRootNode;
-    }),
-      normoNodes.map(x => {
-        const mappedNormoNode: AvailableBaseAdditionInfo = x.data;
-        mappedNormoNode.name = x.name;
-        mappedNormoNode.isAvailable = !!x.availability;
-        mappedNormoNode.isCancelled = x.isCancelled;
-        return mappedNormoNode;
-      }));
+    }));
+
+    this.endpointService.sendNormoEditNodes(normoNodes.map(x => {
+      const mappedNormoNode: AvailableBaseAdditionInfo = x.data;
+      mappedNormoNode.name = x.name;
+      mappedNormoNode.isAvailable = !!x.availability;
+      mappedNormoNode.isCancelled = x.isCancelled;
+      return mappedNormoNode;
+    }));
+
   }
+
 }

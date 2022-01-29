@@ -25,17 +25,17 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { TableControlComponent } from './table-control/table-control.component';
+import { TableNormoControlComponent } from './table-normo-control/table-normo-control.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatTreeModule } from "@angular/material/tree";
 import { PreviewComponent } from './preview/preview.component';
-import { TableControlDialogComponent } from './table-control/table-control-dialog/table-control-dialog.component';
 import { A11yModule } from '@angular/cdk/a11y';
 import { MatSortModule } from '@angular/material/sort';
-import { AddNodeDialogComponent } from './table-control/table-add-node-dialog/add-node-dialog/add-node-dialog.component';
 import { BaseTypePipe } from '../core/pipes/base-type.pipe';
 import { LogViewerComponent } from './log-viewer/log-viewer.component';
 import { NotificationComponent } from './notification/notification.component';
+import { AddNodeDialogComponent } from '../shared/common-components/table-node-dialog/add-node-dialog/add-node-dialog.component';
+import { TableControlDialogComponent } from '../shared/common-components/table-node-dialog/table-control-dialog/table-control-dialog.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +45,7 @@ import { NotificationComponent } from './notification/notification.component';
     DndDirective,
     LoginComponent,
     ToolbarComponent,
-    TableControlComponent,
+    TableNormoControlComponent,
     PreviewComponent,
     TableControlDialogComponent,
     AddNodeDialogComponent,
@@ -59,7 +59,7 @@ import { NotificationComponent } from './notification/notification.component';
     DndDirective,
     LoginComponent,
     ToolbarComponent,
-    TableControlComponent,
+    TableNormoControlComponent,
     PreviewComponent,
     TableControlDialogComponent,
     AddNodeDialogComponent,

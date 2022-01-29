@@ -1,0 +1,167 @@
+<div class="wrapper" >
+    <div class="control-container">
+        <button class="control-button" mat-stroked-button [disabled]="isAwaiting"
+            (click)="addData()">Добавить узел
+        </button>
+        <button class="control-button" mat-stroked-button [disabled]="!selection.selected?.length"
+            (click)="removeData()">Удалить узел
+        </button>
+    </div>
+    <div class="example-container mat-elevation-z8" *ngIf="!isAwaiting">
+        <table mat-table [dataSource]="data" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                    </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <span style="display: flex; justify-content: space-between; width: 60px; line-height: 24px;">
+
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="rowSelected($event.checked, row)" [checked]="selection.isSelected(row)"
+                            [aria-label]="checkboxLabel(row)">
+                        </mat-checkbox>
+
+                        <mat-icon (click)="$event.stopPropagation();onRootExpandClick(row)" *ngIf="row.hasChildren && row.isRoot"
+                            class="mat-icon-rtl-mirror tree-icon">
+                            {{row.isExpand ? 'expand_more' : 'chevron_right'}}
+                        </mat-icon>
+                    </span>
+                </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Наименование базы </th>
+                <td mat-cell *matCellDef="let element">
+                    <span>
+                        <div [ngClass]="{'hide-name-value': editingRow?.guid === element.guid}" class="name-value">
+                            <div (click)="$event.stopPropagation();startNameEdit(element, editInput)">{{element.name}}
+                            </div>
+                        </div>
+                        <div [ngClass]="{'show-name-input': editingRow?.guid === element.guid}" class="hide-name-input"
+                            (click)="$event.stopPropagation();">
+                                <textarea  matInput #editInput class="name-input" autofocus autocomplete="off" type="text"
+                                    (blur)="finishEditing('', true)" (keyup)="onNameEditing($event, editInput.value)">
+                                </textarea>
+                        </div>
+                    </span>
+                </td>
+            </ng-container>
+
+            <!-- availability Column -->
+            <ng-container matColumnDef="availability" >
+                <th mat-header-cell *matHeaderCellDef>
+                    <div class="centred">
+                    Доступность
+                   <br>
+                   <mat-checkbox
+                        (click)="$event.stopPropagation()"
+                        [checked]="allAvailableState === 'checked'"
+                        [disabled]="allAvailableState === 'checked'"
+                        [indeterminate]="allAvailableState === 'mixed'"
+                        (change)="toggleGlobalChange(true)">
+                        Все доступны
+                   </mat-checkbox>
+                   <mat-checkbox
+                        (click)="$event.stopPropagation()"
+                        [checked]="allAvailableState === 'unchecked'"
+                        [disabled]="allAvailableState === 'unchecked'"
+                        [indeterminate]="allAvailableState === 'mixed'"
+                        (change)="toggleGlobalChange(false)">
+                       Все недоступны
+                  </mat-checkbox>
+                </div>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    <span>
+                    <div class="centred">
+                            <mat-slide-toggle (click)="$event.stopPropagation()"
+                                (change)="toggleChange($event.checked, element)"
+                                *ngIf="element.availability !== 'awaiting'" [checked]="element.availability"
+                                labelPosition="after">{{element.availability ? "Доступна" : "Недоступна"}}
+                            </mat-slide-toggle>
+                            <mat-progress-spinner color="accent" diameter="30"
+                                *ngIf="element.availability === 'awaiting'" mode="indeterminate">
+                            </mat-progress-spinner>
+                        </div>
+                    </span>
+                </td>
+            </ng-container>
+            <!-- baseType Column -->
+            <ng-container matColumnDef="baseType">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Тип базы </th>
+                <td mat-cell *matCellDef="let element">
+                    <span>
+                        {{element.baseTypeName}}
+                    </span>
+                 </td>
+            </ng-container>
+
+            <!-- cancelled Column -->
+            <ng-container matColumnDef="cancelled">
+                <th mat-header-cell *matHeaderCellDef> Отменена </th>
+                <td mat-cell *matCellDef="let element">
+                    <span style="margin: 10px;">
+                        <mat-checkbox style="margin-left: 10px;"
+                            [checked]="element.isCancelled"
+                            (click)="$event.stopPropagation()"
+                            (change)="toggleCancelChange($event.checked, element)">
+                   </mat-checkbox>
+                    </span>
+                 </td>
+            </ng-container>
+            
+            <!-- availableChilds Column -->
+            <ng-container matColumnDef="availableChilds">
+                <th mat-header-cell *matHeaderCellDef> Доступные дочерние типы </th>
+                <td mat-cell *matCellDef="let element">
+                     <span *ngIf="!!element.isRoot">
+                         <div class="button-group">
+                                <mat-checkbox
+                                 [checked]="isIncludeChildNodes(availabilityNodes.Normatives, element)"
+                                 (change)="toggleAvailableChildChange($event, element)">
+                                    Нормативы
+                                </mat-checkbox>
+                                <mat-checkbox
+                                 [checked]="isIncludeChildNodes(availabilityNodes.Indexes, element)"
+                                 (change)="toggleAvailableChildChange($event, element)">
+                                    Индексы
+                                </mat-checkbox>
+                                <mat-checkbox
+                                 [checked]="isIncludeChildNodes(availabilityNodes.Corrections, element)"
+                                 (change)="toggleAvailableChildChange($event, element)">
+                                    Поправки
+                                </mat-checkbox>
+                        </div>
+                     </span>
+                     <span *ngIf="!element.isRoot">
+
+                    </span>
+                 </td>
+            </ng-container>
+            <!-- handleEdit Column -->
+            <ng-container matColumnDef="handleEdit">
+                <th mat-header-cell *matHeaderCellDef> Доп. параметры </th>
+                <td mat-cell *matCellDef="let element">
+                    <span *ngIf="!element.isRoot">
+                        <button mat-stroked-button (click)="onHandleEdit(element)"> Редактировать вручную</button>
+                    </span>
+                </td>
+            </ng-container>
+           
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="header-row"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'hide-row': row.isHide}"
+            [ngClass]="{'root-row': row.isRoot}"
+                class="row-common" (click)="onRowClick(row)">
+            </tr>
+        </table>
+    </div>
+    <div class="load-spinner-container" *ngIf="isAwaiting">
+        <mat-progress-spinner diameter="300" mode="indeterminate" color="accent"></mat-progress-spinner>
+    </div>
+</div>
