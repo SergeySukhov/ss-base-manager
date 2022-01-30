@@ -8,6 +8,7 @@ import { AvailableNormativeBaseType, BaseType } from "../server-models/Available
 export enum NetMessageTypes {
   init,
   getAvailableNormoBases,
+  getAvailableIndeciesBases,
   getAvailableBaseTypes,
 
   managerAddNodes,
@@ -40,6 +41,9 @@ export interface NWInitSubBase<T extends NetSubTypes> extends BaseWorkerMessage 
 export interface NWRequestAvailableBaseTypes extends NWRequestBase<NetMessageTypes.getAvailableBaseTypes> {
 }
 export interface NWRequestAvailableBases extends NWRequestBase<NetMessageTypes.getAvailableNormoBases> {
+  data: { type: BaseType },
+}
+export interface NWRequestAvailableIndeciesBases extends NWRequestBase<NetMessageTypes.getAvailableIndeciesBases> {
   data: { type: BaseType },
 }
 
@@ -85,7 +89,7 @@ export interface NWRequestUploadNormatives extends NWRequestBase<NetMessageTypes
 export interface NWRequestInit extends NWRequestBase<NetMessageTypes.init> {
 }
 
-export type NWRequest = NWRequestAvailableBaseTypes | NWRequestAvailableBases
+export type NWRequest = NWRequestAvailableBaseTypes | NWRequestAvailableBases | NWRequestAvailableIndeciesBases
   | NWRequestInit | NWRequestUploadFormuls | NWRequestUploadNormatives
   | NWAddAvailableBases | NWRemoveAvailableBases | NWEditAvailableBases;
 //////////////////////////////////////////////////////////
@@ -122,6 +126,9 @@ export interface NWResponseAvailableBaseTypes extends NWResponseBase<NetMessageT
 export interface NWResponseAvailableBases extends NWResponseBase<NetMessageTypes.getAvailableNormoBases> {
   data: AvailableBaseAdditionInfo[] | null;
 }
+export interface NWResponseAvailableIndeciesBases extends NWResponseBase<NetMessageTypes.getAvailableIndeciesBases> {
+  data: AvailableBaseIndexInfo[] | null;
+}
 export interface NWResponseUploadFormuls extends NWResponseBase<NetMessageTypes.sendFormulsUpload> {
 }
 export interface NWResponseUploadNormatives extends NWResponseBase<NetMessageTypes.sendNormativesUpload> {
@@ -131,7 +138,7 @@ export interface NWResponseCommon extends NWResponseBase<NetMessageTypes.init
 }
 
 export type NWResponse = NWResponseAvailableBaseTypes | NWResponseAvailableBases | NWResponseCommon
-  | NWResponseUploadFormuls | NWResponseUploadNormatives;
+  | NWResponseUploadFormuls | NWResponseUploadNormatives | NWResponseAvailableIndeciesBases;
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////
 export interface NWSubNotificationMessage extends NWSubMessageBase<NetSubTypes.notificationSub> {

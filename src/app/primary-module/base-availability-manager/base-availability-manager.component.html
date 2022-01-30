@@ -1,12 +1,18 @@
 <div class="wrapper">
-    <mat-tab-group>
+    <!-- <ss-table-control [isAwaiting]="isLoading" [dataSource]="normativeData" [updNode]="updNode"
+    (onAddNodes)="handleAddRootNodes($event)" (onRemoveNodes)="handleRemoveNodes($event)"
+    (onEditedNodes)="handleEditRootAndNormoNodes($event)"></ss-table-control> -->
+    <mat-tab-group class="full-height" [selectedIndex]="lastTab"
+        (selectedIndexChange)="onTabChange($event)">
         <mat-tab label="Нормативы">
             <ss-table-control [isAwaiting]="isLoading" [dataSource]="normativeData" [updNode]="updNode"
                 (onAddNodes)="handleAddRootNodes($event)" (onRemoveNodes)="handleRemoveNodes($event)"
                 (onEditedNodes)="handleEditRootAndNormoNodes($event)"></ss-table-control>
         </mat-tab>
         <mat-tab label="Индексы">
-          
+            <ss-indecies-table-control [isAwaiting]="isLoading" [dataSource]="indeciesData">
+
+            </ss-indecies-table-control>
         </mat-tab>
         <mat-tab label="Поправки">
             

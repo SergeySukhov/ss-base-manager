@@ -1,7 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AvailableBaseAdditionInfo } from 'src/app/shared/models/server-models/AvailableBaseAdditionInfo';
-import { BaseDataView } from '../../../secondary-module/table-control/table-control.component';
 
 @Component({
   selector: 'ss-table-control-dialog',

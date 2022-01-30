@@ -36,5 +36,6 @@ export enum LocalStorageConst {
     serverUrls = "serverUrls",
     lastContext = "lastContext",
     userId = "userId",
+    lastControlTab = "lastControlTab",
 
 }

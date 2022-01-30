@@ -26,7 +26,7 @@ export class ManagementSystem extends ManagementSystemBase {
         case NetSubTypes.notificationSub:
           this.hubService.createNotificationSub(request);
           this.createWorkerNotificationSub(request);
-          this.netWorkerEvents.next({message: "Воркер инициализирован", type: NotificationType.info, importance: ImoprtanceLevel.low});
+          this.netWorkerEvents.next({ message: "Воркер инициализирован", type: NotificationType.info, importance: ImoprtanceLevel.low });
           break;
         case NetSubTypes.closeAllSubs:
           this.netWorkerEvents.complete();
@@ -117,8 +117,8 @@ export class ManagementSystem extends ManagementSystemBase {
       isSub: false,
     }
 
-    const sentNodeGuids: string[] = request.data.rootNodes.map(x => x.guid);
-    request.data.rootNodes.forEach(x => {
+    const sentNodeGuids: string[] = request.data.rootNodes?.map(x => x.guid) ?? [];
+    request.data.rootNodes?.forEach(x => {
       const sub = this.managerEditRootNodeCommand(x);
       sub.subscribe(resp => {
         const idx = sentNodeGuids.findIndex(guid => guid === x.guid);
@@ -128,17 +128,19 @@ export class ManagementSystem extends ManagementSystemBase {
         }
       });
     });
-    sentNodeGuids.push(...request.data.normoNodes.map(x => x.guid));
-    request.data.normoNodes.forEach(x => {
-      const sub = this.managerEditNormoNodeCommand(x);
-      sub.subscribe(resp => {
-        const idx = sentNodeGuids.findIndex(guid => guid === x.guid);
-        if (idx > -1) sentNodeGuids.splice(idx, 1);
-        if (!sentNodeGuids.length) {
-          this.messageHandler.toClient(response);
-        }
+    if (request.data.normoNodes) {
+      sentNodeGuids.push(...request.data.normoNodes.map(x => x.guid));
+      request.data.normoNodes?.forEach(x => {
+        const sub = this.managerEditNormoNodeCommand(x);
+        sub.subscribe(resp => {
+          const idx = sentNodeGuids.findIndex(guid => guid === x.guid);
+          if (idx > -1) sentNodeGuids.splice(idx, 1);
+          if (!sentNodeGuids.length) {
+            this.messageHandler.toClient(response);
+          }
+        });
       });
-    });
+    }
   }
 
   private async sendManagerRemoveNodes(request: NWRemoveAvailableBases) {

@@ -3,7 +3,8 @@
 @use '../app/secondary-module/file-loader/file-loader.component.scss' as fileLoader;
 @use '../app/secondary-module/login/login.component.scss' as login;
 @use '../app/secondary-module/toolbar/toolbar.component.scss' as toolbar;
-@use '../app/secondary-module/table-control/table-control.component.scss' as table;
+@use '../app/secondary-module/table-normo-control/table-normo-control.component.scss' as table-normo;
+@use '../app/secondary-module/table-indecies-control/table-indecies-control.component.scss' as table-ind;
 @import "~@angular/material/theming";
 
 @include mat-core();
@@ -15,7 +16,8 @@
   @include fileLoader.theme($theme);
   @include login.theme($theme);
   @include toolbar.theme($theme);
-  @include table.theme($theme);
+  @include table-normo.theme($theme);
+  @include table-ind.theme($theme);
 }
 
 $mat-primary-scheme: (

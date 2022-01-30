@@ -7,9 +7,11 @@
             (click)="removeData()">Удалить узел
         </button>
     </div>
+    <!-- ----------------------------------------------- -->
     <div class="example-container mat-elevation-z8" *ngIf="!isAwaiting">
-        <table mat-table [dataSource]="data" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
-            <!-- Checkbox Column -->
+        <table mat-table [dataSource]="data" matSort  class="mat-elevation-z8">
+
+            <!-- Checkbox Column (matSortChange)="announceSortChange($event)" -->
             <ng-container matColumnDef="select">
                 <th mat-header-cell *matHeaderCellDef>
                     <mat-checkbox (change)="$event ? masterToggle() : null"
@@ -17,6 +19,7 @@
                         [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
                     </mat-checkbox>
                 </th>
+
                 <td mat-cell *matCellDef="let row">
                     <span style="display: flex; justify-content: space-between; width: 60px; line-height: 24px;">
 
@@ -35,9 +38,9 @@
 
             <!-- Name Column -->
             <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Дата индекса </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Индекс </th>
                 <td mat-cell *matCellDef="let element">
-                    <span>
+                    <span *ngIf="element.isRoot">
                         <div [ngClass]="{'hide-name-value': editingRow?.guid === element.guid}" class="name-value">
                             <div (click)="$event.stopPropagation();startNameEdit(element, editInput)">{{element.name}}
                             </div>
@@ -48,6 +51,9 @@
                                     (blur)="finishEditing('', true)" (keyup)="onNameEditing($event, editInput.value)">
                                 </textarea>
                         </div>
+                    </span>
+                    <span *ngIf="!element.isRoot">
+                        <div>!!</div>
                     </span>
                 </td>
             </ng-container>

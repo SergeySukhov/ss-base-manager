@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { NetMessageTypes } from "src/app/shared/models/net-messages/net-worker-messages";
 import { AvailableBaseAdditionInfo, } from "src/app/shared/models/server-models/AvailableBaseAdditionInfo";
+import { AvailableBaseIndexInfo } from "src/app/shared/models/server-models/AvailableBaseIndexInfo";
 import { AvailabilityNodes, AvailableNormativeBaseType, BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { NetWorkerService } from "src/app/shared/workers-module/services/net-worker.service";
 import { environment } from "src/environments/environment";
@@ -84,6 +85,21 @@ export abstract class EndpointBaseService {
             data: { type: baseType },
         });
         const mappedAvailableBases = avNB?.data as AvailableBaseAdditionInfo[]
+        if (!!mappedAvailableBases?.length) {
+            return mappedAvailableBases;
+        } else {
+            return null;
+        }
+    }
+
+    public async getAvailableIndeciesBases(baseType: BaseType): Promise<AvailableBaseIndexInfo[] | null> {
+      
+        const avNB = await this.netWorker.postMessageToWorkerAsync({
+            messageType: NetMessageTypes.getAvailableIndeciesBases,
+            isSub: false,
+            data: { type: baseType },
+        });
+        const mappedAvailableBases = avNB?.data as AvailableBaseIndexInfo[]
         if (!!mappedAvailableBases?.length) {
             return mappedAvailableBases;
         } else {
