@@ -9,15 +9,15 @@ export interface AvailableIndexWorkCategory {
     /// <summary>
     /// Идентификатор к корневому узлу НБ
     /// </summary>
-    AvailableNormativeBaseTypeGuid: string;
+    availableNormativeBaseTypeGuid: string;
     /// <summary>
     /// Имя корневого узел
     /// </summary>
-    ParentIndexName: string;
+    parentIndexName: string;
     /// <summary>
     /// Тип индекса
     /// </summary>
-    WorkCategory: WorkCategory;
+    workCategory: WorkCategory;
 
 }
 

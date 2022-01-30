@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { NetMessageTypes } from "src/app/shared/models/net-messages/net-worker-messages";
 import { AvailableBaseAdditionInfo, } from "src/app/shared/models/server-models/AvailableBaseAdditionInfo";
-import { AvailableBaseIndexInfo } from "src/app/shared/models/server-models/AvailableBaseIndexInfo";
+import { AvailableBaseIndexInfo, ReleasePeriodType } from "src/app/shared/models/server-models/AvailableBaseIndexInfo";
+import { WorkCategory } from "src/app/shared/models/server-models/AvailableIndexWorkCategory";
 import { AvailabilityNodes, AvailableNormativeBaseType, BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { NetWorkerService } from "src/app/shared/workers-module/services/net-worker.service";
 import { environment } from "src/environments/environment";
@@ -93,7 +94,37 @@ export abstract class EndpointBaseService {
     }
 
     public async getAvailableIndeciesBases(baseType: BaseType): Promise<AvailableBaseIndexInfo[] | null> {
-      
+        if (this.testServerless) {
+            const a = new Promise<AvailableBaseIndexInfo[]>((resolve, reject) => {
+                setTimeout(() => {
+                    const a: AvailableBaseIndexInfo = {
+                        guid: v4(),
+                        additionNumber: 1,
+                        isAvailable: true,
+                        isCancelled: false,
+                        type: BaseType.TSN,
+                        releasePeriodType: ReleasePeriodType.Month,
+                        year: 1999,
+                        releasePeriodValue: 2,
+                        techDocPath: "",
+                        availableIndexWorkCategoryGuid: v4(),
+                        parentIndex: {
+                            guid: v4(),
+                            availableNormativeBaseTypeGuid: "",
+                            parentIndexName: "Parent Ind Name",
+                            workCategory: WorkCategory.Build,   
+                        }
+
+                    }
+                    resolve([a
+
+                    ].filter(x => x.type === baseType));
+                }, 100);
+            });
+            return a;
+        }
+
+
         const avNB = await this.netWorker.postMessageToWorkerAsync({
             messageType: NetMessageTypes.getAvailableIndeciesBases,
             isSub: false,

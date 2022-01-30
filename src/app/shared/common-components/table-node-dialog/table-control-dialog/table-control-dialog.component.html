@@ -1,11 +1,25 @@
 <div (keyup)="handleKey($event)">
     <h2 class="title-dialog" mat-dialog-title>Редактирование объекта</h2>
     <div class="table-like" mat-dialog-content>
-        <div *ngFor="let keyValue of objKeyValues" class="pair-row">
+        <div *ngFor="let keyValue of objKeyValues.pairs" class="pair-row">
             <div class="key-col"> {{keyValue.key}}</div>
             <div class="value-col">
                 <input #input [value]="keyValue.value" [disabled]="isKeyDisabled(keyValue.key)"
                     (keyup)="keyValue.value = input.value;valueChange(input.value)">
+            </div>
+        </div>
+        <div class="slave-obj">
+            <span class="slave-title">Дочерние объекты</span>
+            <div class="slave-obj-container" *ngFor="let sObj of slaveObjs">
+                 <span class="slave-key"><span style="font-style: normal">Ключ:</span> {{sObj.key}}</span>
+                
+                <div *ngFor="let keyValue of sObj.pairs" class="pair-row">
+                    <div class="key-col"> {{keyValue.key}}</div>
+                    <div class="value-col">
+                        <input #input [value]="keyValue.value" [disabled]="isKeyDisabled(keyValue.key)"
+                            (keyup)="keyValue.value = input.value;valueChange(input.value)">
+                    </div>
+                </div>
             </div>
         </div>
         <div class="validator-field" [ngClass]="{'validator-error': errorMessage}">

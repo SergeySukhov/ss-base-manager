@@ -327,7 +327,7 @@ export class TableIndeciesControlComponent implements OnInit, AfterViewInit {
   onHandleEdit(row: IndeciesDataViewNode) {
     const forbiddenKeys = ["guid", "type", "isAvailable", "parentBaseType"]
     const dialogRef = this.dialog.open(TableControlDialogComponent, {
-      width: '650px',
+      width: '750px',
       data: { data: row.data, disabledKeys: forbiddenKeys },
     });
 

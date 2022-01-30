@@ -37,6 +37,28 @@
         }
     }
 
+    .slave-obj {
+        border-top: solid 1px gray;
+        margin-top: 10px;
+        padding-top: 10px;
+        display: flex;
+        flex-direction: column;      
+    }
+    .slave-title {
+        font-weight: 500;
+        font-size: 15px;
+        padding-bottom: 10px;
+    }
+    .slave-obj-container {
+        display: flex;
+        flex-direction: column;     
+    }
+    .slave-key {
+        font-weight: 300;
+        padding-bottom: 10px;
+        font-style: italic;
+    }
+
     .validator-field {
         height: 40px;
         width: 100%;
@@ -57,5 +79,10 @@
 
     .accept-button {
         width: 100px;
+    }
+
+    .mat-dialog-content {
+        margin: 0;
+        padding: 0;
     }
 }
