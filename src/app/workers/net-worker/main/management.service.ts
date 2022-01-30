@@ -1,6 +1,6 @@
 ﻿import { Subject } from "rxjs";
 import { ImoprtanceLevel, NotificationType } from "src/app/core/common/models/notification.models";
-import { NWRequest, NetMessageTypes, NWResponse, NWResponseAvailableBases, NWRequestAvailableBases, NWRequestUploadFormuls, NWResponseUploadFormuls, NWRequestUploadNormatives, NWResponseUploadNormatives, NWAddAvailableBases, NWEditAvailableBases, NWRemoveAvailableBases, NWResponseCommon, NWRequestAvailableBaseTypes, NWResponseAvailableBaseTypes, NetSubTypes, NWInitSubBase, NWRequestSub, NWSubMessage, NWRequestNotificationSub } from "src/app/shared/models/net-messages/net-worker-messages";
+import { NWRequest, NetMessageTypes, NWResponse, NWResponseAvailableBases, NWRequestAvailableBases, NWRequestUploadFormuls, NWResponseUploadFormuls, NWRequestUploadNormatives, NWResponseUploadNormatives, NWAddAvailableBases, NWEditAvailableBases, NWRemoveAvailableBases, NWResponseCommon, NWRequestAvailableBaseTypes, NWResponseAvailableBaseTypes, NetSubTypes, NWInitSubBase, NWRequestSub, NWSubMessage, NWRequestNotificationSub, NWRequestAvailableIndeciesBases, NWResponseAvailableIndeciesBases } from "src/app/shared/models/net-messages/net-worker-messages";
 import { AvailableBaseAdditionInfo } from "src/app/shared/models/server-models/AvailableBaseAdditionInfo";
 import { AvailableNormativeBaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { ManagementSystemBase } from "src/app/shared/models/worker-models/management-system-base";
@@ -39,6 +39,9 @@ export class ManagementSystem extends ManagementSystemBase {
           break;
         case NetMessageTypes.getAvailableNormoBases:
           this.sendRequestGetBases(request);
+          break;
+        case NetMessageTypes.getAvailableIndeciesBases:
+          this.sendRequestGetIndeciesBases(request);
           break;
         case NetMessageTypes.getAvailableBaseTypes:
           this.sendRequestGetBasesTypes(request);
@@ -223,6 +226,40 @@ export class ManagementSystem extends ManagementSystemBase {
       if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
         if (sender.status === 200) {
           const senderObj = JSON.parse(sender.response);
+          response.data = senderObj;
+          this.messageHandler.toClient(response);
+        } else {
+          this.errorHandler(response);
+        }
+      }
+    }
+    this.setSenderHandlers(sender, response);
+    sender.send();
+  }
+  
+  private async sendRequestGetIndeciesBases(request: NWRequestAvailableIndeciesBases) {
+    const sender = new XMLHttpRequest();
+    const response: NWResponseAvailableIndeciesBases = {
+      guid: request.guid,
+      messageType: NetMessageTypes.getAvailableIndeciesBases,
+      isSub: false,
+      data: null
+    }
+
+    sender.withCredentials = false;
+
+    // sender.open("GET", environment.manager + "indexinfo/normoBaseType?baseType=" + request.data.type);
+    sender.open("GET", environment.manager + "indexinfo");
+    sender.setRequestHeader('Access-Control-Allow-Origin', '*');
+    sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+    sender.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
+    sender.timeout = 5000;
+
+    sender.onreadystatechange = async () => {
+      if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
+        if (sender.status === 200) {
+          const senderObj = JSON.parse(sender.response);
+          console.log("!! | sender.onreadystatechange= | sender.response", sender.response)
           response.data = senderObj;
           this.messageHandler.toClient(response);
         } else {

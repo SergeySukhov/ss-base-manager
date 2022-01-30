@@ -38,6 +38,7 @@ export class BaseAvailabilityManagerComponent implements OnInit {
   onTabChange(event: number) {
     this.lastTab = event;
     this.storageService.setItem(LocalStorageConst.lastControlTab, event);
+    this.loadData();
   }
 
   async loadData() {
@@ -47,7 +48,7 @@ export class BaseAvailabilityManagerComponent implements OnInit {
         await this.loadNormativesData();
         break;
       case 1:
-
+        await this.loadIndeciesData();
         break;
       default:
         return;
