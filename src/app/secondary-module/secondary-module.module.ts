@@ -98,7 +98,6 @@ import { TableIndeciesControlComponent } from './table-indecies-control/table-in
 
   ],
   providers: [
-    BaseTypePipe,
   ],
 
   bootstrap: [TableControlDialogComponent, AddNodeDialogComponent]

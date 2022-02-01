@@ -8,6 +8,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthModule } from "./auth.module/auth.module";
 import { CoreModule } from './core/core.module';
 import { DatePipe } from '@angular/common';
+import { ChildNodesAvailablePipe } from './core/pipes/child-nodes-available.pipe';
+import { PeriodPipe } from './core/pipes/period.pipe';
+import { BaseTypePipe } from './core/pipes/base-type.pipe';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,13 @@ import { DatePipe } from '@angular/common';
     BrowserAnimationsModule,
     
   ],
-  providers: [DatePipe],
+  providers: [
+    DatePipe,
+    ChildNodesAvailablePipe,
+    PeriodPipe,
+    BaseTypePipe,
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

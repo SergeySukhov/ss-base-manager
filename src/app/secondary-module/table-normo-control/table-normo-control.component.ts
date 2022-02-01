@@ -305,7 +305,7 @@ export class TableNormoControlComponent implements OnInit, AfterViewInit {
   onHandleEdit(row: BaseDataView) {
     const forbiddenKeys = ["guid", "type", "isAvailable", "parentBaseType"]
     const dialogRef = this.dialog.open(TableControlDialogComponent, {
-      width: '650px',
+      width: '750px',
       data: { data: row.data, disabledKeys: forbiddenKeys },
     });
 

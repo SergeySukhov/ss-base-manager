@@ -147,8 +147,8 @@ export class BaseAvailabilityManagerComponent implements OnInit {
           guid: indecyDataBaseInfo.guid,
           availability: indecyDataBaseInfo.isAvailable,
           name: {
-            date: "" + indecyDataBaseInfo.releasePeriodValue,
-            period: "!!",
+            value: "" + indecyDataBaseInfo.releasePeriodValue,
+            periodType: indecyDataBaseInfo.releasePeriodType,
             year: indecyDataBaseInfo.year
           },
           baseTypeName: baseTypeInfo.typeName,

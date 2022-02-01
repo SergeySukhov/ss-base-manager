@@ -47,13 +47,30 @@
                         </div>
                         <div [ngClass]="{'show-name-input': editingRow?.guid === element.guid}" class="hide-name-input"
                             (click)="$event.stopPropagation();">
-                                <textarea  matInput #editInput class="name-input" autofocus autocomplete="off" type="text"
+                                <textarea #editInput class="name-input" autofocus autocomplete="off" type="text"
                                     (blur)="finishEditing('', true)" (keyup)="onNameEditing($event, editInput.value)">
                                 </textarea>
                         </div>
                     </span>
                     <span *ngIf="!element.isRoot">
-                        <div>!!</div>
+                        <div class="index-id">
+                            <mat-form-field style="width: 70px; margin-right: 15px;" (click)="$event.stopPropagation()">
+                                <mat-label>Год выпуска</mat-label>
+                                <mat-select [value]="'' + element.name.year" (selectionChange)="onYearChanged($event, element)">
+                                  <mat-option *ngFor="let dates of getYears()" [value]="dates" >
+                                    {{dates}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <mat-form-field (click)="$event.stopPropagation()">
+                                <mat-label>Период выпуска</mat-label>
+                                <mat-select [value]="getCurrPeriodValue(element)" (selectionChange)="onPeriodChanged($event, element)">
+                                  <mat-option *ngFor="let dates of getPeriods()" [value]="dates">
+                                    {{dates}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                        </div>
                     </span>
                 </td>
             </ng-container>

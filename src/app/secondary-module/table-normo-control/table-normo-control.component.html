@@ -44,7 +44,7 @@
                         </div>
                         <div [ngClass]="{'show-name-input': editingRow?.guid === element.guid}" class="hide-name-input"
                             (click)="$event.stopPropagation();">
-                                <textarea  matInput #editInput class="name-input" autofocus autocomplete="off" type="text"
+                                <textarea #editInput class="name-input" autofocus autocomplete="off" type="text"
                                     (blur)="finishEditing('', true)" (keyup)="onNameEditing($event, editInput.value)">
                                 </textarea>
                         </div>

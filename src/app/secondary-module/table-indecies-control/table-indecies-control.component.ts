@@ -9,11 +9,15 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { BaseTypePipe } from 'src/app/core/pipes/base-type.pipe';
 import { AddNodeDialogComponent } from 'src/app/shared/common-components/table-node-dialog/add-node-dialog/add-node-dialog.component';
 import { TableControlDialogComponent } from 'src/app/shared/common-components/table-node-dialog/table-control-dialog/table-control-dialog.component';
+import { PeriodPipe } from 'src/app/core/pipes/period.pipe';
+import { ReleasePeriodType } from 'src/app/shared/models/server-models/AvailableBaseIndexInfo';
+import { DateIndeciesHelper } from 'src/app/shared/utils/date-indecies.helper.service';
+import { MatSelectChange } from '@angular/material/select';
 
 export interface IndeciesDataView {
   year: number;
-  period: string;
-  date: string;
+  periodType: ReleasePeriodType;
+  value: string;
 }
 
 export interface DataViewBase<T extends string | IndeciesDataView> {
@@ -36,6 +40,7 @@ export interface IndeciesDataViewRoot extends DataViewBase<string> {
 
 }
 export interface IndeciesDataViewNode extends DataViewBase<IndeciesDataView> {
+  name: IndeciesDataView;
   isRoot: false;
   parentGuid: string;
   isHide?: boolean;
@@ -49,7 +54,7 @@ export type IndeciesCommonNodes = IndeciesDataViewRoot | IndeciesDataViewNode;
   styleUrls: ['./table-indecies-control.component.scss'],
 })
 export class TableIndeciesControlComponent implements OnInit, AfterViewInit {
-  @ViewChild(MatTable) table!: MatTable<IndeciesDataViewRoot | IndeciesDataViewNode>;
+  @ViewChild(MatTable) table!: MatTable<IndeciesCommonNodes>;
 
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -82,7 +87,7 @@ export class TableIndeciesControlComponent implements OnInit, AfterViewInit {
   @Output() onRemoveNodes = new EventEmitter<IndeciesCommonNodes[]>();
   @Output() onEditedNodes = new EventEmitter<IndeciesCommonNodes[]>();
 
-
+  LocalPeriodType = ReleasePeriodType;
   availabilityNodes = AvailabilityNodes;
   allAvailableState: "checked" | "unchecked" | "mixed" = "mixed";
 
@@ -93,7 +98,9 @@ export class TableIndeciesControlComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['select', 'name', 'availability', 'baseType', 'cancelled', 'availableChilds', "handleEdit"];
   selection = new SelectionModel<IndeciesCommonNodes>(true, []);
 
-  constructor(public dialog: MatDialog, private baseTypePipe: BaseTypePipe) {
+  constructor(public dialog: MatDialog,
+    private baseTypePipe: BaseTypePipe, public periodPipe: PeriodPipe,
+  ) {
   }
 
   ngOnInit(): void {
@@ -139,6 +146,61 @@ export class TableIndeciesControlComponent implements OnInit, AfterViewInit {
   //   }
   //   this.table.renderRows();
   // }
+
+  getYears(): string[] {
+    return DateIndeciesHelper.GetAllIndeciesYears();
+  }
+
+  getPeriods(): string[] {
+    const p: string[] = [];
+    p.push(...DateIndeciesHelper.GetAllMonths(), ...DateIndeciesHelper.GetAllQuarters());
+    return p;
+  }
+
+  getCurrPeriodValue(node: IndeciesDataViewNode): string {
+    const nodeDateValue = Number.parseInt(node.name.value);
+
+    if (node.name.periodType === ReleasePeriodType.Month && nodeDateValue < 12) {
+      return DateIndeciesHelper.GetAllMonths()[nodeDateValue];
+    } else if (node.name.periodType === ReleasePeriodType.Month && nodeDateValue < 4) {
+      return DateIndeciesHelper.GetAllQuarters()[nodeDateValue];
+    } else {
+      return "-";
+    }
+  }
+
+  onYearChanged(event: MatSelectChange, row: IndeciesDataViewNode) {
+    const newYear = Number.parseInt(event.value);
+    if (!isNaN(newYear)) {
+      row.name.year = newYear;
+      this.onEditedNodes.emit([row]);
+    }
+  }
+
+  onPeriodChanged(event: MatSelectChange, row: IndeciesDataViewNode) {
+    const months = DateIndeciesHelper.GetAllMonths();
+    for (let i = 0; i < months.length; i++) {
+      const month = months[i];
+      if (month === event.value) {
+        row.name.periodType = ReleasePeriodType.Month;
+        row.name.value = "" + i + 1;
+        this.onEditedNodes.emit([row]);
+        return;
+      }
+    }
+
+    const quarters = DateIndeciesHelper.GetAllQuarters();
+    for (let i = 0; i < quarters.length; i++) {
+      const quarter = quarters[i];
+      if (quarter === event.value) {
+        row.name.periodType = ReleasePeriodType.Quarter;
+        row.name.value = "" + i + 1;
+        this.onEditedNodes.emit([row]);
+        return;
+      }
+    }
+
+  }
 
   onRootExpandClick(row: IndeciesCommonNodes) {
     if (!row.isRoot) {
