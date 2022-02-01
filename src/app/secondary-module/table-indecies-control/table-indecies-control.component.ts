@@ -13,6 +13,7 @@ import { PeriodPipe } from 'src/app/core/pipes/period.pipe';
 import { ReleasePeriodType } from 'src/app/shared/models/server-models/AvailableBaseIndexInfo';
 import { DateIndeciesHelper } from 'src/app/shared/utils/date-indecies.helper.service';
 import { MatSelectChange } from '@angular/material/select';
+import { DataViewNode, DataViewRoot, TableControlBase } from 'src/app/shared/common-components/table-control-base/table-control-base';
 
 export interface IndeciesDataView {
   year: number;
@@ -20,30 +21,12 @@ export interface IndeciesDataView {
   value: string;
 }
 
-export interface DataViewBase<T extends string | IndeciesDataView> {
-  guid: string;
-  availability: boolean;
-  baseTypeName: string;
-  isCancelled: boolean;
-  isRoot: true | false;
-  name: T;
-  data?: any;
-
-}
-
-export interface IndeciesDataViewRoot extends DataViewBase<string> {
+export interface IndeciesDataViewRoot extends DataViewRoot {
   name: string;
-  isRoot: true;
-  hasChildren?: boolean;
-  isExpand?: boolean;
-  availableChilds?: AvailabilityNodes[];
-
 }
-export interface IndeciesDataViewNode extends DataViewBase<IndeciesDataView> {
+
+export interface IndeciesDataViewNode extends DataViewNode {
   name: IndeciesDataView;
-  isRoot: false;
-  parentGuid: string;
-  isHide?: boolean;
 }
 
 export type IndeciesCommonNodes = IndeciesDataViewRoot | IndeciesDataViewNode;
@@ -53,7 +36,7 @@ export type IndeciesCommonNodes = IndeciesDataViewRoot | IndeciesDataViewNode;
   templateUrl: './table-indecies-control.component.html',
   styleUrls: ['./table-indecies-control.component.scss'],
 })
-export class TableIndeciesControlComponent implements OnInit, AfterViewInit {
+export class TableIndeciesControlComponent extends TableControlBase<IndeciesCommonNodes> implements OnInit, AfterViewInit {
   @ViewChild(MatTable) table!: MatTable<IndeciesCommonNodes>;
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -101,6 +84,7 @@ export class TableIndeciesControlComponent implements OnInit, AfterViewInit {
   constructor(public dialog: MatDialog,
     private baseTypePipe: BaseTypePipe, public periodPipe: PeriodPipe,
   ) {
+    super(dialog);
   }
 
   ngOnInit(): void {
@@ -111,41 +95,6 @@ export class TableIndeciesControlComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
   }
-
-  // announceSortChange(sortState: any) {
-  //   const unsorted = this.data.splice(0);
-  //   if (sortState.active === "name") {
-  //     if (sortState.direction === "desc") {
-  //       const rootNodes = unsorted.filter(x => x.isRoot).sort(this.sortName).reverse();
-  //       rootNodes.forEach(x => {
-  //         this.data.push(x);
-  //         this.data.push(...unsorted.filter(xx => xx.parentGuid === x.guid).sort(this.sortName).reverse());
-  //       });
-  //     } else {
-  //       const rootNodes = unsorted.filter(x => x.isRoot).sort(this.sortName);
-  //       rootNodes.forEach(x => {
-  //         this.data.push(x);
-  //         this.data.push(...unsorted.filter(xx => xx.parentGuid === x.guid).sort(this.sortName));
-  //       });
-  //     }
-  //   }
-  //   if (sortState.active === "baseType") {
-  //     if (sortState.direction === "desc") {
-  //       const rootNodes = unsorted.filter(x => x.isRoot).sort(this.sortType).reverse();
-  //       rootNodes.forEach(x => {
-  //         this.data.push(x);
-  //         this.data.push(...unsorted.filter(xx => xx.parentGuid === x.guid).sort(this.sortType).reverse());
-  //       });
-  //     } else {
-  //       const rootNodes = unsorted.filter(x => x.isRoot).sort(this.sortType);
-  //       rootNodes.forEach(x => {
-  //         this.data.push(x);
-  //         this.data.push(...unsorted.filter(xx => xx.parentGuid === x.guid).sort(this.sortType));
-  //       });
-  //     }
-  //   }
-  //   this.table.renderRows();
-  // }
 
   getYears(): string[] {
     return DateIndeciesHelper.GetAllIndeciesYears();
@@ -199,88 +148,8 @@ export class TableIndeciesControlComponent implements OnInit, AfterViewInit {
         return;
       }
     }
-
   }
 
-  onRootExpandClick(row: IndeciesCommonNodes) {
-    if (!row.isRoot) {
-      return;
-    }
-    row.isExpand = !row.isExpand;
-    if (row.isExpand) {
-      this.showChildrenRows(row.guid);
-    } else {
-      this.hideChildrenRows(row.guid);
-    }
-    this.table.renderRows();
-  }
-
-  showChildrenRows(parentGuid: string) {
-    this.data.filter(x => !x.isRoot && x.parentGuid === parentGuid).forEach(x => {
-      if (!x.isRoot) {
-        x.isHide = false;
-      }
-    });
-  }
-
-  hideChildrenRows(parentGuid: string) {
-    this.data.filter(x => !x.isRoot && x.parentGuid === parentGuid).forEach(x => {
-      if (!x.isRoot) {
-        x.isHide = true;
-      }
-    });
-  }
-
-  toggleChange(value: boolean, rowData: IndeciesCommonNodes) {
-    if (rowData.isRoot) {
-      rowData.availability = value;
-      this.onEditedNodes.emit([rowData]);
-
-      this.data.filter(x => !x.isRoot && x.parentGuid === rowData.guid).forEach(x => {
-        this.toggleChange(value, x);
-      });
-    } else {
-      setTimeout(() => {
-        rowData.availability = value;
-        this.onEditedNodes.emit([rowData]);
-        this.updateAllAvailableState();
-      }, 1000);
-    }
-    this.updateAllAvailableState();
-  }
-
-  toggleGlobalChange(isAllAvailable: boolean) {
-    this.data.forEach(x => {
-      x.availability = isAllAvailable;
-    });
-    this.updateAllAvailableState();
-
-    this.onEditedNodes.emit(this.data);
-  }
-
-  startNameEdit(row: IndeciesCommonNodes, editInput: any) {
-    setTimeout(() => {
-      editInput.focus();
-    });
-    editInput.value = row.name;
-    this.editingRow = row;
-  }
-
-  onNameEditing(event: KeyboardEvent, value: string) {
-    if (event.key === "Enter") {
-      this.finishEditing(value, false);
-    } else if (event.key === "Escape") {
-      this.finishEditing("", true);
-    }
-  }
-
-  finishEditing(value: string, isCancel: boolean) {
-    if (!isCancel && this.editingRow) {
-      this.editingRow.name = value;
-      this.onEditedNodes.emit([this.editingRow]);
-    }
-    this.editingRow = null;
-  }
 
   addData() {
     const dialogRef = this.dialog.open(AddNodeDialogComponent, {
@@ -312,76 +181,6 @@ export class TableIndeciesControlComponent implements OnInit, AfterViewInit {
 
   }
 
-  removeData() {
-    if (this.selection.selected.length) {
-      this.selection.selected.forEach(x => {
-        const idx = this.data.findIndex(xx => xx.guid === x.guid);
-        if (idx > -1) {
-          this.data.splice(idx, 1);
-        }
-      });
-      this.onRemoveNodes.emit(this.selection.selected)
-    }
-    this.selection.clear();
-    this.table.renderRows();
-
-    this.updateAllAvailableState();
-  }
-
-  toggleAvailableChildChange(event: MatCheckboxChange, row: IndeciesDataViewRoot) {
-    // TODO:
-
-  }
-
-  toggleCancelChange(value: boolean, row: IndeciesCommonNodes) {
-    row.isCancelled = value;
-    this.onEditedNodes.emit([row]);
-
-  }
-
-  masterToggle() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
-    }
-
-    this.selection.select(...this.data.filter(this.filterDataSource));
-  }
-
-  checkboxLabel(row?: IndeciesCommonNodes): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row `;
-  }
-
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.data.filter(this.filterDataSource).length;
-    return numSelected === numRows;
-  }
-
-  rowSelected(value: boolean, row: IndeciesCommonNodes) {
-    if (row.isRoot && row.hasChildren) {
-      this.data.filter(x => !x.isRoot && x.parentGuid === row.guid).forEach(x => {
-        this.rowSelected(value, x);
-      });
-    }
-    if (value) {
-      this.selection.select(...[row])
-    } else {
-      if (!row.isRoot) {
-        const parent = this.selection.selected.find(x => x.guid === row.parentGuid);
-        if (parent) this.selection.deselect(parent);
-      }
-      this.selection.deselect(row);
-    }
-  }
-
-  onRowClick(row: IndeciesCommonNodes) {
-    this.rowSelected(!this.selection.isSelected(row), row)
-  }
-
   isIncludeChildNodes(nodeType: AvailabilityNodes, row: IndeciesDataViewRoot): boolean {
     return !!row.availableChilds?.includes(nodeType);
   }
@@ -402,25 +201,15 @@ export class TableIndeciesControlComponent implements OnInit, AfterViewInit {
     });
   }
 
-
-
-  private sortName(a: IndeciesCommonNodes, b: IndeciesCommonNodes): number {
+  protected sortName(a: IndeciesCommonNodes, b: IndeciesCommonNodes): number {
     if (!a.name || !b.name) {
       return 0;
     }
 
     return a.name === b.name ? 0 : a.name > b.name ? 1 : -1;
   }
-  private sortType(a: IndeciesCommonNodes, b: IndeciesCommonNodes): number {
+  protected sortType(a: IndeciesCommonNodes, b: IndeciesCommonNodes): number {
     return a.baseTypeName === b.baseTypeName ? 0 : a.baseTypeName > b.baseTypeName ? 1 : -1;
   }
-  private updateAllAvailableState() {
-    const allAvailable = this.data.filter(this.filterDataSource).every(x => x.availability === true);
-    const noAvailable = this.data.filter(this.filterDataSource).every(x => x.availability === false);
-    this.allAvailableState = allAvailable ? "checked" : (noAvailable ? "unchecked" : "mixed");
-  }
 
-  private filterDataSource(value: IndeciesCommonNodes): boolean {
-    return true;
-  }
 }

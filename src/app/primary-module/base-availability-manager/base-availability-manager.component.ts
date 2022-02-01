@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { LocalStorageConst, LocalStorageService } from 'src/app/core/services/local-storage.service';
 import { IndeciesCommonNodes, IndeciesDataViewRoot } from 'src/app/secondary-module/table-indecies-control/table-indecies-control.component';
-import { BaseDataView } from 'src/app/secondary-module/table-normo-control/table-normo-control.component';
+import { NormoBaseDataView } from 'src/app/secondary-module/table-normo-control/table-normo-control.component';
 import { AvailableBaseAdditionInfo } from 'src/app/shared/models/server-models/AvailableBaseAdditionInfo';
 import { AvailableBaseIndexInfo } from 'src/app/shared/models/server-models/AvailableBaseIndexInfo';
 import { AvailabilityNodes, AvailableNormativeBaseType, BaseType } from 'src/app/shared/models/server-models/AvailableNormativeBaseType';
@@ -19,11 +19,11 @@ import { AvailabilityBaseEndpointService } from './services/availability-base.en
 export class BaseAvailabilityManagerComponent implements OnInit {
 
   isLoading = false;
-  normativeData: BaseDataView[] = [];
+  normativeData: NormoBaseDataView[] = [];
   indeciesData: IndeciesCommonNodes[] = [];
 
   /** Обновление внутренних данных узла при добавлении */
-  updNode: BaseDataView | null = null;
+  updNode: NormoBaseDataView | null = null;
 
   lastTab: number = 0;
 
@@ -57,7 +57,7 @@ export class BaseAvailabilityManagerComponent implements OnInit {
     this.isLoading = false;
   }
 
-  handleAddRootNodes(nodes: { viewData: BaseDataView, type: BaseType }[]) {
+  handleAddRootNodes(nodes: { viewData: NormoBaseDataView, type: BaseType }[]) {
     this.endpointService.sendAddNodes(nodes.map(x => {
       const mappedRootNode: AvailableNormativeBaseType = {
         guid: x.viewData.guid,
@@ -73,18 +73,20 @@ export class BaseAvailabilityManagerComponent implements OnInit {
     }));
   }
 
-  handleRemoveNodes(nodes: BaseDataView[]) {
+  handleRemoveNodes(nodes: NormoBaseDataView[]) {
     this.endpointService.sendRemoveNodes(nodes.map(x => x.guid));
   }
 
-  handleEditRootAndNormoNodes(nodes: BaseDataView[]) {
+  handleEditRootAndNormoNodes(nodes: NormoBaseDataView[]) {
     const rootNodes = nodes.filter(x => !!x.isRoot);
     const normoNodes = nodes.filter(x => !x.isRoot);
 
     this.endpointService.sendRootEditNodes(rootNodes.map(x => {
       const mappedRootNode: AvailableNormativeBaseType = x.data;
 
-      mappedRootNode.availabilityNodes = x.availableChilds ?? [];
+      if (x.isRoot) {
+        mappedRootNode.availabilityNodes = x.availableChilds ?? [];
+      }
       mappedRootNode.isAvailable = !!x.availability;
       mappedRootNode.isCancelled = x.isCancelled;
       mappedRootNode.typeName = x.name;
@@ -184,10 +186,10 @@ export class BaseAvailabilityManagerComponent implements OnInit {
       }
     });
 
-    const viewBaseModel: BaseDataView[] = [];
+    const viewBaseModel: NormoBaseDataView[] = [];
 
     for (let baseTypeInfo of allAvTypes) {
-      const rootNode: BaseDataView = {
+      const rootNode: NormoBaseDataView = {
         guid: baseTypeInfo.guid,
         availability: baseTypeInfo.isAvailable,
         name: baseTypeInfo.typeName,
@@ -209,7 +211,7 @@ export class BaseAvailabilityManagerComponent implements OnInit {
           name: normoDataBaseInfo.name,
           baseTypeName: baseTypeInfo.typeName,
           isCancelled: normoDataBaseInfo.isCancelled,
-
+          isRoot: false,
           data: normoDataBaseInfo,
           parentGuid: baseTypeInfo.guid,
         });
