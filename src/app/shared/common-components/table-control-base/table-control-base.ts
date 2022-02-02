@@ -9,28 +9,26 @@ import { AvailabilityNodes } from "../../models/server-models/AvailableNormative
 import { AddNodeDialogComponent } from "../table-node-dialog/add-node-dialog/add-node-dialog.component";
 import { TableControlDialogComponent } from "../table-node-dialog/table-control-dialog/table-control-dialog.component";
 
-export interface DataViewBase {
+export interface DataViewBase<T extends boolean> {
     guid: string;
     availability: boolean;
     baseTypeName: string;
     isCancelled: boolean;
-    isRoot: true | false;
+    isRoot: T;
     name: any;
     data?: any;
 
 }
 
-export interface DataViewRoot extends DataViewBase {
+export interface DataViewRoot extends DataViewBase<true> {
     name: string;
-    isRoot: true;
     hasChildren?: boolean;
     isExpand?: boolean;
     availableChilds?: AvailabilityNodes[];
 }
 
-export interface DataViewNode extends DataViewBase {
+export interface DataViewNode extends DataViewBase<false> {
     name: any;
-    isRoot: false;
     parentGuid: string;
     isHide?: boolean;
 }

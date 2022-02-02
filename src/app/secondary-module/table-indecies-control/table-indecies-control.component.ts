@@ -22,7 +22,6 @@ export interface IndeciesDataView {
 }
 
 export interface IndeciesDataViewRoot extends DataViewRoot {
-  name: string;
 }
 
 export interface IndeciesDataViewNode extends DataViewNode {

@@ -1,19 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { LocalStorageConst, LocalStorageService } from 'src/app/core/services/local-storage.service';
-import { IndeciesCommonNodes, IndeciesDataViewRoot } from 'src/app/secondary-module/table-indecies-control/table-indecies-control.component';
-import { NormoBaseDataView } from 'src/app/secondary-module/table-normo-control/table-normo-control.component';
+import { IndeciesCommonNodes, IndeciesDataViewNode, IndeciesDataViewRoot } from 'src/app/secondary-module/table-indecies-control/table-indecies-control.component';
+import { NormoBaseDataView, NormoDataViewNode } from 'src/app/secondary-module/table-normo-control/table-normo-control.component';
+import { CommonNodes, DataViewNode, DataViewRoot } from 'src/app/shared/common-components/table-control-base/table-control-base';
 import { AvailableBaseAdditionInfo } from 'src/app/shared/models/server-models/AvailableBaseAdditionInfo';
 import { AvailableBaseIndexInfo } from 'src/app/shared/models/server-models/AvailableBaseIndexInfo';
 import { AvailabilityNodes, AvailableNormativeBaseType, BaseType } from 'src/app/shared/models/server-models/AvailableNormativeBaseType';
 import { AvailabilityBaseEndpointService } from './services/availability-base.endpoint.service';
+import { BaseAvailabilityViewService } from './services/base-availability-view.service';
 
 @Component({
   selector: 'ss-base-availability-manager',
   templateUrl: './base-availability-manager.component.html',
   styleUrls: ['./base-availability-manager.component.scss'],
   providers: [
-    AvailabilityBaseEndpointService
+    AvailabilityBaseEndpointService,
+    BaseAvailabilityViewService,
   ]
 })
 export class BaseAvailabilityManagerComponent implements OnInit {
@@ -27,7 +30,7 @@ export class BaseAvailabilityManagerComponent implements OnInit {
 
   lastTab: number = 0;
 
-  constructor(private endpointService: AvailabilityBaseEndpointService, private storageService: LocalStorageService) {
+  constructor(private viewService: BaseAvailabilityViewService, private storageService: LocalStorageService) {
   }
 
   ngOnInit() {
@@ -57,75 +60,61 @@ export class BaseAvailabilityManagerComponent implements OnInit {
     this.isLoading = false;
   }
 
-  handleAddRootNodes(nodes: { viewData: NormoBaseDataView, type: BaseType }[]) {
-    this.endpointService.sendAddNodes(nodes.map(x => {
-      const mappedRootNode: AvailableNormativeBaseType = {
-        guid: x.viewData.guid,
-        availabilityNodes: [AvailabilityNodes.Normatives, AvailabilityNodes.Indexes, AvailabilityNodes.Corrections],
-        isAvailable: !!x.viewData.availability,
-        isCancelled: x.viewData.isCancelled,
-        type: x.type,
-        typeName: x.viewData.name,
-      };
-      x.viewData.data = mappedRootNode;
-      this.updNode = x.viewData;
-      return mappedRootNode;
-    }));
+  handleAddRootNodes(nodes: { viewData: DataViewRoot, type: BaseType }[]) {
+    const updNodes = this.viewService.addRootNodes(nodes);
+    updNodes.forEach(node => {
+      this.updNode = node;
+    })
   }
 
-  handleRemoveNodes(nodes: NormoBaseDataView[]) {
-    this.endpointService.sendRemoveNodes(nodes.map(x => x.guid));
+  handleRemoveNodes(nodes: CommonNodes[]) {
+    this.viewService.removeNodes(nodes);
   }
 
-  handleEditRootAndNormoNodes(nodes: NormoBaseDataView[]) {
-    const rootNodes = nodes.filter(x => !!x.isRoot);
-    const normoNodes = nodes.filter(x => !x.isRoot);
+  isRootNode(node: CommonNodes): node is DataViewRoot {
+    return node.isRoot;
+  } 
 
-    this.endpointService.sendRootEditNodes(rootNodes.map(x => {
-      const mappedRootNode: AvailableNormativeBaseType = x.data;
+  handleEditRootAndNormoNodes(nodes: CommonNodes[]) {
+    const rootNodes: DataViewRoot[] = [];
+    const normoNodes: NormoDataViewNode[] = [];
 
-      if (x.isRoot) {
-        mappedRootNode.availabilityNodes = x.availableChilds ?? [];
+    nodes.forEach(x => {
+      if (this.isRootNode(x)) {
+        rootNodes.push(x);
+      } else {
+        normoNodes.push(x);
       }
-      mappedRootNode.isAvailable = !!x.availability;
-      mappedRootNode.isCancelled = x.isCancelled;
-      mappedRootNode.typeName = x.name;
+    })
 
-      return mappedRootNode;
-    }));
+    this.viewService.editRootNodes(rootNodes);
+    this.viewService.editNormoNodes(normoNodes);
+  }
 
-    this.endpointService.sendNormoEditNodes(normoNodes.map(x => {
-      const mappedNormoNode: AvailableBaseAdditionInfo = x.data;
-      mappedNormoNode.name = x.name;
-      mappedNormoNode.isAvailable = !!x.availability;
-      mappedNormoNode.isCancelled = x.isCancelled;
-      return mappedNormoNode;
-    }));
+  handleEditRootAndIndeciesNodes(nodes: IndeciesCommonNodes[]) {
+    const rootNodes: DataViewRoot[] = [];
+    const indeciesNodes: IndeciesDataViewNode[] = [];
 
+    nodes.forEach(x => {
+      if (this.isRootNode(x)) {
+        rootNodes.push(x);
+      } else {
+        indeciesNodes.push(x);
+      }
+    })
+
+    this.viewService.editRootNodes(rootNodes);
+    this.viewService.editIndeciesNodes(indeciesNodes);
   }
 
   private async loadIndeciesData() {
-    const allAvTypes = await this.endpointService.getAvailableBaseTypes();
-    const allBasesPromises: Promise<AvailableBaseIndexInfo[] | null>[] = [];
-    if (!allAvTypes?.length) {
+    const allAvTypes = await this.viewService.loadAvailableBaseTypes();
+    if (!allAvTypes.length) {
       this.isLoading = false;
       return;
     }
 
-
-    allAvTypes.forEach(x => {
-      const promise = this.endpointService.getAvailableIndeciesBases(x.type);
-      allBasesPromises.push(promise);
-    });
-
-    const serverResponse = await Promise.all(allBasesPromises);
-    const availableBases: AvailableBaseIndexInfo[] = [];
-    serverResponse.forEach(x => {
-      if (!!x) {
-        availableBases.push(...x);
-      }
-    });
-
+    const availableIndexBases: AvailableBaseIndexInfo[] = await this.viewService.loadIndeciesData(allAvTypes);
     const viewBaseModel: IndeciesCommonNodes[] = [];
 
     for (let baseTypeInfo of allAvTypes) {
@@ -141,7 +130,7 @@ export class BaseAvailabilityManagerComponent implements OnInit {
         availableChilds: baseTypeInfo.availabilityNodes,
       };
       viewBaseModel.push(rootNode);
-      const basesByType = availableBases.filter(x => x.type === baseTypeInfo.type);
+      const basesByType = availableIndexBases.filter(x => x.type === baseTypeInfo.type);
       rootNode.hasChildren = !!basesByType.length;
 
       for (let indecyDataBaseInfo of basesByType) {
@@ -165,27 +154,13 @@ export class BaseAvailabilityManagerComponent implements OnInit {
   }
 
   private async loadNormativesData() {
-    const allAvTypes = await this.endpointService.getAvailableBaseTypes();
-
-    const allBasesPromises: Promise<AvailableBaseAdditionInfo[] | null>[] = [];
-    if (!allAvTypes?.length) {
+    const allAvTypes = await this.viewService.loadAvailableBaseTypes();
+    if (!allAvTypes.length) {
       this.isLoading = false;
       return;
     }
 
-    allAvTypes.forEach(x => {
-      const promise = this.endpointService.getAvailableNormativeBases(x.type);
-      allBasesPromises.push(promise);
-    });
-
-    const serverResponse = await Promise.all(allBasesPromises);
-    const availableBases: AvailableBaseAdditionInfo[] = [];
-    serverResponse.forEach(x => {
-      if (!!x) {
-        availableBases.push(...x);
-      }
-    });
-
+    const availableBases = await this.viewService.loadAdditionalData(allAvTypes);
     const viewBaseModel: NormoBaseDataView[] = [];
 
     for (let baseTypeInfo of allAvTypes) {
