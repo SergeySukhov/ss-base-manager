@@ -14,9 +14,11 @@ import { ReleasePeriodType } from 'src/app/shared/models/server-models/Available
 import { DateIndeciesHelper } from 'src/app/shared/utils/date-indecies.helper.service';
 import { MatSelectChange } from '@angular/material/select';
 import { DataViewNode, DataViewRoot, TableControlBase } from 'src/app/shared/common-components/table-control-base/table-control-base';
+import { WorkCategory } from 'src/app/shared/models/server-models/AvailableIndexWorkCategory';
 
 export interface IndeciesDataView {
   year: number;
+  workCategory: WorkCategory;
   periodType: ReleasePeriodType;
   value: string;
 }
@@ -95,6 +97,10 @@ export class TableIndeciesControlComponent extends TableControlBase<IndeciesComm
   ngAfterViewInit() {
   }
 
+  getWorkCategories(): string[] {
+    return ["Строительство", "Ремонт", "Реставрация"]
+  }
+
   getYears(): string[] {
     return DateIndeciesHelper.GetAllIndeciesYears();
   }
@@ -114,6 +120,27 @@ export class TableIndeciesControlComponent extends TableControlBase<IndeciesComm
       return DateIndeciesHelper.GetAllQuarters()[nodeDateValue];
     } else {
       return "-";
+    }
+  }
+
+  getCurrWorkCategory(node: IndeciesDataViewNode): string {
+    const allCat = this.getWorkCategories();
+    if (allCat.length > node.name.workCategory) {
+      return allCat[node.name.workCategory];
+    } else {
+      return "неизвестная категория";
+    }
+  }
+
+  onWorkCategoryChanged(event: MatSelectChange, row: IndeciesDataViewNode) {
+    const allCat = this.getWorkCategories();
+    const idx = allCat.findIndex(x => x === event.value);
+
+    console.log("!! | onWorkCategoryChanged | idx", idx)
+    if (idx > -1) {
+      row.name.workCategory = idx;
+      this.onEditedNodes.emit([row]);
+
     }
   }
 

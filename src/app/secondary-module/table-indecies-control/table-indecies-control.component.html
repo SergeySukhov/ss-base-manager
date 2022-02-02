@@ -62,10 +62,18 @@
                                   </mat-option>
                                 </mat-select>
                               </mat-form-field>
-                              <mat-form-field (click)="$event.stopPropagation()">
+                              <mat-form-field style="width: 170px; margin-right: 15px;" (click)="$event.stopPropagation()">
                                 <mat-label>Период выпуска</mat-label>
                                 <mat-select [value]="getCurrPeriodValue(element)" (selectionChange)="onPeriodChanged($event, element)">
                                   <mat-option *ngFor="let dates of getPeriods()" [value]="dates">
+                                    {{dates}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <mat-form-field style="width: 170px; margin-right: 15px;" (click)="$event.stopPropagation()">
+                                <mat-label>Тип работ</mat-label>
+                                <mat-select [value]="getCurrWorkCategory(element)" (selectionChange)="onWorkCategoryChanged($event, element)">
+                                  <mat-option *ngFor="let dates of getWorkCategories()" [value]="dates">
                                     {{dates}}
                                   </mat-option>
                                 </mat-select>

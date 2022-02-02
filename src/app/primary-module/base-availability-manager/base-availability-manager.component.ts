@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { LocalStorageConst, LocalStorageService } from 'src/app/core/services/local-storage.service';
 import { IndeciesCommonNodes, IndeciesDataViewNode, IndeciesDataViewRoot } from 'src/app/secondary-module/table-indecies-control/table-indecies-control.component';
-import { NormoBaseDataView, NormoDataViewNode } from 'src/app/secondary-module/table-normo-control/table-normo-control.component';
+import { NormoBaseDataView, NormoDataViewNode, NormoDataViewRoot } from 'src/app/secondary-module/table-normo-control/table-normo-control.component';
 import { CommonNodes, DataViewNode, DataViewRoot } from 'src/app/shared/common-components/table-control-base/table-control-base';
 import { AvailableBaseAdditionInfo } from 'src/app/shared/models/server-models/AvailableBaseAdditionInfo';
 import { AvailableBaseIndexInfo } from 'src/app/shared/models/server-models/AvailableBaseIndexInfo';
@@ -26,7 +26,7 @@ export class BaseAvailabilityManagerComponent implements OnInit {
   indeciesData: IndeciesCommonNodes[] = [];
 
   /** Обновление внутренних данных узла при добавлении */
-  updNode: NormoBaseDataView | null = null;
+  updAddingRoot: DataViewRoot | null = null;
 
   lastTab: number = 0;
 
@@ -63,7 +63,7 @@ export class BaseAvailabilityManagerComponent implements OnInit {
   handleAddRootNodes(nodes: { viewData: DataViewRoot, type: BaseType }[]) {
     const updNodes = this.viewService.addRootNodes(nodes);
     updNodes.forEach(node => {
-      this.updNode = node;
+      this.updAddingRoot = node;
     })
   }
 
@@ -75,8 +75,8 @@ export class BaseAvailabilityManagerComponent implements OnInit {
     return node.isRoot;
   } 
 
-  handleEditRootAndNormoNodes(nodes: CommonNodes[]) {
-    const rootNodes: DataViewRoot[] = [];
+  handleEditRootAndNormoNodes(nodes: NormoBaseDataView[]) {
+    const rootNodes: NormoDataViewRoot[] = [];
     const normoNodes: NormoDataViewNode[] = [];
 
     nodes.forEach(x => {
@@ -92,7 +92,7 @@ export class BaseAvailabilityManagerComponent implements OnInit {
   }
 
   handleEditRootAndIndeciesNodes(nodes: IndeciesCommonNodes[]) {
-    const rootNodes: DataViewRoot[] = [];
+    const rootNodes: IndeciesDataViewRoot[] = [];
     const indeciesNodes: IndeciesDataViewNode[] = [];
 
     nodes.forEach(x => {
@@ -140,7 +140,8 @@ export class BaseAvailabilityManagerComponent implements OnInit {
           name: {
             value: "" + indecyDataBaseInfo.releasePeriodValue,
             periodType: indecyDataBaseInfo.releasePeriodType,
-            year: indecyDataBaseInfo.year
+            year: indecyDataBaseInfo.year,
+            workCategory: indecyDataBaseInfo.parentIndex.workCategory
           },
           baseTypeName: baseTypeInfo.typeName,
           isCancelled: indecyDataBaseInfo.isCancelled,
