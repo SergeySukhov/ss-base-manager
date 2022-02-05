@@ -21,7 +21,7 @@
                 </th>
 
                 <td mat-cell *matCellDef="let row">
-                    <span style="display: flex; justify-content: space-between; width: 60px; line-height: 24px;">
+                    <span class="checkbox-container">
 
                         <mat-checkbox (click)="$event.stopPropagation()"
                             (change)="rowSelected($event.checked, row)" [checked]="selection.isSelected(row)"
@@ -54,7 +54,7 @@
                     </span>
                     <span *ngIf="!element.isRoot">
                         <div class="index-id">
-                            <mat-form-field style="width: 70px; margin-right: 15px;" (click)="$event.stopPropagation()">
+                            <mat-form-field class="small-part" (click)="$event.stopPropagation()">
                                 <mat-label>Год выпуска</mat-label>
                                 <mat-select [value]="'' + element.name.year" (selectionChange)="onYearChanged($event, element)">
                                   <mat-option *ngFor="let dates of getYears()" [value]="dates" >
@@ -62,7 +62,7 @@
                                   </mat-option>
                                 </mat-select>
                               </mat-form-field>
-                              <mat-form-field style="width: 170px; margin-right: 15px;" (click)="$event.stopPropagation()">
+                              <mat-form-field class="middle-part" (click)="$event.stopPropagation()">
                                 <mat-label>Период выпуска</mat-label>
                                 <mat-select [value]="getCurrPeriodValue(element)" (selectionChange)="onPeriodChanged($event, element)">
                                   <mat-option *ngFor="let dates of getPeriods()" [value]="dates">
@@ -70,7 +70,7 @@
                                   </mat-option>
                                 </mat-select>
                               </mat-form-field>
-                              <mat-form-field style="width: 170px; margin-right: 15px;" (click)="$event.stopPropagation()">
+                              <mat-form-field class="middle-part" (click)="$event.stopPropagation()">
                                 <mat-label>Тип работ</mat-label>
                                 <mat-select [value]="getCurrWorkCategory(element)" (selectionChange)="onWorkCategoryChanged($event, element)">
                                   <mat-option *ngFor="let dates of getWorkCategories()" [value]="dates">

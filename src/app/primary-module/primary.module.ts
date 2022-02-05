@@ -52,6 +52,7 @@ import { RippleModule } from 'primeng/ripple';
 import { MessageService } from 'primeng/api';
 import {ToastModule} from 'primeng/toast';
 import { NotificationService } from '../core/services/notification.service';
+import { IndexBaseComponent } from './index-base/index-base.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { NotificationService } from '../core/services/notification.service';
     FormulaBaseComponent,
     BaseAvailabilityManagerComponent,
     BaseLogsMonitoringComponent,
+    IndexBaseComponent,
   ],
   exports: [
     MainComponent,

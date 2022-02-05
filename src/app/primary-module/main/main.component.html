@@ -13,12 +13,16 @@
                 </ss-list-selector>
             </div>
 
-            <div *ngSwitchCase="ManagerContext.base" class="content-container">
+            <div *ngSwitchCase="ManagerContext.normbase" class="content-container">
                 <ss-normative-base></ss-normative-base>
             </div>
 
             <div *ngSwitchCase="ManagerContext.formula" class="content-container">
                 <ss-formula-base></ss-formula-base>
+            </div>
+            
+            <div *ngSwitchCase="ManagerContext.indexes" class="content-container">
+                <ss-index-base></ss-index-base>
             </div>
 
             <div *ngSwitchCase="ManagerContext.manager" class="content-container">

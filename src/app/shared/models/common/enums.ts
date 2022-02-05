@@ -5,7 +5,7 @@ export enum UserState {
 
 export enum ManagerContext {
     start = "start", 
-    base = "base",
+    normbase = "base",
     indexes = "indexes",
     formula = "formula",
     manager = "manager",

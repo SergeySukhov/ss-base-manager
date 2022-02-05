@@ -18,7 +18,7 @@
                     </mat-checkbox>
                 </th>
                 <td mat-cell *matCellDef="let row">
-                    <span style="display: flex; justify-content: space-between; width: 60px; line-height: 24px;">
+                    <span class="checkbox-container">
 
                         <mat-checkbox (click)="$event.stopPropagation()"
                             (change)="rowSelected($event.checked, row)" [checked]="selection.isSelected(row)"

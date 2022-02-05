@@ -20,7 +20,7 @@ export class MainStateService {
         switch (this.context) {
             case ManagerContext.start:
                 return "Менеджер микросервисов баз Estimate Office";
-            case ManagerContext.base:
+            case ManagerContext.normbase:
                 return "Менеджер нормативных баз Estimate Office";
             case ManagerContext.indexes:
                 return "Менеджер баз индесков Estimate Office";

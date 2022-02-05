@@ -57,6 +57,12 @@
   .mat-icon { 
     width: 27px;
   }
+  
+  .checkbox-container {
+    display: flex;
+    justify-content: space-between;
+    width: 60px; line-height: 24px;
+  }
 
   .show-name-input {
     display: flex !important;

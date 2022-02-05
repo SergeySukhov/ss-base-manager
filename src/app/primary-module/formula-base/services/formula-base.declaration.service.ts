@@ -13,46 +13,14 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<FormBa
     normBaseFieldOptions: SelectorOption<AvailableBaseAdditionInfo>[] = [];
     finalOptions: StepFields[] = [];
     constructor(private endpoint: FormulaBaseEndpointService) {
-        super();
+        super(endpoint);
     }
 
     public getStepperModel(context: FormulaBaseComponent, avTypes: AvailableNormativeBaseType[]): StepperData {
         const stepperModel: StepperData = {
             isLinear: true,
             steps: [
-                {
-                    stepLabel: "Выбор вида НБ",
-                    nextButton: { needShow: true, isDisable: true },
-                    isAwaiting: false,
-                    fields: [{
-                        type: OptionType.selector,
-                        fieldLabel: "Доступные виды нормативных баз",
-                        onDataChange: async (value: SelectorOption<BaseTypeInfo>, step: StepperDataStep) => {
-                            const data = value.data as BaseTypeInfo;
-                            context.resultParams.baseTypeName = data.name;
-                            step.isAwaiting = true;
-
-                            const availableNB = await this.endpoint.getAvailableNormativeBases(data.type);
-                            if (!availableNB) {
-                                step.isAwaiting = false;
-                                step.isCompleted = false;
-                                return;
-                            }
-
-                            this.normBaseFieldOptions.splice(0);
-                            this.normBaseFieldOptions.push(...this.toSelectorOptions(availableNB));
-                            
-                            step.isAwaiting = false;
-                            step.isCompleted = true;
-                            if (step.nextButton) {
-                                step.nextButton.isDisable = false;
-                            }
-                            this.updateResultParams(context.resultParams);
-
-                        },
-                        fieldOptions: this.toSelectorBaseTypeOptions(avTypes),
-                    }],
-                },
+                this.getBaseTypeStep(avTypes, () => {}),
                 ////////////////////////////////////////////////////////////////////
                 {
                     stepLabel: "Выбор НБ",
@@ -145,26 +113,12 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<FormBa
         ]
     }
 
-    private toSelectorOptions(baseData: AvailableBaseAdditionInfo[]): SelectorOption<AvailableBaseAdditionInfo>[] {
+    protected toSelectorOptions(baseData: AvailableBaseAdditionInfo[]): SelectorOption<AvailableBaseAdditionInfo>[] {
         const selectorOptions: SelectorOption<AvailableBaseAdditionInfo>[] = [];
         baseData.forEach(x => {
             selectorOptions.push({
                 isAvailable: true,
                 value: x.name,
-                data: x,
-                action: () => {
-                }
-            });
-        });
-        return selectorOptions;
-    }
-
-        private toSelectorBaseTypeOptions(baseData: AvailableNormativeBaseType[]): SelectorOption<AvailableNormativeBaseType>[] {
-        const selectorOptions: SelectorOption<AvailableBaseAdditionInfo>[] = [];
-        baseData.forEach(x => {
-            selectorOptions.push({
-                isAvailable: true,
-                value: x.typeName,
                 data: x,
                 action: () => {
                 }

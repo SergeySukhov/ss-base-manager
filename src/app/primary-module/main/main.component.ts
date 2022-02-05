@@ -29,7 +29,7 @@ export class MainComponent implements OnInit {
       level: 1,
       expandable: false,
       action: () => {
-        this.stateService.setContext(ManagerContext.base)
+        this.stateService.setContext(ManagerContext.normbase)
       }
     }, {
       name: "Базы формул",

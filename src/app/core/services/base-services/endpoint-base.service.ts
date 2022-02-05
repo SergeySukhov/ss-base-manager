@@ -124,7 +124,6 @@ export abstract class EndpointBaseService {
             return a;
         }
 
-
         const avNB = await this.netWorker.postMessageToWorkerAsync({
             messageType: NetMessageTypes.getAvailableIndeciesBases,
             isSub: false,

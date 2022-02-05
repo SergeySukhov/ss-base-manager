@@ -15,82 +15,16 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Norm
     normBaseFieldOptions: SelectorOption<AvailableBaseAdditionInfo>[] = [];
 
     constructor(private endpoint: NormativeBaseEndpointService, private stateService: NormativeBaseStateService) {
-        super();
+        super(endpoint);
     }
 
     public getStepperModel(context: NormativeBaseComponent, avTypes: AvailableNormativeBaseType[]): StepperData {
         const stepperModel: StepperData = {
             isLinear: true,
             steps: [
-                {
-                    stepLabel: "Выбор вида НБ",
-                    nextButton: { needShow: true, isDisable: true },
-                    isAwaiting: false,
-                    fields: [{
-                        type: OptionType.selector,
-                        fieldLabel: "Доступные виды нормативных баз",
-                        onDataChange: async (value: SelectorOption<BaseTypeInfo>, step: StepperDataStep) => {
-                            const data = value.data as BaseTypeInfo;
-                            context.resultParams.baseTypeName = data.name;
-                            step.isAwaiting = true;
-
-                            const availableNB = await this.endpoint.getAvailableNormativeBases(data.type);
-                            if (!availableNB) {
-                                return;
-                            }
-
-                            this.normBaseFieldOptions.splice(0);
-                            this.normBaseFieldOptions.push(...this.toSelectorOptions(availableNB));
-
-                            step.isAwaiting = false;
-                            step.isCompleted = true;
-                            if (step.nextButton) {
-                                step.nextButton.isDisable = false;
-                            }
-                            this.updateResultParams(context.resultParams);
-
-                        },
-                        fieldOptions: [{
-                            isAvailable: true,
-                            value: "ТСН МГЭ",
-                            data: { type: BaseType.TSN_MGE, name: "ТСН МГЭ" },
-                            action: () => { }
-                        }, {
-                            isAvailable: true,
-                            value: "ТСН МГЭ глава 13",
-                            data: { type: BaseType.TSN_MGE_13, name: "ТСН МГЭ. глава 13" },
-                            action: () => { }
-                        }, {
-                            isAvailable: false,
-                            value: "ФЕР",
-                            data: { type: BaseType.FER, name: "ФЕР" },
-                            action: () => { }
-                        }]
-                    }],
-                },
+                this.getBaseTypeStep(avTypes, () => {}),
                 ////////////////////////////////////////////////////////////////////
-                {
-                    stepLabel: "Выбор НБ",
-                    nextButton: { needShow: true, isDisable: true },
-                    backButton: { needShow: true, isDisable: false },
-                    fields: [{
-                        type: OptionType.selector,
-                        fieldLabel: "Доступные НБ",
-                        onDataChange: (value: SelectorOption<AvailableBaseAdditionInfo>, form: StepperDataStep) => {
-                            context.resultParams.normBaseChoice = value.data as AvailableBaseAdditionInfo;
-
-                            this.setAddBaseForm(!!value.imgSrc, context, form);
-
-                            if (form.nextButton) {
-                                form.nextButton.isDisable = !context.resultParams.normBaseChoice;;
-                            }
-                            form.isCompleted = !form.nextButton?.isDisable
-                            this.updateResultParams(context.resultParams);
-                        },
-                        fieldOptions: this.normBaseFieldOptions,
-                    },
-                    ],
-                },
+                
                 ////////////////////////////////////////////////////////////////////
                 {
                     stepLabel: "Добавление файла нормативной базы (.xml)",
@@ -263,7 +197,6 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Norm
                 fieldLabel: "Наименование НБ",
                 placeHolder: "",
                 onDataChange: (value: string, form: StepperDataStep) => {
-                    console.log("!! | setAddBaseForm | value", value)
                     if (context.resultParams.addBase) {
                         context.resultParams.addBase.name = value;
                         if (form.nextButton) {
