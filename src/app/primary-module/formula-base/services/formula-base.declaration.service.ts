@@ -12,7 +12,7 @@ import { FormulaBaseEndpointService } from "./formula-base.endpoint.service";
 export class FormulaBaseDeclarationService extends DeclarationBaseService<AvailableBaseAdditionInfo, FormBaseResultParams> {
     finalOptions: StepFields[] = [];
     constructor(private endpoint: FormulaBaseEndpointService) {
-        super(endpoint);
+        super();
     }
 
     public getStepperModel(context: FormulaBaseComponent, avTypes: AvailableNormativeBaseType[]): StepperData {

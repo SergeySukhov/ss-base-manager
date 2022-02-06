@@ -12,7 +12,7 @@ export class IndexBaseEndpointService extends EndpointBaseService {
     }
 
     public async sendIndecies(finalData: IndexBaseResultParams): Promise<void> {
-        if (!finalData.mainFile || !finalData.baseChoice) {
+        if (!finalData.mainFile) {
             return;
         }
 
@@ -20,19 +20,20 @@ export class IndexBaseEndpointService extends EndpointBaseService {
             messageType: NetMessageTypes.sendIndeciesUpload,
             isSub: false,
             data: {
-                additionNumber: finalData.baseChoice.additionNumber,
+                additionNumber: finalData.addBase?.base.additionNumber ?? finalData.baseChoice?.additionNumber ?? 1,
                 file: finalData.mainFile,
-                normoGuid: finalData.baseChoice.guid,
+                
+                overhead: finalData.nr,
+                profit: finalData.sp,
                 isDeploy: finalData.needDeploy,
+                year: finalData.addBase?.base?.year ?? finalData.baseChoice?.year ?? 0,
+                periodType: finalData.addBase?.base.releasePeriodType ?? finalData.baseChoice?.releasePeriodType ?? 0,
+                periodValue: finalData.addBase?.base.releasePeriodValue ?? finalData.baseChoice?.releasePeriodValue ?? 0,
                 baseType: finalData.baseType,
                 addBase: finalData.addBase ? {
                     guid: finalData.addBase.base.guid,
-                    overhead: 0,
-                    profit: 0,
-                    year: finalData.addBase.base.year,
-                    periodType: finalData.addBase.base.releasePeriodType,
-                    periodValue: finalData.addBase.base.releasePeriodValue,
                 } : undefined,
+
             },
         }, false);
     }

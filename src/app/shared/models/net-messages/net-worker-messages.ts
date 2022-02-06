@@ -95,14 +95,13 @@ export interface NWRequestUploadIndecies extends NWRequestBase<NetMessageTypes.s
   data: {
     file: File,
     additionNumber: number,
-    normoGuid: string,
+    year: number;
+    periodType: ReleasePeriodType;
+    periodValue: number;
+    overhead: number;
+    profit: number;
     addBase?: {
       guid: string;
-      year: number;
-      periodType: ReleasePeriodType;
-      periodValue: number;
-      overhead: number;
-      profit: number;
     },
     isDeploy?: boolean
     baseType: BaseType;

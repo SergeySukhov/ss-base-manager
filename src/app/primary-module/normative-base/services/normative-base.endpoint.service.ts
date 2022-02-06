@@ -20,14 +20,14 @@ export class NormativeBaseEndpointService extends EndpointBaseService {
             messageType: NetMessageTypes.sendNormativesUpload,
             isSub: false,
             data: {
-                additionNumber: finalData.baseChoice?.additionNumber ?? 11,
+                additionNumber: finalData.addBase?.additionNumber ?? finalData.baseChoice?.additionNumber ?? 1,
                 fileNormatives: finalData.mainFile,
                 normoGuid: finalData.addBase?.guid ?? finalData.baseChoice?.guid ?? "",
                 isDeploy: finalData.needDeploy,
                 baseType: finalData.baseType,
                 addBase: finalData.addBase ? {
                     guid: finalData.addBase.guid,
-                    name: "",
+                    name: finalData.addBase.name,
                 } : undefined,
             },
         });

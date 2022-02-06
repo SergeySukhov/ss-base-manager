@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { BaseTypePipe } from "src/app/core/pipes/base-type.pipe";
 import { WorkCategoryPipe } from "src/app/core/pipes/work-type.pipe";
 import { DeclarationBaseService } from "src/app/core/services/base-services/declaration-base.service";
 import { SelectorOption, StepFields, StepperData, OptionType, StepperDataStep, StepperLabelField } from "src/app/secondary-module/stepper/models/stepper-model";
@@ -17,10 +18,10 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
 
     finalOptions: StepFields[] = [];
     addIndexBase: AvailableBaseIndexInfo;
-    addIndexParams: { nr: number; sp: number; } = { nr: 0, sp: 0 };
 
-    constructor(private endpoint: IndexBaseEndpointService, private workCatPipe: WorkCategoryPipe) {
-        super(endpoint);
+    constructor(private endpoint: IndexBaseEndpointService, private workCatPipe: WorkCategoryPipe,
+        private baseTypePipe: BaseTypePipe) {
+        super();
         this.addIndexBase = this.initAddIndexBase();
     }
 
@@ -52,6 +53,38 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                             this.updateResultParams(context.resultParams);
                         },
                     },
+                    ],
+                },
+                ////////////////////////////////////////////////////////////////////
+                {
+                    stepLabel: "Параметры базы индексов",
+                    nextButton: { needShow: true, isDisable: false },
+                    backButton: { needShow: true, isDisable: false },
+                    isCompleted: true,
+                    fields: [
+                        {
+                            type: OptionType.input,
+                            fieldLabel: "НР",
+                            placeHolder: "",
+                            inputType: "number",
+                            initValue: context.resultParams.nr,
+                            onDataChange: (value: string) => {
+                                if (value) {
+                                    context.resultParams.nr = Number.parseFloat(value);
+                                }
+                            }
+                        }, {
+                            type: OptionType.input,
+                            fieldLabel: "СП",
+                            inputType: "number",
+                            initValue: context.resultParams.sp,
+                            placeHolder: "",
+                            onDataChange: (value: string) => {
+                                if (value) {
+                                    context.resultParams.sp = Number.parseFloat(value);
+                                }
+                            }
+                        },
                     ],
                 },
                 ////////////////////////////////////////////////////////////////////
@@ -114,11 +147,15 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
         const resultInfoFields: StepperLabelField[] = [{
             type: OptionType.label,
             fieldLabel: "Вид базы:",
-            text: resultParams.baseTypeName ?? "не выбран тип НБ",
+            text: this.baseTypePipe.transform(resultParams.baseType),
         }, {
             type: OptionType.label,
             fieldLabel: resultParams.addBase ? "Новая база индексов" : "База индексов:",
             text: resultParams.addBase ? this.getIndexName(resultParams.addBase.base) : this.getIndexName(resultParams.baseChoice),
+        }, {
+            type: OptionType.label,
+            fieldLabel: "НР и СП:",
+            text: "НР: " + resultParams.nr + " | СП: " + resultParams.sp ?? "не выбран файл (необязательно)",
         }, {
             type: OptionType.label,
             fieldLabel: "Файл c индексами:",
@@ -129,14 +166,14 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
             text: resultParams.fileTechDocs?.name ?? "не выбран файл (необязательно)",
         },
         ];
-        if (resultParams.addBase) {
-            const nrspParams: StepperLabelField = {
-                type: OptionType.label,
-                fieldLabel: "НР и СП:",
-                text: "НР: " +resultParams.addBase?.nr + " | СП: " + resultParams.addBase.sp ?? "не выбран файл (необязательно)",
-            };
-            resultInfoFields.splice(2, 0, nrspParams);
-        }
+        // if (resultParams.addBase) {
+        //     const nrspParams: StepperLabelField = {
+        //         type: OptionType.label,
+        //         fieldLabel: "НР и СП:",
+        //         text: "НР: " + resultParams.nr + " | СП: " + resultParams.sp ?? "не выбран файл (необязательно)",
+        //     };
+        //     resultInfoFields.splice(2, 0, nrspParams);
+        // }
         return resultInfoFields;
     }
 
@@ -188,7 +225,8 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
 
     private setAddBaseForm(needAddForm: boolean, context: IndexBaseComponent, form: StepperDataStep) {
         if (needAddForm) {
-            context.resultParams.addBase = { base: this.addIndexBase, nr: this.addIndexParams.nr, sp: this.addIndexParams.sp };
+            this.addIndexBase.guid = v4();
+            context.resultParams.addBase = { base: this.addIndexBase };
             form.stepLabel = "Добавление новой базы индексов"
             form.isCompleted = true;
             form.fields.push({
@@ -225,32 +263,8 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                 placeHolder: "",
                 initValue: this.addIndexBase.additionNumber,
                 onDataChange: (value: string) => {
-                    if (context.resultParams.addBase) {
-                        context.resultParams.addBase.base.additionNumber = Number.parseInt(value);
-                    }
-                }
-            }, {
-                type: OptionType.input,
-                fieldLabel: "НР",
-                placeHolder: "",
-                inputType: "number",
-                initValue: this.addIndexParams.nr,
-
-                onDataChange: (value: string) => {
-                    if (context.resultParams.addBase) {
-                        context.resultParams.addBase.nr = Number.parseInt(value);
-                    }
-                }
-            }, {
-                type: OptionType.input,
-                fieldLabel: "СП",
-                inputType: "number",
-                initValue: this.addIndexParams.sp,
-
-                placeHolder: "",
-                onDataChange: (value: string) => {
-                    if (context.resultParams.addBase) {
-                        context.resultParams.addBase.sp = Number.parseInt(value);
+                    if (context.resultParams.addBase && value) {
+                        this.addIndexBase.additionNumber = Number.parseInt(value);
                     }
                 }
             },

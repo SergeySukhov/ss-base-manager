@@ -15,7 +15,7 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
 
 
 
-    constructor(private endpointService: EndpointBaseService) {
+    constructor() {
     }
 
     public abstract getStepperModel(context: any, avTypes: AvailableNormativeBaseType[]): StepperData;

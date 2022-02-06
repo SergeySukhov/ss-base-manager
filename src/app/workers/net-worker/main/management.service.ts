@@ -363,7 +363,10 @@ export class ManagementSystem extends ManagementSystemBase {
 
     var data = new FormData();
     data.append("xmlFile", request.data.file);
-    data.append("normoGuid", request.data.normoGuid);
+    data.append("Overhead", "" + request.data.overhead);
+    data.append("Profit", "" + request.data.profit);
+    data.append("Year", "" + request.data.year);
+    data.append("Month", "" + request.data.periodValue);
     data.append("Deploy", "" + request.data.isDeploy);
     data.append("ContextId", this.hubService.connectionId ?? "");
     data.append("IsNewDatabase", "" + !!request.data.addBase);

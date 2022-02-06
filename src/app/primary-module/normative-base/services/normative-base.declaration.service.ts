@@ -13,7 +13,7 @@ import { NormativeBaseStateService } from "./normative-base.state.service";
 export class NormativeBaseDeclarationService extends DeclarationBaseService<AvailableBaseAdditionInfo, NormBaseResultParams> {
 
     constructor(private endpoint: NormativeBaseEndpointService, private stateService: NormativeBaseStateService) {
-        super(endpoint);
+        super();
     }
 
     public getStepperModel(context: NormativeBaseComponent, avTypes: AvailableNormativeBaseType[]): StepperData {
@@ -163,15 +163,15 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
             text: resultParams.fileTechDocs?.name ?? "не выбран файл (необязательно)",
         },
         ];
-        if (resultParams.addBase) {
-            const addInfo: StepperLabelField = {
-                type: OptionType.label,
-                fieldLabel: "Файл c техчастями:",
-                text: resultParams.fileTechDocs?.name ?? "не выбран файл (необязательно)",
-            };
+        // if (resultParams.addBase) {
+        //     const addInfo: StepperLabelField = {
+        //         type: OptionType.label,
+        //         fieldLabel: "Файл c техчастями:",
+        //         text: resultParams.fileTechDocs?.name ?? "не выбран файл (необязательно)",
+        //     };
 
-            resultInfoFields.splice(2, 0, addInfo);
-        }
+        //     resultInfoFields.splice(2, 0, addInfo);
+        // }
         return resultInfoFields;
     }
 
