@@ -19,8 +19,8 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
     finalOptions: StepFields[] = [];
     addIndexBase: AvailableBaseIndexInfo;
 
-    constructor(private endpoint: IndexBaseEndpointService, private workCatPipe: WorkCategoryPipe,
-        private baseTypePipe: BaseTypePipe) {
+    constructor(private endpoint: IndexBaseEndpointService,
+        ) {
         super();
         this.addIndexBase = this.initAddIndexBase();
     }

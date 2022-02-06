@@ -3,6 +3,7 @@ import { BaseTypeInfo } from "src/app/primary-module/formula-base/models/form-ba
 import { ResultUploadParamsBase } from "src/app/primary-module/normative-base/models/base-result-params.model";
 import { OptionType, SelectorOption, StepFields, StepperData, StepperDataStep } from "src/app/secondary-module/stepper/models/stepper-model";
 import { AvailableNormativeBaseType, BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
+import { BaseTypePipe } from "../../pipes/base-type.pipe";
 import { EndpointBaseService } from "./endpoint-base.service";
 
 @Injectable()
@@ -13,7 +14,7 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
 
     protected finalOptions: StepFields[] = [];
 
-
+    protected baseTypePipe = new BaseTypePipe();
 
     constructor() {
     }
@@ -38,7 +39,7 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
         baseData.forEach(x => {
             selectorOptions.push({
                 isAvailable: true,
-                value: x.typeName,
+                value: this.baseTypePipe.transform(x.type),
                 data: x,
                 action: () => {
                 }
