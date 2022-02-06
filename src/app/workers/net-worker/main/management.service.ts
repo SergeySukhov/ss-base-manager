@@ -260,7 +260,6 @@ export class ManagementSystem extends ManagementSystemBase {
       if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
         if (sender.status === 200) {
           const senderObj = JSON.parse(sender.response);
-          console.log("!! | sender.onreadystatechange= | sender.response", sender.response)
           response.data = senderObj;
           this.messageHandler.toClient(response);
         } else {

@@ -33,7 +33,6 @@ export class NormativeBaseComponent implements OnInit {
   }
 
   onFinish() {
-    console.log("!! | onFinish | Finish", this.resultParams)
 
     this.endpointService.sendNormatives(this.resultParams);
   }

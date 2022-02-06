@@ -136,7 +136,6 @@ export class TableIndeciesControlComponent extends TableControlBase<IndeciesComm
     const allCat = this.getWorkCategories();
     const idx = allCat.findIndex(x => x === event.value);
 
-    console.log("!! | onWorkCategoryChanged | idx", idx)
     if (idx > -1) {
       row.name.workCategory = idx;
       this.onEditedNodes.emit([row]);
@@ -153,27 +152,13 @@ export class TableIndeciesControlComponent extends TableControlBase<IndeciesComm
   }
 
   onPeriodChanged(event: MatSelectChange, row: IndeciesDataViewNode) {
-    const months = DateIndeciesHelper.GetAllMonths();
-    for (let i = 0; i < months.length; i++) {
-      const month = months[i];
-      if (month === event.value) {
-        row.name.periodType = ReleasePeriodType.Month;
-        row.name.value = "" + i + 1;
-        this.onEditedNodes.emit([row]);
-        return;
-      }
+    const period = DateIndeciesHelper.toPeriodFromString(event.value);
+    if (!period) {
+      return;
     }
-
-    const quarters = DateIndeciesHelper.GetAllQuarters();
-    for (let i = 0; i < quarters.length; i++) {
-      const quarter = quarters[i];
-      if (quarter === event.value) {
-        row.name.periodType = ReleasePeriodType.Quarter;
-        row.name.value = "" + i + 1;
-        this.onEditedNodes.emit([row]);
-        return;
-      }
-    }
+    row.name.periodType = ReleasePeriodType.Month;
+    row.name.value = "" + period.value;
+    this.onEditedNodes.emit([row]);
   }
 
 

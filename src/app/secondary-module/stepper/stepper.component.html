@@ -12,16 +12,16 @@
                 [stepControl]="firstFormGroup"
                 *ngFor="let stepModel of data?.steps" #stepp>
 
-            <form  [formGroup]="firstFormGroup">
+            <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>{{stepModel.stepLabel}}</ng-template>
 
             <div class="mat-container" *ngFor="let fieldModel of stepModel.fields">
 
                 <div class="field-container" *ngIf="fieldModel.type === 'selector'">
-                    <mat-form-field class="form-field" appearance="fill">
+                    <mat-form-field class="form-field" appearance="fill" >
                         <mat-label>{{fieldModel.fieldLabel}}</mat-label>
 
-                        <mat-select (selectionChange)="fieldModel.onDataChange($event.value, stepModel)">
+                        <mat-select [value]="fieldModel.startOptIdx ? fieldModel.fieldOptions[fieldModel.startOptIdx.value] : null" (selectionChange)="fieldModel.onDataChange($event.value, stepModel)">
                             <mat-option *ngFor="let option of fieldModel.fieldOptions" [value]="option"
                                 [disabled]="!option.isAvailable" (onSelectionChange)="option.action(option, stepModel)">
                                 <img *ngIf="!!option.imgSrc" [src]="option.imgSrc" />
@@ -37,7 +37,7 @@
                 <div *ngIf="fieldModel.type === 'input'">
                     <mat-form-field appearance="fill">
                         <mat-label>{{fieldModel?.fieldLabel ?? ""}}</mat-label>
-                        <input #stepInput  matInput autocomplete="false" (keyup)="fieldModel.onDataChange(stepInput.value, stepModel)"
+                        <input #stepInput matInput autocomplete="false" (keyup)="fieldModel.onDataChange(stepInput.value, stepModel)"
                             value="">
                     </mat-form-field>
                     <mat-spinner *ngIf="stepModel.isAwaiting" mode="indeterminate" color="accent" [diameter]="40"></mat-spinner>

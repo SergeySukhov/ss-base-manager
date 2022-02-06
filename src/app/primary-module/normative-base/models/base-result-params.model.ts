@@ -1,5 +1,8 @@
+import { BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
+
 export class ResultUploadParamsBase<TBase> {
     baseTypeName: string = "";
+    baseType: BaseType = BaseType.TSN_MGE;
     baseChoice: TBase | null = null;
     needDeploy = false;
 

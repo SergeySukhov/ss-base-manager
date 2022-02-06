@@ -24,7 +24,6 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
     protected abstract toSelectorBaseOptions(bases: TAvailableBase[]): SelectorOption<TAvailableBase>[]
 
     protected updateResultParams(resultParams: TResultOptions) {
-        console.log("!! | updateResultParams | resultParams", resultParams)
         this.finalOptions.splice(0);
         this.finalOptions.push(...this.toFinalData(resultParams));
     }
@@ -63,16 +62,14 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
                 fieldLabel: "Доступные виды нормативных баз",
                 onDataChange: async (value: SelectorOption<BaseTypeInfo>, step: StepperDataStep) => {
                     const data = value.data as BaseTypeInfo;
-                    console.log("!! | onDataChange: | data", data)
                     step.isAwaiting = true;
-
                     const availableNB = await getDataForNexStep(data.type);
                     step.isAwaiting = false;
 
                     if (!availableNB) {
-                        step.isCompleted = false;
                         return;
                     }
+
                     resultParams.baseTypeName = data.name;
                     this.setAvailableBasesOptions(availableNB);
 

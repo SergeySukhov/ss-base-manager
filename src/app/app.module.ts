@@ -11,6 +11,7 @@ import { DatePipe } from '@angular/common';
 import { ChildNodesAvailablePipe } from './core/pipes/child-nodes-available.pipe';
 import { PeriodPipe } from './core/pipes/period.pipe';
 import { BaseTypePipe } from './core/pipes/base-type.pipe';
+import { WorkCategoryPipe } from './core/pipes/work-type.pipe';
 
 @NgModule({
   declarations: [
@@ -26,10 +27,6 @@ import { BaseTypePipe } from './core/pipes/base-type.pipe';
     
   ],
   providers: [
-    DatePipe,
-    ChildNodesAvailablePipe,
-    PeriodPipe,
-    BaseTypePipe,
 
   ],
   bootstrap: [AppComponent]

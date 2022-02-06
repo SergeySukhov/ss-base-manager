@@ -36,7 +36,6 @@ export class TableNormoControlComponent extends TableControlBase<NormoBaseDataVi
   @Input() isAwaiting = false;
 
   @Input() set dataSource(value: NormoBaseDataView[] | undefined) {
-    console.log("!! | @Input | value", value)
     if (!value) {
       return;
     }

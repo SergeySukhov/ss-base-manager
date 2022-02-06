@@ -1,11 +1,13 @@
 import { Injectable } from "@angular/core";
+import { WorkCategoryPipe } from "src/app/core/pipes/work-type.pipe";
 import { DeclarationBaseService } from "src/app/core/services/base-services/declaration-base.service";
-import { SelectorOption, StepFields, StepperData, OptionType, StepperDataStep } from "src/app/secondary-module/stepper/models/stepper-model";
+import { SelectorOption, StepFields, StepperData, OptionType, StepperDataStep, StepperLabelField } from "src/app/secondary-module/stepper/models/stepper-model";
 import { AvailableBaseAdditionInfo } from "src/app/shared/models/server-models/AvailableBaseAdditionInfo";
-import { AvailableBaseIndexInfo } from "src/app/shared/models/server-models/AvailableBaseIndexInfo";
-import { AvailableNormativeBaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
+import { AvailableBaseIndexInfo, ReleasePeriodType } from "src/app/shared/models/server-models/AvailableBaseIndexInfo";
+import { WorkCategory } from "src/app/shared/models/server-models/AvailableIndexWorkCategory";
+import { AvailableNormativeBaseType, BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
+import { DateIndeciesHelper } from "src/app/shared/utils/date-indecies.helper.service";
 import { v4 } from "uuid";
-import { BaseTypeInfo } from "../../formula-base/models/form-base.models";
 import { IndexBaseComponent } from "../index-base.component";
 import { IndexBaseResultParams } from "../models/index-base.model";
 import { IndexBaseEndpointService } from "./index-base.endpoint.service";
@@ -14,8 +16,11 @@ import { IndexBaseEndpointService } from "./index-base.endpoint.service";
 export class IndexBaseDeclarationService extends DeclarationBaseService<AvailableBaseIndexInfo, IndexBaseResultParams> {
 
     finalOptions: StepFields[] = [];
-    constructor(private endpoint: IndexBaseEndpointService) {
+    addIndexBase: AvailableBaseIndexInfo;
+
+    constructor(private endpoint: IndexBaseEndpointService, private workCatPipe: WorkCategoryPipe) {
         super(endpoint);
+        this.addIndexBase = this.initAddIndexBase();
     }
 
     public getStepperModel(context: IndexBaseComponent, avTypes: AvailableNormativeBaseType[]): StepperData {
@@ -25,14 +30,16 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                 this.getBaseTypeStep(avTypes, context.resultParams, this.endpoint.getAvailableIndeciesBases.bind(this.endpoint)),
                 ////////////////////////////////////////////////////////////////////
                 {
-                    stepLabel: "Выбор НБ",
+                    stepLabel: "Выбор базы индексов",
                     nextButton: { needShow: true, isDisable: true },
                     backButton: { needShow: true, isDisable: false },
                     fields: [{
                         type: OptionType.selector,
                         fieldLabel: "Доступные базы индексов",
+
                         onDataChange: (value: SelectorOption<AvailableBaseIndexInfo>, form: StepperDataStep) => {
                             context.resultParams.baseChoice = value.data as AvailableBaseIndexInfo;
+                            this.addIndexBase.type = context.resultParams.baseType;
 
                             this.setAddBaseForm(!!value.imgSrc, context, form);
 
@@ -46,58 +53,171 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                     },
                     ],
                 },
+                ////////////////////////////////////////////////////////////////////
+                {
+                    stepLabel: "Добавление файла базы индексов (.xml)",
+                    nextButton: { needShow: true, isDisable: true },
+                    backButton: { needShow: true, isDisable: false },
+                    fields: [{
+                        type: OptionType.fileLoader,
+                        fieldLabel: "",
+                        fileFormats: [".xml",],
+                        onDataChange: (value: File[], form: StepperDataStep) => {
+                            if (value?.length) {
+                                context.resultParams.mainFile = value[0];
+                                form.isCompleted = true;
+                            } else {
+                                context.resultParams.mainFile = null;
+                                form.isCompleted = false;
+                            }
+                            if (form.nextButton) {
+                                form.nextButton.isDisable = !value?.length;
+                            }
+                            this.updateResultParams(context.resultParams);
+                        },
+                    },
+                    ],
+                },
+                ////////////////////////////////////////////////////////////////////
+                {
+                    stepLabel: "Итог",
+                    nextButton: { needShow: false, isDisable: false },
+                    resetButton: { needShow: true, isDisable: false },
+                    backButton: { needShow: true, isDisable: false },
+                    actionButton: { needShow: true, isDisable: false },
+                    checkbox: {
+                        needShow: true,
+                        isDisable: false,
+                        text: "Развернуть микросервис после обновления базы",
+                        value: false,
+                        action: (value: boolean, form: StepperDataStep) => {
+                            context.resultParams.needDeploy = value;
+                            this.updateResultParams(context.resultParams);
+                        }
+                    },
+                    isCompleted: context.resultParams.isComplete,
+                    fields: this.finalOptions,
+                    actionButtonAction: context.onFinish.bind(context),
+                },
+                ////////////////////////////////////////////////////////////////////
             ],
         }
         return stepperModel;
     }
 
+    public update(resultParams: IndexBaseResultParams) {
+        this.updateResultParams(resultParams);
+    }
+
     protected toFinalData(resultParams: IndexBaseResultParams): StepFields[] {
-        throw new Error("Method not implemented.");
+        const resultInfoFields: StepperLabelField[] = [{
+            type: OptionType.label,
+            fieldLabel: "Вид базы:",
+            text: resultParams.baseTypeName ?? "не выбран тип НБ",
+        }, {
+            type: OptionType.label,
+            fieldLabel: resultParams.addBase ? "Новая база индексов" : "База индексов:",
+            text: resultParams.addBase ? this.getIndexName(resultParams.addBase) : this.getIndexName(resultParams.baseChoice),
+        }, {
+            type: OptionType.label,
+            fieldLabel: "Файл c индексами:",
+            text: resultParams.mainFile?.name ?? "не выбран файл",
+        },
+        ];
+        if (resultParams.addBase) {
+
+        }
+        return resultInfoFields;
     }
 
     protected toSelectorBaseOptions(baseData: AvailableBaseIndexInfo[]): SelectorOption<AvailableBaseIndexInfo>[] {
         const selectorOptions: SelectorOption<AvailableBaseIndexInfo>[] = [];
+        selectorOptions.push({
+            isAvailable: true,
+            imgSrc: "assets\\icons\\add.svg",
+            value: "",
+            data: {},
+            action: () => { }
+        });
         baseData.forEach(x => {
             selectorOptions.push({
                 isAvailable: true,
-                value: "",
+                value: this.getIndexName(x),
                 data: x,
-                action: () => {
-                }
+                action: () => { }
             });
         });
         return selectorOptions;
     }
 
+    private getIndexName(indexBase: AvailableBaseIndexInfo | null): string {
+        return indexBase ? `Год: ${indexBase.year} | Период: ${DateIndeciesHelper.GetPeriod(indexBase)} | Тип: ${this.workCatPipe.transform(indexBase.parentIndex.workCategory)}` + " " : "не выбрана база";
+    }
+
+    private initAddIndexBase() {
+        const parentGuid = v4();
+        return {
+            guid: v4(),
+            isAvailable: true,
+            isCancelled: false,
+            releasePeriodType: ReleasePeriodType.Month,
+            releasePeriodValue: 0,
+            techDocPath: "",
+            type: BaseType.TSN_MGE,
+            year: 2000,
+            additionNumber: 1,
+            availableIndexWorkCategoryGuid: parentGuid,
+            parentIndex: {
+                availableNormativeBaseTypeGuid: "",
+                guid: parentGuid,
+                parentIndexName: "",
+                workCategory: WorkCategory.Build
+            }
+        }
+    }
+
     private setAddBaseForm(needAddForm: boolean, context: IndexBaseComponent, form: StepperDataStep) {
         if (needAddForm) {
-            context.resultParams.addBase = {
-                guid: v4(),
-                name: "",
-                additionNumber: 1,
-            }
-            context.resultParams.baseChoice = null;
-            form.stepLabel = "Добавление новой НБ"
-            form.fields.push(
-                {
-                    type: OptionType.label,
-                    text: context.resultParams.addBase.guid,
-                    fieldLabel: "Идентификатор добаляемой НБ",
-                    onDataChange: () => { }
-                }, {
-                type: OptionType.input,
-                fieldLabel: "Наименование НБ",
-                placeHolder: "",
-                onDataChange: (value: string, form: StepperDataStep) => {
-                    if (context.resultParams.addBase) {
-                        context.resultParams.addBase.name = value;
-                        if (form.nextButton) {
-                            form.nextButton.isDisable = !value;
-                        }
-                        form.isCompleted = !!value;
+            context.resultParams.addBase = this.addIndexBase;
+            form.stepLabel = "Добавление новой базы индексов"
+            form.isCompleted = true;
+            form.fields.push({
+                type: OptionType.label,
+                text: context.resultParams.addBase.guid,
+                fieldLabel: "Идентификатор добаляемой базы индексов",
+                onDataChange: () => { }
+            }, {
+                type: OptionType.selector,
+                fieldLabel: "Тип индекса",
+                startOptIdx: { value: 0 },
+                fieldOptions: this.getWorkCatSelectorOptions(),
+                onDataChange: (value: SelectorOption<string>, form: StepperDataStep) => {
+                    if (context.resultParams.addBase && value.value) {
+                        this.addIndexBase.parentIndex.workCategory = this.workCatPipe.backTransform(value.value) ?? WorkCategory.Build;
                     }
                 }
-
+            }, {
+                type: OptionType.selector,
+                fieldLabel: "Год выпуска",
+                startOptIdx: { value: 0 },
+                fieldOptions: this.getYearSelectorOptions(),
+                onDataChange: (value: SelectorOption<string>, form: StepperDataStep) => {
+                    if (context.resultParams.addBase && value.value) {
+                        this.addIndexBase.year = Number.parseInt(value.value)
+                    }
+                }
+            }, {
+                type: OptionType.selector,
+                fieldLabel: "Период выпуска",
+                startOptIdx: { value: 0 },
+                fieldOptions: this.getPeriodSelectorOptions(),
+                onDataChange: (value: SelectorOption<string>, form: StepperDataStep) => {
+                    if (context.resultParams.addBase && value.value) {
+                        const period = DateIndeciesHelper.toPeriodFromString(value.value);
+                        this.addIndexBase.releasePeriodType = period?.periodType ?? ReleasePeriodType.Month;
+                        this.addIndexBase.releasePeriodValue = period?.value ?? 0;
+                    }
+                }
             }, {
                 type: OptionType.input,
                 fieldLabel: "Номер дополнения",
@@ -107,14 +227,45 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                         context.resultParams.addBase.additionNumber = Number.parseInt(value);
                     }
                 }
-
             },
             )
         } else {
-            form.stepLabel = "Выбор НБ"
+            form.stepLabel = "Выбор базы индексов"
             context.resultParams.addBase = undefined;
             form.fields.splice(1);
         }
         return;
+    }
+
+    private getYearSelectorOptions(): SelectorOption<string>[] {
+        return DateIndeciesHelper.GetAllIndeciesYears().map(year => {
+            return {
+                value: year,
+                action: () => { },
+                isAvailable: true,
+                data: {},
+            }
+        });
+    }
+    private getPeriodSelectorOptions(): SelectorOption<string>[] {
+        return DateIndeciesHelper.GetAllMonths().concat(...DateIndeciesHelper.GetAllQuarters()).map(x => {
+            return {
+                value: x,
+                action: () => { },
+                isAvailable: true,
+                data: {},
+            }
+        });
+    }
+    private getWorkCatSelectorOptions(): SelectorOption<string>[] {
+        return Object.values(WorkCategory).map(x => {
+            return {
+                value: typeof x === "string" ? "" : this.workCatPipe.transform(x),
+                action: () => { },
+                isAvailable: true,
+                data: {},
+            };
+        }
+        ).filter(x => !!x.value);
     }
 }

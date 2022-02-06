@@ -48,7 +48,8 @@ export class StepperInputField extends StepperDataField<OptionType.input>  {
 }
 
 export class StepperSelectorField extends StepperDataField<OptionType.selector>  {
-    fieldOptions: SelectorOption<any>[] | undefined;
+    fieldOptions: SelectorOption<any>[] = [];
+    startOptIdx?: {value: number};
     onDataChange: <T>(value: SelectorOption<T>, form: StepperDataStep) => void = () => { return };
 }
 

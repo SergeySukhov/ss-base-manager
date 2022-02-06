@@ -16,7 +16,7 @@ export class StepperIntl extends MatStepperIntl {
   styleUrls: ['./stepper.component.scss'],
   providers: [
     FormBuilder,
-    {provide: MatStepperIntl, useClass: StepperIntl}
+    { provide: MatStepperIntl, useClass: StepperIntl }
   ]
 })
 export class StepperComponent implements OnInit {
@@ -60,7 +60,4 @@ export class StepperComponent implements OnInit {
   test(event: any) {
     this.modelChange.emit();
   }
-
-
-
 }
