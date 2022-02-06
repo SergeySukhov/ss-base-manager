@@ -291,7 +291,6 @@ export class ManagementSystem extends ManagementSystemBase {
     data.append("ContextId", this.hubService.connectionId ?? "");
     data.append("IsNewDatabase", "" + !!request.data.isAdd);
     data.append("Type", "" + request.data.baseType);
-    data.append("AdditionNumber", "" + request.data.additionNumber);
 
     sender.withCredentials = false;
     sender.open("POST", environment.formuls + "uploader");
