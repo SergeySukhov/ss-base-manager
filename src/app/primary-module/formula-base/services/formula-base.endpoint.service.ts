@@ -20,7 +20,7 @@ export class FormulaBaseEndpointService extends EndpointBaseService {
             messageType: NetMessageTypes.sendFormulsUpload,
             isSub: false,
             data: {
-                addonNumber: finalData.baseChoice.additionNumber,
+                additionNumber: finalData.baseChoice.additionNumber,
                 file: finalData.mainFile,
                 normoGuid: finalData.baseChoice.guid,
                 isAdd: false,

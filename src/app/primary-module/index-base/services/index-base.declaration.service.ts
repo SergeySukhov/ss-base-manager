@@ -17,6 +17,7 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
 
     finalOptions: StepFields[] = [];
     addIndexBase: AvailableBaseIndexInfo;
+    addIndexParams: { nr: number; sp: number; } = { nr: 0, sp: 0 };
 
     constructor(private endpoint: IndexBaseEndpointService, private workCatPipe: WorkCategoryPipe) {
         super(endpoint);
@@ -36,6 +37,7 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                     fields: [{
                         type: OptionType.selector,
                         fieldLabel: "Доступные базы индексов",
+                        fieldOptions: this.baseFieldOptions,
 
                         onDataChange: (value: SelectorOption<AvailableBaseIndexInfo>, form: StepperDataStep) => {
                             context.resultParams.baseChoice = value.data as AvailableBaseIndexInfo;
@@ -49,7 +51,6 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                             form.isCompleted = !form.nextButton?.isDisable
                             this.updateResultParams(context.resultParams);
                         },
-                        fieldOptions: this.baseFieldOptions,
                     },
                     ],
                 },
@@ -117,15 +118,24 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
         }, {
             type: OptionType.label,
             fieldLabel: resultParams.addBase ? "Новая база индексов" : "База индексов:",
-            text: resultParams.addBase ? this.getIndexName(resultParams.addBase) : this.getIndexName(resultParams.baseChoice),
+            text: resultParams.addBase ? this.getIndexName(resultParams.addBase.base) : this.getIndexName(resultParams.baseChoice),
         }, {
             type: OptionType.label,
             fieldLabel: "Файл c индексами:",
             text: resultParams.mainFile?.name ?? "не выбран файл",
+        }, {
+            type: OptionType.label,
+            fieldLabel: "Файл c техчастями:",
+            text: resultParams.fileTechDocs?.name ?? "не выбран файл (необязательно)",
         },
         ];
         if (resultParams.addBase) {
-
+            const nrspParams: StepperLabelField = {
+                type: OptionType.label,
+                fieldLabel: "НР и СП:",
+                text: "НР: " +resultParams.addBase?.nr + " | СП: " + resultParams.addBase.sp ?? "не выбран файл (необязательно)",
+            };
+            resultInfoFields.splice(2, 0, nrspParams);
         }
         return resultInfoFields;
     }
@@ -151,7 +161,7 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
     }
 
     private getIndexName(indexBase: AvailableBaseIndexInfo | null): string {
-        return indexBase ? `Год: ${indexBase.year} | Период: ${DateIndeciesHelper.GetPeriod(indexBase)} | Тип: ${this.workCatPipe.transform(indexBase.parentIndex.workCategory)}` + " " : "не выбрана база";
+        return indexBase ? `Год: ${indexBase.year} | Период выпуска: ${DateIndeciesHelper.GetPeriod(indexBase)}` : "не выбраны параметры";
     }
 
     private initAddIndexBase() {
@@ -178,28 +188,18 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
 
     private setAddBaseForm(needAddForm: boolean, context: IndexBaseComponent, form: StepperDataStep) {
         if (needAddForm) {
-            context.resultParams.addBase = this.addIndexBase;
+            context.resultParams.addBase = { base: this.addIndexBase, nr: this.addIndexParams.nr, sp: this.addIndexParams.sp };
             form.stepLabel = "Добавление новой базы индексов"
             form.isCompleted = true;
             form.fields.push({
                 type: OptionType.label,
-                text: context.resultParams.addBase.guid,
+                text: context.resultParams.addBase.base.guid,
                 fieldLabel: "Идентификатор добаляемой базы индексов",
                 onDataChange: () => { }
             }, {
                 type: OptionType.selector,
-                fieldLabel: "Тип индекса",
-                startOptIdx: { value: 0 },
-                fieldOptions: this.getWorkCatSelectorOptions(),
-                onDataChange: (value: SelectorOption<string>, form: StepperDataStep) => {
-                    if (context.resultParams.addBase && value.value) {
-                        this.addIndexBase.parentIndex.workCategory = this.workCatPipe.backTransform(value.value) ?? WorkCategory.Build;
-                    }
-                }
-            }, {
-                type: OptionType.selector,
                 fieldLabel: "Год выпуска",
-                startOptIdx: { value: 0 },
+                startOptIdx: { value: this.getYearSelectorOptions().findIndex(x => x.value === "" + this.addIndexBase.year) } ?? undefined,
                 fieldOptions: this.getYearSelectorOptions(),
                 onDataChange: (value: SelectorOption<string>, form: StepperDataStep) => {
                     if (context.resultParams.addBase && value.value) {
@@ -209,7 +209,7 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
             }, {
                 type: OptionType.selector,
                 fieldLabel: "Период выпуска",
-                startOptIdx: { value: 0 },
+                startOptIdx: { value: this.getPeriodSelectorOptions().findIndex(x => x.value === DateIndeciesHelper.GetPeriod(this.addIndexBase)) } ?? undefined,
                 fieldOptions: this.getPeriodSelectorOptions(),
                 onDataChange: (value: SelectorOption<string>, form: StepperDataStep) => {
                     if (context.resultParams.addBase && value.value) {
@@ -220,11 +220,37 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                 }
             }, {
                 type: OptionType.input,
+                inputType: "number",
                 fieldLabel: "Номер дополнения",
+                placeHolder: "",
+                initValue: this.addIndexBase.additionNumber,
+                onDataChange: (value: string) => {
+                    if (context.resultParams.addBase) {
+                        context.resultParams.addBase.base.additionNumber = Number.parseInt(value);
+                    }
+                }
+            }, {
+                type: OptionType.input,
+                fieldLabel: "НР",
+                placeHolder: "",
+                inputType: "number",
+                initValue: this.addIndexParams.nr,
+
+                onDataChange: (value: string) => {
+                    if (context.resultParams.addBase) {
+                        context.resultParams.addBase.nr = Number.parseInt(value);
+                    }
+                }
+            }, {
+                type: OptionType.input,
+                fieldLabel: "СП",
+                inputType: "number",
+                initValue: this.addIndexParams.sp,
+
                 placeHolder: "",
                 onDataChange: (value: string) => {
                     if (context.resultParams.addBase) {
-                        context.resultParams.addBase.additionNumber = Number.parseInt(value);
+                        context.resultParams.addBase.sp = Number.parseInt(value);
                     }
                 }
             },
@@ -247,6 +273,7 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
             }
         });
     }
+
     private getPeriodSelectorOptions(): SelectorOption<string>[] {
         return DateIndeciesHelper.GetAllMonths().concat(...DateIndeciesHelper.GetAllQuarters()).map(x => {
             return {
@@ -256,16 +283,5 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                 data: {},
             }
         });
-    }
-    private getWorkCatSelectorOptions(): SelectorOption<string>[] {
-        return Object.values(WorkCategory).map(x => {
-            return {
-                value: typeof x === "string" ? "" : this.workCatPipe.transform(x),
-                action: () => { },
-                isAvailable: true,
-                data: {},
-            };
-        }
-        ).filter(x => !!x.value);
     }
 }

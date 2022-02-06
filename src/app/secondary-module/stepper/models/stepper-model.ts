@@ -44,6 +44,8 @@ export class StepperLabelField extends StepperDataField<OptionType.label>  {
 
 export class StepperInputField extends StepperDataField<OptionType.input>  {
     placeHolder?: string = "";
+    inputType?: string = "";
+    initValue?: any = "";
     onDataChange: (value: any, form: StepperDataStep) => void = () => { return };
 }
 

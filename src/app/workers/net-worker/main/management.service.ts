@@ -285,12 +285,13 @@ export class ManagementSystem extends ManagementSystemBase {
 
     let data = new FormData();
     data.append("SourceFile", request.data.file);
-    data.append("AdditionNumber", "" + request.data.addonNumber);
+    data.append("AdditionNumber", "" + request.data.additionNumber);
     data.append("Guid", request.data.normoGuid);
     data.append("Deploy", "" + request.data.isDeploy);
     data.append("ContextId", this.hubService.connectionId ?? "");
     data.append("IsNewDatabase", "" + !!request.data.isAdd);
     data.append("Type", "" + request.data.baseType);
+    data.append("AdditionNumber", "" + request.data.additionNumber);
 
     sender.withCredentials = false;
     sender.open("POST", environment.formuls + "uploader");
@@ -325,11 +326,11 @@ export class ManagementSystem extends ManagementSystemBase {
     var data = new FormData();
     data.append("xmlFile", request.data.fileNormatives);
     data.append("normoGuid", request.data.normoGuid);
-    data.append("type", request.data.normoGuid);
-    data.append("deploy", "" + request.data.isDeploy);
+    data.append("Deploy", "" + request.data.isDeploy);
     data.append("ContextId", this.hubService.connectionId ?? "");
     data.append("IsNewDatabase", "" + !!request.data.addBase);
     data.append("Type", "" + request.data.baseType);
+    data.append("AdditionNumber", "" + request.data.additionNumber);
 
     sender.withCredentials = false;
     sender.open("POST", environment.normo + "uploader");
@@ -364,11 +365,11 @@ export class ManagementSystem extends ManagementSystemBase {
     var data = new FormData();
     data.append("xmlFile", request.data.file);
     data.append("normoGuid", request.data.normoGuid);
-    data.append("type", request.data.normoGuid);
-    data.append("deploy", "" + request.data.isDeploy);
+    data.append("Deploy", "" + request.data.isDeploy);
     data.append("ContextId", this.hubService.connectionId ?? "");
     data.append("IsNewDatabase", "" + !!request.data.addBase);
     data.append("Type", "" + request.data.baseType);
+    data.append("AdditionNumber", "" + request.data.additionNumber);
 
     sender.withCredentials = false;
     sender.open("POST", environment.indecies + "uploader");

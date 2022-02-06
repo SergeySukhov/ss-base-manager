@@ -20,14 +20,18 @@ export class IndexBaseEndpointService extends EndpointBaseService {
             messageType: NetMessageTypes.sendIndeciesUpload,
             isSub: false,
             data: {
-                addonNumber: finalData.baseChoice.additionNumber,
+                additionNumber: finalData.baseChoice.additionNumber,
                 file: finalData.mainFile,
                 normoGuid: finalData.baseChoice.guid,
                 isDeploy: finalData.needDeploy,
                 baseType: finalData.baseType,
                 addBase: finalData.addBase ? {
-                    guid: finalData.addBase.guid,
-                    name: "",
+                    guid: finalData.addBase.base.guid,
+                    overhead: 0,
+                    profit: 0,
+                    year: finalData.addBase.base.year,
+                    periodType: finalData.addBase.base.releasePeriodType,
+                    periodValue: finalData.addBase.base.releasePeriodValue,
                 } : undefined,
             },
         }, false);

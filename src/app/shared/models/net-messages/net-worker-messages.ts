@@ -2,7 +2,7 @@
 import { NotificationMessage } from "src/app/core/common/models/notification.models";
 import { BaseWorkerMessage } from "../base-worker-message";
 import { AvailableBaseAdditionInfo } from "../server-models/AvailableBaseAdditionInfo";
-import { AvailableBaseIndexInfo } from "../server-models/AvailableBaseIndexInfo";
+import { AvailableBaseIndexInfo, ReleasePeriodType } from "../server-models/AvailableBaseIndexInfo";
 import { AvailableNormativeBaseType, BaseType } from "../server-models/AvailableNormativeBaseType";
 
 export enum NetMessageTypes {
@@ -65,7 +65,7 @@ export interface NWEditAvailableBases extends NWRequestBase<NetMessageTypes.mana
 export interface NWRequestUploadFormuls extends NWRequestBase<NetMessageTypes.sendFormulsUpload> {
   data: {
     file: File,
-    addonNumber: number,
+    additionNumber: number,
     normoGuid: string,
     isAdd?: boolean,
     isDeploy?: boolean,
@@ -79,7 +79,7 @@ export interface NWRequestUploadNormatives extends NWRequestBase<NetMessageTypes
     fileNormatives: File;
     fileFormuls?: File,
     fileTechs?: File,
-    addonNumber: number,
+    additionNumber: number,
     normoGuid: string,
     addBase?: {
       guid: string;
@@ -94,11 +94,15 @@ export interface NWRequestUploadNormatives extends NWRequestBase<NetMessageTypes
 export interface NWRequestUploadIndecies extends NWRequestBase<NetMessageTypes.sendIndeciesUpload> {
   data: {
     file: File,
-    addonNumber: number,
+    additionNumber: number,
     normoGuid: string,
     addBase?: {
       guid: string;
-      name: string,
+      year: number;
+      periodType: ReleasePeriodType;
+      periodValue: number;
+      overhead: number;
+      profit: number;
     },
     isDeploy?: boolean
     baseType: BaseType;
