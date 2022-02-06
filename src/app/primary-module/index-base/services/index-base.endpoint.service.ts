@@ -23,8 +23,12 @@ export class IndexBaseEndpointService extends EndpointBaseService {
                 addonNumber: finalData.baseChoice.additionNumber,
                 file: finalData.mainFile,
                 normoGuid: finalData.baseChoice.guid,
-                isAdd: false,
-                isDeploy: finalData.needDeploy
+                isDeploy: finalData.needDeploy,
+                baseType: finalData.baseType,
+                addBase: finalData.addBase ? {
+                    guid: finalData.addBase.guid,
+                    name: "",
+                } : undefined,
             },
         }, false);
     }

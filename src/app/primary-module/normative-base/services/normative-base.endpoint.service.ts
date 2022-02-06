@@ -19,12 +19,16 @@ export class NormativeBaseEndpointService extends EndpointBaseService {
         const avNB = await this.netWorker.postMessageToWorkerAsync({
             messageType: NetMessageTypes.sendNormativesUpload,
             isSub: false,
-
             data: {
                 addonNumber: finalData.baseChoice?.additionNumber ?? 11,
                 fileNormatives: finalData.mainFile,
                 normoGuid: finalData.addBase?.guid ?? finalData.baseChoice?.guid ?? "",
-                isDeploy: finalData.needDeploy
+                isDeploy: finalData.needDeploy,
+                baseType: finalData.baseType,
+                addBase: finalData.addBase ? {
+                    guid: finalData.addBase.guid,
+                    name: "",
+                } : undefined,
             },
         });
     }

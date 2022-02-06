@@ -1,6 +1,6 @@
 ﻿import { Subject } from "rxjs";
 import { ImoprtanceLevel, NotificationType } from "src/app/core/common/models/notification.models";
-import { NWRequest, NetMessageTypes, NWResponse, NWResponseAvailableBases, NWRequestAvailableBases, NWRequestUploadFormuls, NWResponseUploadFormuls, NWRequestUploadNormatives, NWResponseUploadNormatives, NWAddAvailableBases, NWEditAvailableBases, NWRemoveAvailableBases, NWResponseCommon, NWRequestAvailableBaseTypes, NWResponseAvailableBaseTypes, NetSubTypes, NWInitSubBase, NWRequestSub, NWSubMessage, NWRequestNotificationSub, NWRequestAvailableIndeciesBases, NWResponseAvailableIndeciesBases } from "src/app/shared/models/net-messages/net-worker-messages";
+import { NWRequest, NetMessageTypes, NWResponse, NWResponseAvailableBases, NWRequestAvailableBases, NWRequestUploadFormuls, NWResponseUploadFormuls, NWRequestUploadNormatives, NWResponseUploadNormatives, NWAddAvailableBases, NWEditAvailableBases, NWRemoveAvailableBases, NWResponseCommon, NWRequestAvailableBaseTypes, NWResponseAvailableBaseTypes, NetSubTypes, NWInitSubBase, NWRequestSub, NWSubMessage, NWRequestNotificationSub, NWRequestAvailableIndeciesBases, NWResponseAvailableIndeciesBases, NWRequestUploadIndecies, NWResponseUploadIndecies } from "src/app/shared/models/net-messages/net-worker-messages";
 import { AvailableBaseAdditionInfo } from "src/app/shared/models/server-models/AvailableBaseAdditionInfo";
 import { AvailableNormativeBaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { ManagementSystemBase } from "src/app/shared/models/worker-models/management-system-base";
@@ -51,6 +51,9 @@ export class ManagementSystem extends ManagementSystemBase {
           break;
         case NetMessageTypes.sendNormativesUpload:
           this.sendUploadNormatives(request);
+          break;
+        case NetMessageTypes.sendIndeciesUpload:
+          this.sendUploadIndecies(request);
           break;
         case NetMessageTypes.managerAddNodes:
           this.sendManagerAddNodes(request);
@@ -236,7 +239,7 @@ export class ManagementSystem extends ManagementSystemBase {
     this.setSenderHandlers(sender, response);
     sender.send();
   }
-  
+
   private async sendRequestGetIndeciesBases(request: NWRequestAvailableIndeciesBases) {
     const sender = new XMLHttpRequest();
     const response: NWResponseAvailableIndeciesBases = {
@@ -286,6 +289,8 @@ export class ManagementSystem extends ManagementSystemBase {
     data.append("Guid", request.data.normoGuid);
     data.append("Deploy", "" + request.data.isDeploy);
     data.append("ContextId", this.hubService.connectionId ?? "");
+    data.append("IsNewDatabase", "" + !!request.data.isAdd);
+    data.append("Type", "" + request.data.baseType);
 
     sender.withCredentials = false;
     sender.open("POST", environment.formuls + "uploader");
@@ -323,9 +328,50 @@ export class ManagementSystem extends ManagementSystemBase {
     data.append("type", request.data.normoGuid);
     data.append("deploy", "" + request.data.isDeploy);
     data.append("ContextId", this.hubService.connectionId ?? "");
+    data.append("IsNewDatabase", "" + !!request.data.addBase);
+    data.append("Type", "" + request.data.baseType);
 
     sender.withCredentials = false;
     sender.open("POST", environment.normo + "uploader");
+
+    sender.setRequestHeader('Access-Control-Allow-Origin', '*');
+    sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    sender.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    sender.timeout = 5000;
+
+    sender.onreadystatechange = async () => {
+      if (sender.readyState == XMLHttpRequest.DONE && sender.response) {
+        if (sender.status === 200) {
+          this.messageHandler.toClient(response);
+        } else {
+          this.errorHandler(response);
+        }
+      }
+    }
+
+    this.setSenderHandlers(sender, response);
+    sender.send(data);
+  }
+
+  private async sendUploadIndecies(request: NWRequestUploadIndecies) {
+    const sender = new XMLHttpRequest();
+    const response: NWResponseUploadIndecies = {
+      guid: request.guid,
+      messageType: request.messageType,
+      isSub: false,
+    }
+
+    var data = new FormData();
+    data.append("xmlFile", request.data.file);
+    data.append("normoGuid", request.data.normoGuid);
+    data.append("type", request.data.normoGuid);
+    data.append("deploy", "" + request.data.isDeploy);
+    data.append("ContextId", this.hubService.connectionId ?? "");
+    data.append("IsNewDatabase", "" + !!request.data.addBase);
+    data.append("Type", "" + request.data.baseType);
+
+    sender.withCredentials = false;
+    sender.open("POST", environment.indecies + "uploader");
 
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');
     sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');

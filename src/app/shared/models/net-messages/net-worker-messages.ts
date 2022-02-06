@@ -68,13 +68,15 @@ export interface NWRequestUploadFormuls extends NWRequestBase<NetMessageTypes.se
     addonNumber: number,
     normoGuid: string,
     isAdd?: boolean,
-    isDeploy?: boolean
+    isDeploy?: boolean,
+    baseType: BaseType;
+
   }
 }
 
 export interface NWRequestUploadNormatives extends NWRequestBase<NetMessageTypes.sendNormativesUpload> {
   data: {
-    fileNormatives: File,
+    fileNormatives: File;
     fileFormuls?: File,
     fileTechs?: File,
     addonNumber: number,
@@ -83,7 +85,9 @@ export interface NWRequestUploadNormatives extends NWRequestBase<NetMessageTypes
       guid: string;
       name: string,
     },
-    isDeploy?: boolean
+    isDeploy?: boolean;
+    baseType: BaseType;
+
   }
 }
 
@@ -92,8 +96,12 @@ export interface NWRequestUploadIndecies extends NWRequestBase<NetMessageTypes.s
     file: File,
     addonNumber: number,
     normoGuid: string,
-    isAdd?: boolean,
+    addBase?: {
+      guid: string;
+      name: string,
+    },
     isDeploy?: boolean
+    baseType: BaseType;
   }
 }
 

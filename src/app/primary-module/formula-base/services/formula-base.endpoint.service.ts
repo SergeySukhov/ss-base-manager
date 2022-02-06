@@ -24,7 +24,8 @@ export class FormulaBaseEndpointService extends EndpointBaseService {
                 file: finalData.mainFile,
                 normoGuid: finalData.baseChoice.guid,
                 isAdd: false,
-                isDeploy: finalData.needDeploy
+                isDeploy: finalData.needDeploy,
+                baseType: finalData.baseType,
             },
         }, false);
     }
