@@ -12,7 +12,7 @@ export class IndexBaseEndpointService extends EndpointBaseService {
     }
 
     public async sendIndecies(finalData: IndexBaseResultParams): Promise<void> {
-        if (!finalData.file || !finalData.indexBaseChoice) {
+        if (!finalData.mainFile || !finalData.baseChoice) {
             return;
         }
 
@@ -20,9 +20,9 @@ export class IndexBaseEndpointService extends EndpointBaseService {
             messageType: NetMessageTypes.sendIndeciesUpload,
             isSub: false,
             data: {
-                addonNumber: finalData.indexBaseChoice.additionNumber,
-                file: finalData.file,
-                normoGuid: finalData.indexBaseChoice.guid,
+                addonNumber: finalData.baseChoice.additionNumber,
+                file: finalData.mainFile,
+                normoGuid: finalData.baseChoice.guid,
                 isAdd: false,
                 isDeploy: finalData.needDeploy
             },

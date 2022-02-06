@@ -12,7 +12,7 @@ export class FormulaBaseEndpointService extends EndpointBaseService {
     }
 
     public async sendFormuls(finalData: FormBaseResultParams): Promise<void> {
-        if (!finalData.file || !finalData.normBaseChoice) {
+        if (!finalData.mainFile || !finalData.baseChoice) {
             return;
         }
 
@@ -20,9 +20,9 @@ export class FormulaBaseEndpointService extends EndpointBaseService {
             messageType: NetMessageTypes.sendFormulsUpload,
             isSub: false,
             data: {
-                addonNumber: finalData.normBaseChoice.additionNumber,
-                file: finalData.file,
-                normoGuid: finalData.normBaseChoice.guid,
+                addonNumber: finalData.baseChoice.additionNumber,
+                file: finalData.mainFile,
+                normoGuid: finalData.baseChoice.guid,
                 isAdd: false,
                 isDeploy: finalData.needDeploy
             },

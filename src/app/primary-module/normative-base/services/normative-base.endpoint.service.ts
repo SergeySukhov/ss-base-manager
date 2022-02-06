@@ -12,7 +12,7 @@ export class NormativeBaseEndpointService extends EndpointBaseService {
     }
 
     public async sendNormatives(finalData: NormBaseResultParams): Promise<void> {
-        if (!finalData.fileNormatives) {
+        if (!finalData.mainFile) {
             return;
         }
 
@@ -21,9 +21,9 @@ export class NormativeBaseEndpointService extends EndpointBaseService {
             isSub: false,
 
             data: {
-                addonNumber: finalData.normBaseChoice?.additionNumber ?? 11,
-                fileNormatives: finalData.fileNormatives,
-                normoGuid: finalData.addBase?.guid ?? finalData.normBaseChoice?.guid ?? "",
+                addonNumber: finalData.baseChoice?.additionNumber ?? 11,
+                fileNormatives: finalData.mainFile,
+                normoGuid: finalData.addBase?.guid ?? finalData.baseChoice?.guid ?? "",
                 isDeploy: finalData.needDeploy
             },
         });

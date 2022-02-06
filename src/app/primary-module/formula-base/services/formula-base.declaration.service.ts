@@ -9,8 +9,7 @@ import { FormulaBaseEndpointService } from "./formula-base.endpoint.service";
 
 
 @Injectable()
-export class FormulaBaseDeclarationService extends DeclarationBaseService<FormBaseResultParams> {
-    normBaseFieldOptions: SelectorOption<AvailableBaseAdditionInfo>[] = [];
+export class FormulaBaseDeclarationService extends DeclarationBaseService<AvailableBaseAdditionInfo, FormBaseResultParams> {
     finalOptions: StepFields[] = [];
     constructor(private endpoint: FormulaBaseEndpointService) {
         super(endpoint);
@@ -20,7 +19,7 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<FormBa
         const stepperModel: StepperData = {
             isLinear: true,
             steps: [
-                this.getBaseTypeStep(avTypes, () => {}),
+                this.getBaseTypeStep(avTypes, context.resultParams, this.endpoint.getAvailableNormativeBases.bind(this.endpoint)),
                 ////////////////////////////////////////////////////////////////////
                 {
                     stepLabel: "Выбор НБ",
@@ -30,7 +29,7 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<FormBa
                         type: OptionType.selector,
                         fieldLabel: "Доступные НБ",
                         onDataChange: (value: SelectorOption<AvailableBaseAdditionInfo>, form: StepperDataStep) => {
-                            context.resultParams.normBaseChoice = value.data as AvailableBaseAdditionInfo;
+                            context.resultParams.baseChoice = value.data as AvailableBaseAdditionInfo;
 
                             if (form.nextButton) {
                                 form.nextButton.isDisable = false;
@@ -38,7 +37,7 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<FormBa
                             form.isCompleted = true;
                             this.updateResultParams(context.resultParams);
                         },
-                        fieldOptions: this.normBaseFieldOptions,
+                        fieldOptions: this.baseFieldOptions,
                     },
                     ],
                 },
@@ -53,10 +52,10 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<FormBa
                         fileFormats: [".csv", ".svg"],
                         onDataChange: (value: File[], form: StepperDataStep) => {
                             if (value?.length) {
-                                context.resultParams.file = value[0];
+                                context.resultParams.mainFile = value[0];
                                 form.isCompleted = true;
                             } else {
-                                context.resultParams.file = null;
+                                context.resultParams.mainFile = null;
                                 form.isCompleted = false;
                             }
                             if (form.nextButton) {
@@ -104,16 +103,16 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<FormBa
         }, {
             type: OptionType.label,
             fieldLabel: "Формулы для нормативной базы:",
-            text: resultParams.normBaseChoice?.name ?? "не выбрана база",
+            text: resultParams.baseChoice?.name ?? "не выбрана база",
         }, {
             type: OptionType.label,
             fieldLabel: "Файл c формулами:",
-            text: resultParams.file?.name ?? "не выбран файл",
+            text: resultParams.mainFile?.name ?? "не выбран файл",
         },
         ]
     }
 
-    protected toSelectorOptions(baseData: AvailableBaseAdditionInfo[]): SelectorOption<AvailableBaseAdditionInfo>[] {
+    protected toSelectorBaseOptions(baseData: AvailableBaseAdditionInfo[]): SelectorOption<AvailableBaseAdditionInfo>[] {
         const selectorOptions: SelectorOption<AvailableBaseAdditionInfo>[] = [];
         baseData.forEach(x => {
             selectorOptions.push({

@@ -249,6 +249,7 @@ export class ManagementSystem extends ManagementSystemBase {
     sender.withCredentials = false;
 
     // sender.open("GET", environment.manager + "indexinfo/normoBaseType?baseType=" + request.data.type);
+    // TODO: является ли новой
     sender.open("GET", environment.manager + "indexinfo");
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');
     sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')

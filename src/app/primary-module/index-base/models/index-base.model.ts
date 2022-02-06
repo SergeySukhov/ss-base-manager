@@ -1,14 +1,13 @@
 import { AvailableBaseIndexInfo } from "src/app/shared/models/server-models/AvailableBaseIndexInfo";
+import { ResultUploadParamsBase } from "../../normative-base/models/base-result-params.model";
 
-export class IndexBaseResultParams {
-    baseTypeName: string = "";
+export class IndexBaseResultParams extends ResultUploadParamsBase<AvailableBaseIndexInfo>  {
     additionNumber: number = 0;
 
-    indexBaseChoice: AvailableBaseIndexInfo | null = null;
-    needDeploy = false;
-    file: File | null = null;
-    get isComplete(): boolean {
-        return !!(this.baseTypeName && this.indexBaseChoice && this.file)
+    addBase?: {
+        guid: string;
+        name: string;
+        additionNumber: number;
     }
 }
 

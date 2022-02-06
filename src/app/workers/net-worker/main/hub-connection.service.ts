@@ -39,7 +39,7 @@ export class HubConnectionService {
         if (!!this.pConnectionId) {
             this.events.next({ message: "Соединение установлено", type: NotificationType.info, importance: ImoprtanceLevel.high });
         } else {
-            this.events.next({ message: "Соединение не установлено", type: NotificationType.warn, importance: ImoprtanceLevel.high });
+            this.events.next({ message: "Соединение с сервером не установлено", type: NotificationType.warn, importance: ImoprtanceLevel.high });
         }
     }
 
