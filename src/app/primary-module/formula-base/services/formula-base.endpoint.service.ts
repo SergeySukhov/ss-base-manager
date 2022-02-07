@@ -28,12 +28,6 @@ export class FormulaBaseEndpointService extends EndpointBaseService {
                 Type: finalData.baseType,
                 SourceFile: finalData.mainFile,
                 DocumentZipFile: null,
-                // additionNumber: finalData.baseChoice.additionNumber,
-                // file: finalData.mainFile,
-                // normoGuid: finalData.baseChoice.guid,
-                // isAdd: false,
-                // isDeploy: finalData.needDeploy,
-                // baseType: finalData.baseType,
             },
         }, false);
     }
