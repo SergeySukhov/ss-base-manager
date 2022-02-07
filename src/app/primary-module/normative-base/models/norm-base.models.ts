@@ -6,10 +6,5 @@ export class NormBaseResultParams extends ResultUploadParamsBase<AvailableBaseAd
 
     fileFormuls: File | null = null;
     fileTechDocs: File | null = null;
-
-    addBase?: {
-        guid: string;
-        name: string;
-        additionNumber: number;
-    }
+    addBase?: AvailableBaseAdditionInfo;
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StepperData } from "src/app/secondary-module/stepper/models/stepper-model";
+import { FormulaBaseEndpointService } from "../formula-base/services/formula-base.endpoint.service";
 import { NormBaseResultParams } from './models/norm-base.models';
 import { NormativeBaseDeclarationService } from "./services/normative-base.declaration.service";
 import { NormativeBaseEndpointService } from './services/normative-base.endpoint.service';
@@ -12,7 +13,9 @@ import { NormativeBaseStateService } from './services/normative-base.state.servi
   providers: [
     NormativeBaseDeclarationService,
     NormativeBaseEndpointService,
-    NormativeBaseStateService]
+    NormativeBaseStateService,
+    FormulaBaseEndpointService,
+  ]
 })
 export class NormativeBaseComponent implements OnInit {
 
@@ -33,8 +36,11 @@ export class NormativeBaseComponent implements OnInit {
   }
 
   onFinish() {
-
     this.endpointService.sendNormatives(this.resultParams);
   }
 
+  onModelChange() {
+    this.declarationService.update(this.resultParams);
+  }
+  
 }

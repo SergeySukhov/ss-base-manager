@@ -4,6 +4,8 @@ import { BaseWorkerMessage } from "../base-worker-message";
 import { AvailableBaseAdditionInfo } from "../server-models/AvailableBaseAdditionInfo";
 import { AvailableBaseIndexInfo, ReleasePeriodType } from "../server-models/AvailableBaseIndexInfo";
 import { AvailableNormativeBaseType, BaseType } from "../server-models/AvailableNormativeBaseType";
+import { NormoRequestUploader } from "../server-models/server-upload-request-models/NormoRequestUploader";
+import { CommonRequestUploader } from "../server-models/server-upload-request-models/UploadRequestsBase";
 
 export enum NetMessageTypes {
   init,
@@ -63,32 +65,11 @@ export interface NWEditAvailableBases extends NWRequestBase<NetMessageTypes.mana
 }
 
 export interface NWRequestUploadFormuls extends NWRequestBase<NetMessageTypes.sendFormulsUpload> {
-  data: {
-    file: File,
-    additionNumber: number,
-    normoGuid: string,
-    isAdd?: boolean,
-    isDeploy?: boolean,
-    baseType: BaseType;
-
-  }
+  data: CommonRequestUploader
 }
 
 export interface NWRequestUploadNormatives extends NWRequestBase<NetMessageTypes.sendNormativesUpload> {
-  data: {
-    fileNormatives: File;
-    fileFormuls?: File,
-    fileTechs?: File,
-    additionNumber: number,
-    normoGuid: string,
-    addBase?: {
-      guid: string;
-      name: string,
-    },
-    isDeploy?: boolean;
-    baseType: BaseType;
-
-  }
+  data: NormoRequestUploader;
 }
 
 export interface NWRequestUploadIndecies extends NWRequestBase<NetMessageTypes.sendIndeciesUpload> {

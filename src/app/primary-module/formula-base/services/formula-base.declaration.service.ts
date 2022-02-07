@@ -95,6 +95,10 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<Availa
         return stepperModel;
     }
 
+    public update(resultParams: FormBaseResultParams) {
+        this.updateResultParams(resultParams);
+    }
+
     protected toFinalData(resultParams: FormBaseResultParams): StepperLabelField[] {
         return [{
             type: OptionType.label,

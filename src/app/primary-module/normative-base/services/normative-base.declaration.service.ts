@@ -11,9 +11,11 @@ import { NormativeBaseStateService } from "./normative-base.state.service";
 
 @Injectable()
 export class NormativeBaseDeclarationService extends DeclarationBaseService<AvailableBaseAdditionInfo, NormBaseResultParams> {
+    additionalBase: AvailableBaseAdditionInfo;
 
     constructor(private endpoint: NormativeBaseEndpointService, private stateService: NormativeBaseStateService) {
         super();
+        this.additionalBase = this.initAddAdditionalBase();
     }
 
     public getStepperModel(context: NormativeBaseComponent, avTypes: AvailableNormativeBaseType[]): StepperData {
@@ -140,6 +142,10 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
         return stepperModel;
     }
 
+    public update(resultParams: NormBaseResultParams) {
+        this.updateResultParams(resultParams);
+    }
+
     protected toFinalData(resultParams: NormBaseResultParams): StepperLabelField[] {
         const resultInfoFields: StepperLabelField[] = [{
             type: OptionType.label,
@@ -147,7 +153,7 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
             text: resultParams.baseTypeName ?? "не выбран тип НБ",
         }, {
             type: OptionType.label,
-            fieldLabel: resultParams.addBase ? "Новая нормативная" : "Нормативная база:",
+            fieldLabel: resultParams.addBase ? "Новая нормативная база" : "Нормативная база:",
             text: resultParams.addBase?.name ?? resultParams.baseChoice?.name ?? "не выбрана база",
         }, {
             type: OptionType.label,
@@ -163,15 +169,6 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
             text: resultParams.fileTechDocs?.name ?? "не выбран файл (необязательно)",
         },
         ];
-        // if (resultParams.addBase) {
-        //     const addInfo: StepperLabelField = {
-        //         type: OptionType.label,
-        //         fieldLabel: "Файл c техчастями:",
-        //         text: resultParams.fileTechDocs?.name ?? "не выбран файл (необязательно)",
-        //     };
-
-        //     resultInfoFields.splice(2, 0, addInfo);
-        // }
         return resultInfoFields;
     }
 
@@ -197,49 +194,72 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
         return selectorOptions;
     }
 
+    private initAddAdditionalBase(): AvailableBaseAdditionInfo {
+        return {
+            guid: v4(),
+            isAvailable: true,
+            isCancelled: false,
+            additionRegexp: "",
+            name: "",
+            shortName: "",
+            parentBaseType: undefined,
+            type: BaseType.TSN_MGE,
+            additionNumber: 1,
+
+        }
+    }
+
     private setAddBaseForm(needAddForm: boolean, context: NormativeBaseComponent, form: StepperDataStep) {
         if (needAddForm) {
-            context.resultParams.addBase = {
-                guid: v4(),
-                name: "",
-                additionNumber: 1,
-            }
-            context.resultParams.baseChoice = null;
+            this.additionalBase.guid = v4();
+            context.resultParams.addBase = this.additionalBase;
+            form.isCompleted = true;
+            form.nextButton = { isDisable: false, needShow: true }
             form.stepLabel = "Добавление новой НБ"
-            form.fields.push(
-                {
-                    type: OptionType.label,
-                    text: context.resultParams.addBase.guid,
-                    fieldLabel: "Идентификатор добавляемой НБ",
-                    onDataChange: () => { }
-                }, {
+            form.fields.push({
+                type: OptionType.label,
+                text: this.additionalBase.guid,
+                fieldLabel: "Идентификатор добавляемой НБ",
+                onDataChange: () => { }
+            }, {
                 type: OptionType.input,
                 fieldLabel: "Наименование НБ",
+                initValue: this.additionalBase.name,
                 placeHolder: "",
                 onDataChange: (value: string, form: StepperDataStep) => {
-                    if (context.resultParams.addBase) {
-                        context.resultParams.addBase.name = value;
-                        if (form.nextButton) {
-                            form.nextButton.isDisable = !value;
-                        }
-                        form.isCompleted = !!value;
-                    }
+                    this.additionalBase.name = value;
+                }
+            }, {
+                type: OptionType.input,
+                fieldLabel: "Краткое наименование НБ",
+                placeHolder: "",
+                initValue: this.additionalBase.shortName,
+                onDataChange: (value: string, form: StepperDataStep) => {
+                    this.additionalBase.shortName = value;
+                }
+            }, {
+                type: OptionType.input,
+                fieldLabel: "Номер дополнения",
+                inputType: "number",
+                initValue: this.additionalBase.additionNumber,
+                placeHolder: "",
+                onDataChange: (value: string) => {
+                    this.additionalBase.additionNumber = Number.parseInt(value) ?? 1;
                 }
 
             }, {
                 type: OptionType.input,
-                fieldLabel: "Номер дополнения",
+                fieldLabel: "Регулярное выражение",
+                initValue: this.additionalBase.additionNumber,
                 placeHolder: "",
                 onDataChange: (value: string) => {
-                    if (context.resultParams.addBase) {
-                        context.resultParams.addBase.additionNumber = Number.parseInt(value) ?? 1;
-                    }
+                    this.additionalBase.additionRegexp = value;
                 }
 
             },
             )
         } else {
-            form.stepLabel = "Выбор НБ"
+            form.stepLabel = "Выбор НБ";
             context.resultParams.addBase = undefined;
             form.fields.splice(1);
         }

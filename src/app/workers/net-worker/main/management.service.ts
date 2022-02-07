@@ -283,14 +283,11 @@ export class ManagementSystem extends ManagementSystemBase {
       isSub: false,
     }
 
-    let data = new FormData();
-    data.append("SourceFile", request.data.file);
-    data.append("AdditionNumber", "" + request.data.additionNumber);
-    data.append("Guid", request.data.normoGuid);
-    data.append("Deploy", "" + request.data.isDeploy);
-    data.append("ContextId", this.hubService.connectionId ?? "");
-    data.append("IsNewDatabase", "" + !!request.data.isAdd);
-    data.append("Type", "" + request.data.baseType);
+    let requestData = new FormData();
+    request.data.ContextId = this.hubService.connectionId ?? "";
+    for (const [key, value] of Object.entries(request.data)) {
+        requestData.append(key, value);
+    }
 
     sender.withCredentials = false;
     sender.open("POST", environment.formuls + "uploader");
@@ -311,7 +308,7 @@ export class ManagementSystem extends ManagementSystemBase {
     }
 
     this.setSenderHandlers(sender, response);
-    sender.send(data);
+    sender.send(requestData);
   }
 
   private async sendUploadNormatives(request: NWRequestUploadNormatives) {
@@ -322,14 +319,11 @@ export class ManagementSystem extends ManagementSystemBase {
       isSub: false,
     }
 
-    var data = new FormData();
-    data.append("xmlFile", request.data.fileNormatives);
-    data.append("normoGuid", request.data.normoGuid);
-    data.append("Deploy", "" + request.data.isDeploy);
-    data.append("ContextId", this.hubService.connectionId ?? "");
-    data.append("IsNewDatabase", "" + !!request.data.addBase);
-    data.append("Type", "" + request.data.baseType);
-    data.append("AdditionNumber", "" + request.data.additionNumber);
+    let requestData = new FormData();
+    request.data.ContextId = this.hubService.connectionId ?? "";
+    for (const [key, value] of Object.entries(request.data)) {
+        requestData.append(key, value);
+    }
 
     sender.withCredentials = false;
     sender.open("POST", environment.normo + "uploader");
@@ -350,7 +344,7 @@ export class ManagementSystem extends ManagementSystemBase {
     }
 
     this.setSenderHandlers(sender, response);
-    sender.send(data);
+    sender.send(requestData);
   }
 
   private async sendUploadIndecies(request: NWRequestUploadIndecies) {
@@ -361,7 +355,7 @@ export class ManagementSystem extends ManagementSystemBase {
       isSub: false,
     }
 
-    var data = new FormData();
+    let data = new FormData();
     data.append("xmlFile", request.data.file);
     data.append("Overhead", "" + request.data.overhead);
     data.append("Profit", "" + request.data.profit);

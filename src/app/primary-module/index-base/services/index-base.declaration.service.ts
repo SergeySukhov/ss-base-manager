@@ -20,7 +20,7 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
     addIndexBase: AvailableBaseIndexInfo;
 
     constructor(private endpoint: IndexBaseEndpointService,
-        ) {
+    ) {
         super();
         this.addIndexBase = this.initAddIndexBase();
     }
@@ -201,7 +201,7 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
         return indexBase ? `Год: ${indexBase.year} | Период выпуска: ${DateIndeciesHelper.GetPeriod(indexBase)}` : "не выбраны параметры";
     }
 
-    private initAddIndexBase() {
+    private initAddIndexBase(): AvailableBaseIndexInfo {
         const parentGuid = v4();
         return {
             guid: v4(),

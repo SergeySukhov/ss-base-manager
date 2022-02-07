@@ -43,6 +43,7 @@ export class FormulaBaseComponent implements OnInit {
   }
 
   onModelChange() {
+    this.declarationService.update(this.resultParams);
   }
 
 }
