@@ -30,7 +30,7 @@ export class IndexBaseEndpointService extends EndpointBaseService {
             Year: finalData.addBase?.year ?? finalData.baseChoice?.year ?? 0,
             Profit: finalData.sp,
             Overhead: finalData.sp,
-            AdditionNormativeGuid: "",
+            AdditionNormativeGuid: "00000000-0000-0000-0000-000000000000",
 
         };
         const avNB = await this.netWorker.postMessageToWorkerAsync({
