@@ -42,9 +42,9 @@ export class NotificationService {
 
             this.allLogs.unshift(message)
             this.notificationChange?.next(x.data.message);
-            if (x.data.message.imoprtance === ImoprtanceLevel.high) {
+            // if (x.data.message.imoprtance === ImoprtanceLevel.high) {
                 this.showNotification(x.data.message, x.data.message.type === NotificationType.error);
-            }
+            // }
         });
     }
 
