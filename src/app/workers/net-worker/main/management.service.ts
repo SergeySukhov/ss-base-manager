@@ -355,17 +355,7 @@ export class ManagementSystem extends ManagementSystemBase {
       isSub: false,
     }
 
-    let data = new FormData();
-    data.append("xmlFile", request.data.file);
-    data.append("Overhead", "" + request.data.overhead);
-    data.append("Profit", "" + request.data.profit);
-    data.append("Year", "" + request.data.year);
-    data.append("Month", "" + request.data.periodValue);
-    data.append("Deploy", "" + request.data.isDeploy);
-    data.append("ContextId", this.hubService.connectionId ?? "");
-    data.append("IsNewDatabase", "" + !!request.data.addBase);
-    data.append("Type", "" + request.data.baseType);
-    data.append("AdditionNumber", "" + request.data.additionNumber);
+
 
     sender.withCredentials = false;
     sender.open("POST", environment.indecies + "uploader");
@@ -385,8 +375,14 @@ export class ManagementSystem extends ManagementSystemBase {
       }
     }
 
+    let requestData = new FormData();
+    request.data.ContextId = this.hubService.connectionId ?? "";
+    for (const [key, value] of Object.entries(request.data)) {
+        requestData.append(key, value);
+    }
+
     this.setSenderHandlers(sender, response);
-    sender.send(data);
+    sender.send(requestData);
   }
 
   private setSenderHandlers(sender: XMLHttpRequest, response: NWResponse) {

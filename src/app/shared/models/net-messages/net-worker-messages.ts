@@ -4,6 +4,7 @@ import { BaseWorkerMessage } from "../base-worker-message";
 import { AvailableBaseAdditionInfo } from "../server-models/AvailableBaseAdditionInfo";
 import { AvailableBaseIndexInfo, ReleasePeriodType } from "../server-models/AvailableBaseIndexInfo";
 import { AvailableNormativeBaseType, BaseType } from "../server-models/AvailableNormativeBaseType";
+import { IndicesRequestUploader } from "../server-models/server-upload-request-models/IndeciesRequestUploader";
 import { NormoRequestUploader } from "../server-models/server-upload-request-models/NormoRequestUploader";
 import { CommonRequestUploader } from "../server-models/server-upload-request-models/UploadRequestsBase";
 
@@ -73,20 +74,7 @@ export interface NWRequestUploadNormatives extends NWRequestBase<NetMessageTypes
 }
 
 export interface NWRequestUploadIndecies extends NWRequestBase<NetMessageTypes.sendIndeciesUpload> {
-  data: {
-    file: File,
-    additionNumber: number,
-    year: number;
-    periodType: ReleasePeriodType;
-    periodValue: number;
-    overhead: number;
-    profit: number;
-    addBase?: {
-      guid: string;
-    },
-    isDeploy?: boolean
-    baseType: BaseType;
-  }
+  data: IndicesRequestUploader;
 }
 
 

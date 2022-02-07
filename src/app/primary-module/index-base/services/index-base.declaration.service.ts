@@ -174,7 +174,7 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
         }, {
             type: OptionType.label,
             fieldLabel: resultParams.addBase ? "Новая база индексов" : "База индексов:",
-            text: resultParams.addBase ? this.getIndexName(resultParams.addBase.base) : this.getIndexName(resultParams.baseChoice),
+            text: resultParams.addBase ? this.getIndexName(resultParams.addBase) : this.getIndexName(resultParams.baseChoice),
         }, {
             type: OptionType.label,
             fieldLabel: "НР и СП:",
@@ -241,12 +241,12 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
     private setAddBaseForm(needAddForm: boolean, context: IndexBaseComponent, form: StepperDataStep) {
         if (needAddForm) {
             this.addIndexBase.guid = v4();
-            context.resultParams.addBase = { base: this.addIndexBase };
+            context.resultParams.addBase = this.addIndexBase;
             form.stepLabel = "Добавление новой базы индексов"
             form.isCompleted = true;
             form.fields.push({
                 type: OptionType.label,
-                text: context.resultParams.addBase.base.guid,
+                text: this.addIndexBase.guid,
                 fieldLabel: "Идентификатор добаляемой базы индексов",
                 onDataChange: () => { }
             }, {

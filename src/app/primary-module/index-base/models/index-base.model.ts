@@ -2,7 +2,7 @@ import { AvailableBaseIndexInfo } from "src/app/shared/models/server-models/Avai
 import { ResultUploadParamsBase } from "../../normative-base/models/base-result-params.model";
 
 export class IndexBaseResultParams extends ResultUploadParamsBase<AvailableBaseIndexInfo>  {
-    addBase?: { base: AvailableBaseIndexInfo};
+    addBase?: AvailableBaseIndexInfo;
     nr: number = 0;
     sp: number = 0;
     fileTechDocs: File | null = null;
