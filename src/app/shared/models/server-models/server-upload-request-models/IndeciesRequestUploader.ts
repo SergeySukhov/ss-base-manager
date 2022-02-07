@@ -6,5 +6,6 @@ export interface IndicesRequestUploader extends CommonRequestUploader {
     Profit: number;
     Year: number;
     Month: number;
+    AdditionNormativeGuid: string;
     PeriodType: ReleasePeriodType;
 }
