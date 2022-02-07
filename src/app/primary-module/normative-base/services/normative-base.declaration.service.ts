@@ -150,7 +150,7 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
         const resultInfoFields: StepperLabelField[] = [{
             type: OptionType.label,
             fieldLabel: "Вид базы:",
-            text: resultParams.baseTypeName ?? "не выбран тип НБ",
+            text: this.baseTypePipe.transform(resultParams.baseType) ?? "не выбран тип НБ",
         }, {
             type: OptionType.label,
             fieldLabel: resultParams.addBase ? "Новая нормативная база" : "Нормативная база:",

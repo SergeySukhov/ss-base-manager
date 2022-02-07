@@ -103,7 +103,7 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<Availa
         return [{
             type: OptionType.label,
             fieldLabel: "Вид базы:",
-            text: resultParams.baseTypeName ?? "не выбран тип НБ",
+            text: this.baseTypePipe.transform(resultParams.baseType) ?? "не выбран тип НБ",
         }, {
             type: OptionType.label,
             fieldLabel: "Формулы для нормативной базы:",

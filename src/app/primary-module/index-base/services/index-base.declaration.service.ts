@@ -113,6 +113,29 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                     ],
                 },
                 ////////////////////////////////////////////////////////////////////
+
+                {
+                    stepLabel: "Добавление файлов тех. частей (.pdf)",
+                    nextButton: { needShow: true, isDisable: false },
+                    backButton: { needShow: true, isDisable: false },
+                    isOptional: true,
+                    fields: [{
+                        type: OptionType.fileLoader,
+                        fieldLabel: "",
+                        fileFormats: [".pdf"],
+                        onDataChange: (value: File[], form: StepperDataStep) => {
+                            form.isCompleted = true;
+                            if (value?.length) {
+                                context.resultParams.fileTechDocs = value[0];
+                            } else {
+                                context.resultParams.fileTechDocs = null;
+                            }
+                            this.updateResultParams(context.resultParams);
+                        },
+                    },
+                    ],
+                },
+                ////////////////////////////////////////////////////////////////////
                 {
                     stepLabel: "Итог",
                     nextButton: { needShow: false, isDisable: false },
@@ -166,14 +189,6 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
             text: resultParams.fileTechDocs?.name ?? "не выбран файл (необязательно)",
         },
         ];
-        // if (resultParams.addBase) {
-        //     const nrspParams: StepperLabelField = {
-        //         type: OptionType.label,
-        //         fieldLabel: "НР и СП:",
-        //         text: "НР: " + resultParams.nr + " | СП: " + resultParams.sp ?? "не выбран файл (необязательно)",
-        //     };
-        //     resultInfoFields.splice(2, 0, nrspParams);
-        // }
         return resultInfoFields;
     }
 
