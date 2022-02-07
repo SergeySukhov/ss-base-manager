@@ -38,7 +38,9 @@ export class NotificationService {
         this.notificationChange = new Subject<NotificationMessage>();
         this.endpointSub.subscribe(x => {
             const message = x.data.message as NotificationMessage;
-            message.timeStamp = this.datePipe.transform(Number.parseInt(message.timeStamp), "dd.MM | HH:mm:ss") ?? "";
+            const timeNow = Date.now();
+            message.timeStamp = this.datePipe.transform(timeNow, "dd.MM | HH:mm:ss") ?? "";
+            // message.timeStamp = this.datePipe.transform(Number.parseInt(time), "dd.MM | HH:mm:ss") ?? "";
 
             this.allLogs.unshift(message)
             this.notificationChange?.next(x.data.message);
