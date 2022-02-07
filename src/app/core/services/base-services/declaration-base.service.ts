@@ -62,7 +62,6 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
                 type: OptionType.selector,
                 fieldLabel: "Доступные виды нормативных баз",
                 onDataChange: async (value: SelectorOption<BaseTypeInfo>, form: StepperDataStep) => {
-                    console.log("!! | onDataChange: | form", form)
                     const data = value.data as BaseTypeInfo;
                     form.isAwaiting = true;
 

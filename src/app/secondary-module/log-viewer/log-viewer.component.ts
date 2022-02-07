@@ -13,10 +13,10 @@ export class LogViewerComponent implements OnInit {
 
   @Input() logsData: NotificationMessage[] | undefined;
   @Input() oldLogsData: NotificationMessage[] | undefined;
-
+  // TODO: переделать
   get logs(): NotificationMessage[] {
-      if (!!this.filter && this.logsData) {
-      return this.logsData.filter(x => !this.filter?.serviceName || x.fromService.includes(this.filter.serviceName)).reverse();
+    if (!!this.filter && this.logsData) {
+      return this.logsData.reverse().filter(x => !this.filter?.serviceName || x.fromService.includes(this.filter.serviceName));
     } else {
       return this.logsData ?? [];
     }
