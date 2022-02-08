@@ -11,7 +11,7 @@ export enum NotificationType {
 
 export interface NotificationMessage {
     guid: string;
-    timeStamp: string;
+    timeStamp?: string;
     fromService: string;
     message: string;
     imoprtance: ImoprtanceLevel,

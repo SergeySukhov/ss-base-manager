@@ -28,7 +28,7 @@ export class HubConnectionService {
                 .withUrl(url ?? environment.logger, connectionOptions)
                 .withAutomaticReconnect()
                 .build();
-                
+
             await this.hub.start();
             const id = await this.hub.invoke("GetConnectionId");
             this.pConnectionId = id;
@@ -58,7 +58,6 @@ export class HubConnectionService {
                     imoprtance: ImoprtanceLevel.high,
                     type: NotificationType.info,
                     message: "Не удалось установить подключение к серверу",
-                    timeStamp: Date.now().toString()
                 }
             },
         }
