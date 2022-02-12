@@ -69,7 +69,7 @@ export class TableNormoControlComponent extends TableControlBase<NormoBaseDataVi
   data: NormoBaseDataView[] = [];
   dataSourceTest = new MatTableDataSource(this.data);
 
-  displayedColumns: string[] = ['select', 'name', 'availability', 'baseType', 'cancelled', 'availableChilds', "handleEdit"];
+  displayedColumns: string[] = ['select', 'name', 'availability', 'baseType', 'cancelled', "handleEdit"];
   selection = new SelectionModel<NormoBaseDataView>(true, []);
 
   constructor(public dialog: MatDialog, private baseTypePipe: BaseTypePipe) {

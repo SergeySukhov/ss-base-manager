@@ -13,7 +13,7 @@ import { StepperComponent } from "./stepper/stepper.component";
 import { FileLoaderComponent } from './file-loader/file-loader.component';
 import { DndDirective } from "./file-loader/directives/dnd.directive";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MatRippleModule } from '@angular/material/core';
+import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -31,12 +31,27 @@ import { MatTreeModule } from "@angular/material/tree";
 import { PreviewComponent } from './preview/preview.component';
 import { A11yModule } from '@angular/cdk/a11y';
 import { MatSortModule } from '@angular/material/sort';
-import { BaseTypePipe } from '../core/pipes/base-type.pipe';
 import { LogViewerComponent } from './log-viewer/log-viewer.component';
 import { NotificationComponent } from './notification/notification.component';
 import { AddNodeDialogComponent } from '../shared/common-components/table-node-dialog/add-node-dialog/add-node-dialog.component';
 import { TableControlDialogComponent } from '../shared/common-components/table-node-dialog/table-control-dialog/table-control-dialog.component';
 import { TableIndeciesControlComponent } from './table-indecies-control/table-indecies-control.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { PortalModule } from '@angular/cdk/portal';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -73,28 +88,41 @@ import { TableIndeciesControlComponent } from './table-indecies-control/table-in
     FormsModule,
     A11yModule,
     ReactiveFormsModule,
-    DragDropModule,
-    CdkStepperModule,
-    CdkTableModule,
-    MatTableModule,
-    MatDialogModule,
-    MatStepperModule,
-    MatButtonModule,
     MatButtonModule,
     MatButtonToggleModule,
-    MatToolbarModule,
-    MatSlideToggleModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatStepperModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatGridListModule,
     MatIconModule,
     MatInputModule,
-    MatSelectModule,
-    MatRippleModule,
     MatListModule,
-    MatCardModule,
+    MatMenuModule,
+    MatNativeDateModule,
+    MatPaginatorModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
-    MatCheckboxModule,
-    MatTreeModule,
+    MatRadioModule,
+    MatRippleModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
     MatSortModule,
+    MatTableModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    MatTreeModule,
+    OverlayModule,
+    PortalModule,
+    ScrollingModule,
 
   ],
   providers: [

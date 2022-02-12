@@ -89,19 +89,14 @@ export abstract class TableControlBase<T extends CommonNodes> {
     }
 
     toggleChange(value: boolean, rowData: T) {
+        rowData.availability = value;
+        this.onEditedNodes.emit([rowData]);
         if (rowData.isRoot) {
-            rowData.availability = value;
-            this.onEditedNodes.emit([rowData]);
-
             this.data.filter(x => !x.isRoot && x.parentGuid === rowData.guid).forEach(x => {
                 this.toggleChange(value, x);
             });
         } else {
-            setTimeout(() => {
-                rowData.availability = value;
-                this.onEditedNodes.emit([rowData]);
-                this.updateAllAvailableState();
-            }, 1000);
+
         }
         this.updateAllAvailableState();
     }
@@ -115,7 +110,7 @@ export abstract class TableControlBase<T extends CommonNodes> {
         this.onEditedNodes.emit(this.data);
     }
 
-    startNameEdit(row: T, editInput: any) {
+    startNameEdit(row: T, editInput: HTMLTextAreaElement | HTMLInputElement) {
         setTimeout(() => {
             editInput.focus();
         });

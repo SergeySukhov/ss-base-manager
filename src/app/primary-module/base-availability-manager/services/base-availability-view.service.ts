@@ -65,7 +65,7 @@ export class BaseAvailabilityViewService {
             const mappedIndNode: AvailableBaseIndexInfo = x.data;
             mappedIndNode.isAvailable = !!x.availability;
             mappedIndNode.releasePeriodType = x.name.periodType;
-            mappedIndNode.releasePeriodValue = Number.parseInt(x.name.value);
+            mappedIndNode.releasePeriodValue = Number.parseInt(x.name.periodValue);
             mappedIndNode.year = x.name.year;
             mappedIndNode.isCancelled = x.isCancelled;
             return mappedIndNode;

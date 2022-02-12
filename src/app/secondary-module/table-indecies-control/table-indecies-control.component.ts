@@ -20,7 +20,7 @@ export interface IndeciesDataView {
   year: number;
   workCategory: WorkCategory;
   periodType: ReleasePeriodType;
-  value: string;
+  periodValue: string;
 }
 
 export interface IndeciesDataViewRoot extends DataViewRoot {
@@ -75,17 +75,25 @@ export class TableIndeciesControlComponent extends TableControlBase<IndeciesComm
   availabilityNodes = AvailabilityNodes;
   allAvailableState: "checked" | "unchecked" | "mixed" = "mixed";
 
-  editingRow: IndeciesCommonNodes | null = null;
+  allIndeciesYears: string[];
+  allIndeciesPeriods: string[];
+  allIndeciesWorkTypes: string[];
+
   data: IndeciesCommonNodes[] = [];
   dataSourceTest = new MatTableDataSource(this.data);
 
-  displayedColumns: string[] = ['select', 'name', 'availability', 'baseType', 'cancelled', 'availableChilds', "handleEdit"];
+  displayedColumns: string[] = ['select', 'name', 'availability', 'baseType', 'cancelled', 
+  // 'availableChilds',
+   "handleEdit"];
   selection = new SelectionModel<IndeciesCommonNodes>(true, []);
 
   constructor(public dialog: MatDialog,
     private baseTypePipe: BaseTypePipe, public periodPipe: PeriodPipe,
   ) {
     super(dialog);
+    this.allIndeciesYears = this.getYears();
+    this.allIndeciesPeriods = this.getPeriods();
+    this.allIndeciesWorkTypes = this.getWorkCategories();
   }
 
   ngOnInit(): void {
@@ -112,7 +120,7 @@ export class TableIndeciesControlComponent extends TableControlBase<IndeciesComm
   }
 
   getCurrPeriodValue(node: IndeciesDataViewNode): string {
-    const nodeDateValue = Number.parseInt(node.name.value);
+    const nodeDateValue = Number.parseInt(node.name.periodValue);
 
     if (node.name.periodType === ReleasePeriodType.Month && nodeDateValue < 12) {
       return DateIndeciesHelper.GetAllMonths()[nodeDateValue];
@@ -130,6 +138,15 @@ export class TableIndeciesControlComponent extends TableControlBase<IndeciesComm
     } else {
       return "неизвестная категория";
     }
+  }
+
+  onNameClick(node: IndeciesDataViewNode, event: MouseEvent) {
+    event.stopPropagation();
+    this.editingRow = node;
+  }
+
+  onNameEditBlur() {
+    this.editingRow = null;
   }
 
   onWorkCategoryChanged(event: MatSelectChange, row: IndeciesDataViewNode) {
@@ -157,7 +174,7 @@ export class TableIndeciesControlComponent extends TableControlBase<IndeciesComm
       return;
     }
     row.name.periodType = ReleasePeriodType.Month;
-    row.name.value = "" + period.value;
+    row.name.periodValue = "" + period.value;
     this.onEditedNodes.emit([row]);
   }
 

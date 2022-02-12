@@ -116,9 +116,13 @@ export abstract class EndpointBaseService {
                         }
 
                     }
-                    resolve([a
-
-                    ].filter(x => x.type === baseType));
+                    const aa = [a];
+                    for(let i = 0; i< 5; i++) {
+                        const b = JSON.parse(JSON.stringify(a));
+                        b.guid = v4();
+                        aa.push(b);
+                    }
+                    resolve(aa.filter(x => x.type === baseType));
                 }, 100);
             });
             return a;

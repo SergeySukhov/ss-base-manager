@@ -23,13 +23,18 @@
   }
 }
 
+.hide-elem {
+  display: none !important;
+}
 
 :host .wrapper {
+  width: 100%;
+  user-select: none;
+
+  table {
     width: 100%;
-    table {
-        width: 100%;
-      }
-    user-select: none;
+  }
+
   
   .control-container {
     min-height: 50px;
@@ -40,6 +45,7 @@
     border-bottom: 1px solid #80808073;
 
   }
+  
   .control-button {
     width: 150px;
     margin: 5px;
@@ -84,6 +90,10 @@
   .name-value {
     display: flex;
     padding-right: 20px;
+  }
+
+  .index-name {
+    font-size: 13px;
   }
 
   .row-common {
@@ -168,7 +178,7 @@
     max-width: 650px;
   }
   .mat-column-baseType {
-    width: 350px;
+    width: 450px;
     font-size: 12px;
     
     max-width: 350px;
@@ -191,7 +201,13 @@
     max-width: 300px;
     min-width: 300px;
   }
-  
+  .mat-column-handleEdit {
+    font-size: 12px;
+    width: 200px;
+    max-width: 200px;
+    min-width: 200px;
+    right: 0;
+  }
   th.mat-sort-header-sorted {
     color: black;
   }
