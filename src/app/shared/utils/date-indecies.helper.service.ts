@@ -33,8 +33,8 @@ export class DateIndeciesHelper {
 
     public static GetPeriod(index: AvailableBaseIndexInfo): string {
         if (index.releasePeriodValue >= 0) {
-            if (index.releasePeriodType === ReleasePeriodType.Month && index.releasePeriodValue < 12) {
-                return this.GetAllMonths()[index.releasePeriodValue];
+            if (index.releasePeriodType === ReleasePeriodType.Month && index.releasePeriodValue < 13) {
+                return this.GetAllMonths()[index.releasePeriodValue-1];
             } else if (index.releasePeriodType === ReleasePeriodType.Quarter && index.releasePeriodValue < 4) {
                 return this.GetAllQuarters()[index.releasePeriodValue];
             }
@@ -43,13 +43,13 @@ export class DateIndeciesHelper {
     }
 
     public static toPeriodFromString(value: string): { periodType: ReleasePeriodType, value: number } | null {
-        const result = { periodType: ReleasePeriodType.Month, value: 0 };
+        const result = { periodType: ReleasePeriodType.Month, value: 1 };
         const months = DateIndeciesHelper.GetAllMonths();
         for (let i = 0; i < months.length; i++) {
             const month = months[i];
             if (month === value) {
                 result.periodType = ReleasePeriodType.Month;
-                result.value = i;
+                result.value = i + 1;
                 return result;
             }
         }
