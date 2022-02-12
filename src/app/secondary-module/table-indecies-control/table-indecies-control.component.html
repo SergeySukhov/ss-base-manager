@@ -9,7 +9,7 @@
     </div>
     <!-- ----------------------------------------------- -->
     <div class="example-container mat-elevation-z8" [ngClass]="{'hide-elem': isAwaiting}">
-        <table mat-table [dataSource]="dataSourceTest"   class="mat-elevation-z8">
+        <table mat-table [dataSource]="data"   class="mat-elevation-z8">
 
             <!-- Checkbox Column (matSortChange)="announceSortChange($event)" -->
             <ng-container matColumnDef="select">
@@ -55,10 +55,11 @@
                     <span *ngIf="!element.isRoot">
                         <div class="index-name" *ngIf="editingRow?.guid !== element.guid"
                         (click)="onNameClick(element, $event)">
-                            {{element.name.year}} | {{getCurrPeriodValue(element)}} | {{getCurrWorkCategory(element)}} 
+                            {{element.name.year}} 
+                            | {{element.name.periodValue}} | {{(element.name.workCategory)}} 
                         </div>
 
-                        <div #nameEdit class="index-id" *ngIf="editingRow?.guid === element.guid"
+                        <div class="index-id" *ngIf="editingRow?.guid === element.guid"
                         >
                             <mat-form-field class="small-part" (click)="$event.stopPropagation()">
                                 <mat-label>Год выпуска</mat-label>
@@ -70,7 +71,7 @@
                               </mat-form-field>
                               <mat-form-field class="middle-part" (click)="$event.stopPropagation()">
                                 <mat-label>Период выпуска</mat-label>
-                                <mat-select [value]="getCurrPeriodValue(element)" (selectionChange)="onPeriodChanged($event, element)">
+                                <mat-select [value]="element.name.periodValue" (selectionChange)="onPeriodChanged($event, element)">
                                   <mat-option *ngFor="let dates of allIndeciesPeriods" [value]="dates">
                                     {{dates}}
                                   </mat-option>
@@ -78,7 +79,7 @@
                               </mat-form-field>
                               <mat-form-field class="middle-part" (click)="$event.stopPropagation()">
                                 <mat-label>Тип работ</mat-label>
-                                <mat-select [value]="getCurrWorkCategory(element)" (selectionChange)="onWorkCategoryChanged($event, element)">
+                                <mat-select [value]="element.name.workCategory" (selectionChange)="onWorkCategoryChanged($event, element)">
                                   <mat-option *ngFor="let dates of allIndeciesWorkTypes" [value]="dates">
                                     {{dates}}
                                   </mat-option>

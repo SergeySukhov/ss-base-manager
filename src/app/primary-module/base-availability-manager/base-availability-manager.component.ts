@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { WorkCategoryPipe } from 'src/app/core/pipes/work-type.pipe';
 import { LocalStorageConst, LocalStorageService } from 'src/app/core/services/local-storage.service';
 import { IndeciesCommonNodes, IndeciesDataViewNode, IndeciesDataViewRoot } from 'src/app/secondary-module/table-indecies-control/table-indecies-control.component';
 import { NormoBaseDataView, NormoDataViewNode, NormoDataViewRoot } from 'src/app/secondary-module/table-normo-control/table-normo-control.component';
@@ -30,7 +31,8 @@ export class BaseAvailabilityManagerComponent implements OnInit {
 
   lastTab: number = 0;
 
-  constructor(private viewService: BaseAvailabilityViewService, private storageService: LocalStorageService) {
+  constructor(private viewService: BaseAvailabilityViewService, private storageService: LocalStorageService,
+    ) {
   }
 
   ngOnInit() {
@@ -118,37 +120,14 @@ export class BaseAvailabilityManagerComponent implements OnInit {
     const viewBaseModel: IndeciesCommonNodes[] = [];
 
     for (let baseTypeInfo of allAvTypes) {
-      const rootNode: IndeciesDataViewRoot = {
-        guid: baseTypeInfo.guid,
-        availability: baseTypeInfo.isAvailable,
-        name: baseTypeInfo.typeName,
-        baseTypeName: baseTypeInfo.typeName,
-        isCancelled: baseTypeInfo.isCancelled,
-        data: baseTypeInfo,
-        isRoot: true,
-        isExpand: true,
-        availableChilds: baseTypeInfo.availabilityNodes,
-      };
+      const rootNode: IndeciesDataViewRoot = this.viewService.mapToViewRoot(baseTypeInfo);
+
       viewBaseModel.push(rootNode);
       const basesByType = availableIndexBases.filter(x => x.type === baseTypeInfo.type);
       rootNode.hasChildren = !!basesByType.length;
 
       for (let indecyDataBaseInfo of basesByType) {
-        viewBaseModel.push({
-          guid: indecyDataBaseInfo.guid,
-          availability: indecyDataBaseInfo.isAvailable,
-          name: {
-            periodValue: "" + indecyDataBaseInfo.releasePeriodValue,
-            periodType: indecyDataBaseInfo.releasePeriodType,
-            year: indecyDataBaseInfo.year,
-            workCategory: indecyDataBaseInfo.parentIndex.workCategory
-          },
-          baseTypeName: baseTypeInfo.typeName,
-          isCancelled: indecyDataBaseInfo.isCancelled,
-          isRoot: false,
-          data: indecyDataBaseInfo,
-          parentGuid: baseTypeInfo.guid,
-        });
+        viewBaseModel.push(this.viewService.mapToViewIndex(indecyDataBaseInfo, baseTypeInfo));
       }
     }
     this.indeciesData = viewBaseModel;
@@ -165,32 +144,14 @@ export class BaseAvailabilityManagerComponent implements OnInit {
     const viewBaseModel: NormoBaseDataView[] = [];
 
     for (let baseTypeInfo of allAvTypes) {
-      const rootNode: NormoBaseDataView = {
-        guid: baseTypeInfo.guid,
-        availability: baseTypeInfo.isAvailable,
-        name: baseTypeInfo.typeName,
-        baseTypeName: baseTypeInfo.typeName,
-        isCancelled: baseTypeInfo.isCancelled,
-        data: baseTypeInfo,
-        isRoot: true,
-        isExpand: true,
-        availableChilds: baseTypeInfo.availabilityNodes,
-      };
+      const rootNode = this.viewService.mapToViewRoot(baseTypeInfo);
+
       viewBaseModel.push(rootNode);
       const basesByType = availableBases.filter(x => x.type === baseTypeInfo.type);
       rootNode.hasChildren = !!basesByType.length;
 
       for (let normoDataBaseInfo of basesByType) {
-        viewBaseModel.push({
-          guid: normoDataBaseInfo.guid,
-          availability: normoDataBaseInfo.isAvailable,
-          name: normoDataBaseInfo.name,
-          baseTypeName: baseTypeInfo.typeName,
-          isCancelled: normoDataBaseInfo.isCancelled,
-          isRoot: false,
-          data: normoDataBaseInfo,
-          parentGuid: baseTypeInfo.guid,
-        });
+        viewBaseModel.push(this.viewService.mapToViewAdditional(normoDataBaseInfo, baseTypeInfo));
       }
     }
     this.normativeData = viewBaseModel;

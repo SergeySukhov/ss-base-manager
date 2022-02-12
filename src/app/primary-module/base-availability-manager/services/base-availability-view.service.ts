@@ -1,16 +1,20 @@
 import { Injectable } from "@angular/core";
+import { WorkCategoryPipe } from "src/app/core/pipes/work-type.pipe";
 import { IndeciesDataViewNode } from "src/app/secondary-module/table-indecies-control/table-indecies-control.component";
 import { NormoBaseDataView } from "src/app/secondary-module/table-normo-control/table-normo-control.component";
 import { CommonNodes, DataViewNode, DataViewRoot } from "src/app/shared/common-components/table-control-base/table-control-base";
 import { AvailableBaseAdditionInfo } from "src/app/shared/models/server-models/AvailableBaseAdditionInfo";
-import { AvailableBaseIndexInfo } from "src/app/shared/models/server-models/AvailableBaseIndexInfo";
+import { AvailableBaseIndexInfo, ReleasePeriodType } from "src/app/shared/models/server-models/AvailableBaseIndexInfo";
+import { WorkCategory } from "src/app/shared/models/server-models/AvailableIndexWorkCategory";
 import { AvailableNormativeBaseType, AvailabilityNodes, BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
+import { DateIndeciesHelper } from "src/app/shared/utils/date-indecies.helper.service";
 import { AvailabilityBaseEndpointService } from "./availability-base.endpoint.service";
 
 @Injectable()
 export class BaseAvailabilityViewService {
 
-    constructor(private endpointService: AvailabilityBaseEndpointService,) {
+    constructor(private endpointService: AvailabilityBaseEndpointService,
+        private workCatPipe: WorkCategoryPipe,) {
     }
 
     addRootNodes(nodes: { viewData: DataViewRoot, type: BaseType }[]): DataViewRoot[] {
@@ -36,40 +40,15 @@ export class BaseAvailabilityViewService {
     }
 
     editRootNodes(nodes: DataViewRoot[]) {
-        this.endpointService.sendRootEditNodes(nodes.map(x => {
-            const mappedRootNode: AvailableNormativeBaseType = x.data;
-
-            if (x.isRoot) {
-                mappedRootNode.availabilityNodes = x.availableChilds ?? [];
-            }
-            mappedRootNode.isAvailable = !!x.availability;
-            mappedRootNode.isCancelled = x.isCancelled;
-            mappedRootNode.typeName = x.name;
-
-            return mappedRootNode;
-        }));
+        this.endpointService.sendRootEditNodes(nodes.map(this.mapToBaseType));
     }
 
     editNormoNodes(nodes: NormoBaseDataView[]) {
-        this.endpointService.sendNormoEditNodes(nodes.map(x => {
-            const mappedNormoNode: AvailableBaseAdditionInfo = x.data;
-            mappedNormoNode.name = x.name;
-            mappedNormoNode.isAvailable = !!x.availability;
-            mappedNormoNode.isCancelled = x.isCancelled;
-            return mappedNormoNode;
-        }));
+        this.endpointService.sendNormoEditNodes(nodes.map(this.mapToAdditionalInfo));
     }
 
     editIndeciesNodes(nodes: IndeciesDataViewNode[]) {
-        this.endpointService.sendIndexesEditNodes(nodes.map(x => {
-            const mappedIndNode: AvailableBaseIndexInfo = x.data;
-            mappedIndNode.isAvailable = !!x.availability;
-            mappedIndNode.releasePeriodType = x.name.periodType;
-            mappedIndNode.releasePeriodValue = Number.parseInt(x.name.periodValue);
-            mappedIndNode.year = x.name.year;
-            mappedIndNode.isCancelled = x.isCancelled;
-            return mappedIndNode;
-        }));
+        this.endpointService.sendIndexesEditNodes(nodes.map(this.mapToIndexInfo));
     }
 
     async loadAvailableBaseTypes(): Promise<AvailableNormativeBaseType[]> {
@@ -112,5 +91,80 @@ export class BaseAvailabilityViewService {
         });
 
         return availableBases;
+    }
+
+    mapToIndexInfo(x: IndeciesDataViewNode): AvailableBaseIndexInfo {
+        const mappedIndNode: AvailableBaseIndexInfo = x.data;
+        mappedIndNode.isAvailable = !!x.availability;
+        const period = DateIndeciesHelper.toPeriodFromString(x.name.periodValue)
+        mappedIndNode.releasePeriodType = period?.periodType ?? ReleasePeriodType.Month;
+        mappedIndNode.releasePeriodValue = period?.value ?? 0;
+        mappedIndNode.year = x.name.year;
+        mappedIndNode.isCancelled = x.isCancelled;
+        mappedIndNode.parentIndex.workCategory = this.workCatPipe.backTransform(x.name.workCategory) ?? WorkCategory.Build;
+        return mappedIndNode;
+    }
+
+    mapToAdditionalInfo(x: NormoBaseDataView): AvailableBaseAdditionInfo {
+        const mappedNormoNode: AvailableBaseAdditionInfo = x.data;
+        mappedNormoNode.name = x.name;
+        mappedNormoNode.isAvailable = !!x.availability;
+        mappedNormoNode.isCancelled = x.isCancelled;
+        return mappedNormoNode;
+    }
+
+    mapToBaseType(x: DataViewRoot): AvailableNormativeBaseType {
+        const mappedRootNode: AvailableNormativeBaseType = x.data;
+
+        mappedRootNode.availabilityNodes = x.availableChilds ?? [];
+        mappedRootNode.isAvailable = !!x.availability;
+        mappedRootNode.isCancelled = x.isCancelled;
+        mappedRootNode.typeName = x.name;
+        return mappedRootNode;
+    }
+
+    mapToViewRoot(baseTypeInfo: AvailableNormativeBaseType): DataViewRoot {
+        const rootNode: DataViewRoot = {
+            guid: baseTypeInfo.guid,
+            availability: baseTypeInfo.isAvailable,
+            name: baseTypeInfo.typeName,
+            baseTypeName: baseTypeInfo.typeName,
+            isCancelled: baseTypeInfo.isCancelled,
+            data: baseTypeInfo,
+            isRoot: true,
+            isExpand: true,
+            availableChilds: baseTypeInfo.availabilityNodes,
+          };
+        return rootNode;
+    }
+
+    mapToViewAdditional(normoDataBaseInfo: AvailableBaseAdditionInfo, baseTypeInfo: AvailableNormativeBaseType): NormoBaseDataView {
+        return {
+            guid: normoDataBaseInfo.guid,
+            availability: normoDataBaseInfo.isAvailable,
+            name: normoDataBaseInfo.name,
+            baseTypeName: baseTypeInfo.typeName,
+            isCancelled: normoDataBaseInfo.isCancelled,
+            isRoot: false,
+            data: normoDataBaseInfo,
+            parentGuid: baseTypeInfo.guid,
+          }
+    }
+
+    mapToViewIndex(indecyDataBaseInfo: AvailableBaseIndexInfo, baseTypeInfo: AvailableNormativeBaseType): IndeciesDataViewNode {
+        return {
+            guid: indecyDataBaseInfo.guid,
+            availability: indecyDataBaseInfo.isAvailable,
+            name: {
+              periodValue: DateIndeciesHelper.GetPeriod(indecyDataBaseInfo),
+              year: indecyDataBaseInfo.year,
+              workCategory: this.workCatPipe.transform(indecyDataBaseInfo.parentIndex.workCategory),
+            },
+            baseTypeName: baseTypeInfo.typeName,
+            isCancelled: indecyDataBaseInfo.isCancelled,
+            isRoot: false,
+            data: indecyDataBaseInfo,
+            parentGuid: baseTypeInfo.guid,
+          }
     }
 }

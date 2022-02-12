@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { v4 } from 'uuid';
 import { AvailabilityNodes, BaseType } from 'src/app/shared/models/server-models/AvailableNormativeBaseType';
@@ -18,8 +18,7 @@ import { WorkCategory } from 'src/app/shared/models/server-models/AvailableIndex
 
 export interface IndeciesDataView {
   year: number;
-  workCategory: WorkCategory;
-  periodType: ReleasePeriodType;
+  workCategory: string;
   periodValue: string;
 }
 
@@ -80,11 +79,10 @@ export class TableIndeciesControlComponent extends TableControlBase<IndeciesComm
   allIndeciesWorkTypes: string[];
 
   data: IndeciesCommonNodes[] = [];
-  dataSourceTest = new MatTableDataSource(this.data);
 
-  displayedColumns: string[] = ['select', 'name', 'availability', 'baseType', 'cancelled', 
-  // 'availableChilds',
-   "handleEdit"];
+  displayedColumns: string[] = ['select', 'name', 'availability', 'baseType', 'cancelled',
+    // 'availableChilds',
+    "handleEdit"];
   selection = new SelectionModel<IndeciesCommonNodes>(true, []);
 
   constructor(public dialog: MatDialog,
@@ -114,30 +112,9 @@ export class TableIndeciesControlComponent extends TableControlBase<IndeciesComm
   }
 
   getPeriods(): string[] {
-    const p: string[] = [];
-    p.push(...DateIndeciesHelper.GetAllMonths(), ...DateIndeciesHelper.GetAllQuarters());
-    return p;
-  }
-
-  getCurrPeriodValue(node: IndeciesDataViewNode): string {
-    const nodeDateValue = Number.parseInt(node.name.periodValue);
-
-    if (node.name.periodType === ReleasePeriodType.Month && nodeDateValue < 12) {
-      return DateIndeciesHelper.GetAllMonths()[nodeDateValue];
-    } else if (node.name.periodType === ReleasePeriodType.Month && nodeDateValue < 4) {
-      return DateIndeciesHelper.GetAllQuarters()[nodeDateValue];
-    } else {
-      return "-";
-    }
-  }
-
-  getCurrWorkCategory(node: IndeciesDataViewNode): string {
-    const allCat = this.getWorkCategories();
-    if (allCat.length > node.name.workCategory) {
-      return allCat[node.name.workCategory];
-    } else {
-      return "неизвестная категория";
-    }
+    const periods: string[] = [];
+    periods.push(...DateIndeciesHelper.GetAllMonths(), ...DateIndeciesHelper.GetAllQuarters());
+    return periods;
   }
 
   onNameClick(node: IndeciesDataViewNode, event: MouseEvent) {
@@ -150,14 +127,8 @@ export class TableIndeciesControlComponent extends TableControlBase<IndeciesComm
   }
 
   onWorkCategoryChanged(event: MatSelectChange, row: IndeciesDataViewNode) {
-    const allCat = this.getWorkCategories();
-    const idx = allCat.findIndex(x => x === event.value);
-
-    if (idx > -1) {
-      row.name.workCategory = idx;
-      this.onEditedNodes.emit([row]);
-
-    }
+    row.name.workCategory = event.value;
+    this.onEditedNodes.emit([row]);
   }
 
   onYearChanged(event: MatSelectChange, row: IndeciesDataViewNode) {
@@ -169,12 +140,7 @@ export class TableIndeciesControlComponent extends TableControlBase<IndeciesComm
   }
 
   onPeriodChanged(event: MatSelectChange, row: IndeciesDataViewNode) {
-    const period = DateIndeciesHelper.toPeriodFromString(event.value);
-    if (!period) {
-      return;
-    }
-    row.name.periodType = ReleasePeriodType.Month;
-    row.name.periodValue = "" + period.value;
+    row.name.periodValue = event.value;
     this.onEditedNodes.emit([row]);
   }
 
