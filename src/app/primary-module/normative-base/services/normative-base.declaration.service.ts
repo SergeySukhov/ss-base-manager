@@ -28,6 +28,7 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
                 {
                     stepLabel: "Выбор НБ",
                     nextButton: { needShow: true, isDisable: true },
+                    // resetButton: { needShow: true, isDisable: false },
                     backButton: { needShow: true, isDisable: false },
                     fields: [{
                         type: OptionType.selector,

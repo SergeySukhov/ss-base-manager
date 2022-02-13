@@ -86,7 +86,7 @@
                     [disabled]="stepModel.backButton?.isDisable"
                      mat-button (click)="stepper.previous()">Назад</button>
                
-                <button class="step-button" 
+                <button class="step-button resetButton" 
                     *ngIf="stepModel.resetButton?.needShow" 
                     [disabled]="stepModel.resetButton?.isDisable"
                     mat-button (click)="stepper.reset()">Заново</button>
