@@ -1,4 +1,4 @@
-<div class="container" [fileFormats]="acceptFormats" dndShaker (fileDropped)="onFileDropped($event)">
+<div class="container-file" [fileFormats]="acceptFormats" dndShaker (fileDropped)="onFileDropped($event)">
     <input type="file" #fileDropRef id="fileDropRef" [accept]="acceptFormats?.join(', ')" [multiple]="false" (change)="fileBrowseHandler($event)" />
     <img src="assets\icons\uploader.svg" alt="">
     <h3>+ Перетащите файл сюда +</h3>
@@ -8,7 +8,7 @@
 
 <div class="files-list">
     <div class="single-file" *ngFor="let file of files; let i = index">
-        <div class="file-icon" style="width: 50px">
+        <div class="file-icon">
             <img src="assets\icons\fileIcon.svg" alt="">
         </div>
         <div class="info">

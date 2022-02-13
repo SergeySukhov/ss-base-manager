@@ -47,14 +47,14 @@ export class MainComponent implements OnInit {
       action: () => {
         this.stateService.setContext(ManagerContext.indexes)
       }
-    }, {
-      name: "Базы поправок",
-      available: false,
-      level: 1,
-      expandable: false,
-      action: () => {
-        this.stateService.setContext(ManagerContext.correction)
-      }
+    // }, {
+    //   name: "Базы поправок",
+    //   available: false,
+    //   level: 1,
+    //   expandable: false,
+    //   action: () => {
+    //     this.stateService.setContext(ManagerContext.correction)
+    //   }
     },]
 
   }, {
@@ -65,14 +65,14 @@ export class MainComponent implements OnInit {
     action: () => {
       this.stateService.setContext(ManagerContext.manager)
     }
-  }, {
-    name: "Шаблоны добавления",
-    available: false,
-    level: 0,
-    expandable: false,
-    action: () => {
-      // this.stateService.context = ManagerContext.manager;
-    }
+  // }, {
+  //   name: "Шаблоны добавления",
+  //   available: false,
+  //   level: 0,
+  //   expandable: false,
+  //   action: () => {
+  //     // this.stateService.context = ManagerContext.manager;
+  //   }
   }, {
     name: "Мониторинг сообщений",
     available: false,
