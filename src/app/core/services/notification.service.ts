@@ -38,11 +38,11 @@ export class NotificationService {
         this.endpointSub.subscribe(x => {
 
             const message = x.data.message as NotificationMessage;
-            
+
             if (!message.timeStamp) {
                 message.timeStamp = this.datePipe.transform(Date.now(), "dd.MM | HH:mm:ss") ?? "";
             } else if (Number.parseInt(message.timeStamp) > 100000) {
-                message.timeStamp = this.datePipe.transform( message.timeStamp, "dd.MM | HH:mm:ss") ?? "";
+                message.timeStamp = this.datePipe.transform(message.timeStamp, "dd.MM | HH:mm:ss") ?? "";
             }
 
             this.allLogs.unshift(message)
@@ -58,9 +58,12 @@ export class NotificationService {
             "info" : notificationMessage.type === NotificationType.error ? "error" : "warn";
 
         this.messageService.add({
-            severity: toStringType, summary: notificationMessage.fromService,
-            detail: notificationMessage.message, life: sticky ? undefined : 5000,
-            closable: !sticky, sticky,
+            severity: toStringType,
+            summary: notificationMessage.fromService,
+            detail: notificationMessage.message,
+            life: sticky ? undefined : 5000,
+            closable: sticky,
+            sticky,
         });
     }
 
