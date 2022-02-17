@@ -5,7 +5,7 @@ import { Subject } from "rxjs";
 import { NetSubTypes, NWSubMessage, NWSubNotificationMessage } from "src/app/shared/models/net-messages/net-worker-messages";
 import { NetWorkerService } from "src/app/shared/workers-module/services/net-worker.service";
 import { v4 } from "uuid";
-import { ImoprtanceLevel, NotificationMessage, NotificationType } from "../common/models/notification.models";
+import { NotificationMessage, NotificationType } from "../common/models/notification.models";
 
 
 
@@ -18,7 +18,7 @@ export class NotificationService {
     readonly allLogs: NotificationMessage[] = [];
 
     constructor(
-        private messageService: MessageService,
+        private messageService: MessageService, 
         private datePipe: DatePipe,
         protected netWorker: NetWorkerService,
     ) {

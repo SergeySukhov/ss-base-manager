@@ -6,10 +6,10 @@
             <div class="key-col"> {{keyValue.key}}</div>
             <div class="value-col">
                 <input #input [value]="keyValue.value" [disabled]="isKeyDisabled(keyValue.key)"
-                    (keyup)="keyValue.value = input.value;valueChange(input.value)">
+                    (keyup)="valueChange($event, keyValue, input.value)">
             </div>
         </div>
-        <div class="slave-obj">
+        <div class="slave-obj" *ngIf="slaveObjs.length > 0">
             <span class="slave-title">Дочерние объекты</span>
             <div class="slave-obj-container" *ngFor="let sObj of slaveObjs">
                  <span class="slave-key"><span style="font-style: normal">Ключ:</span> {{sObj.key}}</span>
@@ -19,7 +19,7 @@
                     <div class="key-col"> {{keyValue.key}}</div>
                     <div class="value-col">
                         <input #input [value]="keyValue.value" [disabled]="isKeyDisabled(keyValue.key)"
-                            (keyup)="keyValue.value = input.value;valueChange(input.value)">
+                            (keyup)="valueChange($event, keyValue, input.value)">
                     </div>
                 </div>
             </div>

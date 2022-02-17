@@ -38,17 +38,13 @@ export class TableControlDialogComponent implements OnInit {
       this.editingCopy = JSON.parse(JSON.stringify(this.data.data));
     } catch (e) {
       this.errorMessage = "!! Ошибка JSON";
-      console.warn("!! Исключение при работе с JSON, возможно объект содержал null|undefined или зацикленные связи", e);
       this.errorTooltip = "Исключение при работе с JSON, возможно объект содержал null|undefined или зацикленные связи";
-      console.log("!! | ngOnInit | this.data.data", this.data.data)
     }
     try {
       this.objKeyValues.pairs.push(...this.getKeyValueFromObj(this.data.data));
     } catch (e) {
       this.errorMessage = "!! Ошибка обработки объекта";
-      console.warn("!!", e);
       this.errorTooltip = "Необработанная ситуация в представлении объекта";
-      console.log("!! | ngOnInit | this.data.data", this.data.data)
     }
   }
 
@@ -101,8 +97,11 @@ export class TableControlDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  valueChange(value: string) {
-    this.toObj();
+  valueChange(event: KeyboardEvent, pair: KeyValue, value: string) {
+    if (pair.value !== value) {
+      pair.value = value;
+      this.toObj();
+    }
   }
 
   toObj() {
@@ -159,9 +158,6 @@ export class TableControlDialogComponent implements OnInit {
         return false;
       }
     }
-
-
-
     return true;
   }
 
