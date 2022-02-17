@@ -1,7 +1,8 @@
 <div (keyup)="handleKey($event)">
     <h2 class="title-dialog" mat-dialog-title>Редактирование объекта</h2>
     <div class="table-like" mat-dialog-content>
-        <div *ngFor="let keyValue of objKeyValues.pairs" class="pair-row">
+        <div *ngFor="let keyValue of objKeyValues.pairs" class="pair-row" 
+        [ngClass]="{'process-key-err': keyValue.key === processKey && errorMessage}">
             <div class="key-col"> {{keyValue.key}}</div>
             <div class="value-col">
                 <input #input [value]="keyValue.value" [disabled]="isKeyDisabled(keyValue.key)"
@@ -13,7 +14,8 @@
             <div class="slave-obj-container" *ngFor="let sObj of slaveObjs">
                  <span class="slave-key"><span style="font-style: normal">Ключ:</span> {{sObj.key}}</span>
                 
-                <div *ngFor="let keyValue of sObj.pairs" class="pair-row">
+                <div *ngFor="let keyValue of sObj.pairs" 
+                [ngClass]="{'process-key-err': keyValue.key === processKey && errorMessage}" class="pair-row">
                     <div class="key-col"> {{keyValue.key}}</div>
                     <div class="value-col">
                         <input #input [value]="keyValue.value" [disabled]="isKeyDisabled(keyValue.key)"
@@ -22,14 +24,15 @@
                 </div>
             </div>
         </div>
-        <div class="validator-field" [ngClass]="{'validator-error': errorMessage}">
+        <div [matTooltip]="errorTooltip" [matTooltipDisabled]="!errorTooltip"  matTooltipPosition="right"
+         class="validator-field" [ngClass]="{'validator-error': errorMessage}">
             <img [src]="errorMessage ? 'assets/icons/cross.svg' : 'assets/icons/check.svg'" alt="">
             {{!errorMessage ? "Корректный тип" : errorMessage}}
         </div>
     </div>
 
     <div mat-dialog-actions>
-        <button mat-flat-button cdkFocusInitial class="accept-button" color="primary"
+        <button mat-flat-button class="accept-button" color="primary"
         [mat-dialog-close]="editingCopy" [disabled]="!!errorMessage">Принять</button>
         <button mat-stroked-button (click)="onNoClick()">Отменить</button>
     </div>

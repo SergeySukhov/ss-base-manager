@@ -171,8 +171,6 @@ export class TableIndeciesControlComponent extends TableControlBase<IndeciesComm
       this.table.renderRows();
       this.updateAllAvailableState();
     });
-
-
   }
 
   isIncludeChildNodes(nodeType: AvailabilityNodes, row: IndeciesDataViewRoot): boolean {

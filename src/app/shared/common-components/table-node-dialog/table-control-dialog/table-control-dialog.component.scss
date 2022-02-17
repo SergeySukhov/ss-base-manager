@@ -12,10 +12,15 @@
     }
     .pair-row {
         width: 100%;
-        padding: 5px 0px;
+        padding: 5px 2px;
         display: flex;
         flex-direction: row;
         height: 30px;
+    }
+
+    .process-key-err {
+        border: 1px solid red;
+        border-radius: 3px;
     }
 
     .key-col {

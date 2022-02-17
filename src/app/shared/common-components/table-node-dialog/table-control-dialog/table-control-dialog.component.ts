@@ -21,6 +21,8 @@ interface ParsedObj {
 export class TableControlDialogComponent implements OnInit {
 
   errorMessage = "";
+  errorTooltip = "";
+  processKey = "";
 
   objKeyValues: ParsedObj = { pairs: [], lvl: 0, key: "" };
 
@@ -32,18 +34,32 @@ export class TableControlDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: { data: any, disabledKeys: string[] },) { }
 
   ngOnInit(): void {
-
     try {
       this.editingCopy = JSON.parse(JSON.stringify(this.data.data));
-      this.objKeyValues.pairs.push(...this.getKeyValueFromObj(this.data.data))
-    } catch (exp) {
-      this.errorMessage = "!! ошибка json";
+    } catch (e) {
+      this.errorMessage = "!! Ошибка JSON";
+      console.warn("!! Исключение при работе с JSON, возможно объект содержал null|undefined или зацикленные связи", e);
+      this.errorTooltip = "Исключение при работе с JSON, возможно объект содержал null|undefined или зацикленные связи";
+      console.log("!! | ngOnInit | this.data.data", this.data.data)
+    }
+    try {
+      this.objKeyValues.pairs.push(...this.getKeyValueFromObj(this.data.data));
+    } catch (e) {
+      this.errorMessage = "!! Ошибка обработки объекта";
+      console.warn("!!", e);
+      this.errorTooltip = "Необработанная ситуация в представлении объекта";
+      console.log("!! | ngOnInit | this.data.data", this.data.data)
     }
   }
 
   getKeyValueFromObj(obj: any, lvl = 0): KeyValue[] {
     const result: { key: string, value: string }[] = [];
     for (const [key, value] of Object.entries(obj)) {
+      if (value === null || value === undefined) {
+        this.data.disabledKeys.push(key);
+        result.push({ key, value: "null" });
+        continue;
+      }
       if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
 
         let objValue: string = "";
@@ -91,26 +107,36 @@ export class TableControlDialogComponent implements OnInit {
 
   toObj() {
     this.errorMessage = "";
+    this.errorTooltip = "";
+    this.processKey = "";
     try {
       for (const pair of this.objKeyValues.pairs) {
+        this.processKey = pair.key;
         this.editingCopy[pair.key] = JSON.parse(pair.value);
       }
 
       for (let slaveObj of this.slaveObjs) {
         const sObj: { [key: string]: any } = {};
         for (const pair of slaveObj.pairs) {
+          this.processKey = pair.key;
           sObj[pair.key] = JSON.parse(pair.value);
         }
         this.editingCopy[slaveObj.key] = sObj;
         if (!this.isInstanseOfObj(sObj, this.data.data[slaveObj.key])) {
+          this.errorTooltip = "Некорректный тип поля дочернего объекта";
           this.errorMessage = "Некорректный тип поля";
+          return;
         }
       }
 
       if (!this.editingCopy || !this.isInstanseOfObj(this.editingCopy, this.data.data)) {
+        this.errorTooltip = "Некорректный тип поля объекта";
         this.errorMessage = "Некорректный тип поля";
+        return;
       }
+      this.processKey = "";
     } catch (e) {
+      this.errorTooltip = "Исключение при работе с JSON, объект неправильного формата, объект содержал null|undefined или зацикленные связи";
       this.errorMessage = "Некорректный тип поля";
 
     }
@@ -118,7 +144,7 @@ export class TableControlDialogComponent implements OnInit {
 
   isInstanseOfObj(targetObject: any, sourceObject: any): boolean {
     const keys = Object.keys(targetObject);
-    const dataKeys = Object.keys(targetObject);
+    const dataKeys = Object.keys(sourceObject);
     if (dataKeys.length !== keys.length) {
       return false;
     }
@@ -127,10 +153,15 @@ export class TableControlDialogComponent implements OnInit {
       if (typeof sourceObject[key] === "object") {
         continue;
       }
+
       if (!(key in sourceObject) || (typeof targetObject[key] !== typeof sourceObject[key])) {
+        this.processKey = key;
         return false;
       }
     }
+
+
+
     return true;
   }
 
