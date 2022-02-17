@@ -355,8 +355,6 @@ export class ManagementSystem extends ManagementSystemBase {
       isSub: false,
     }
 
-
-
     sender.withCredentials = false;
     sender.open("POST", environment.indecies + "uploader");
 

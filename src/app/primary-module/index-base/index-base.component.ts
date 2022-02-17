@@ -17,7 +17,6 @@ export class IndexBaseComponent implements OnInit {
 
   public data: StepperData | null = null;
   public resultParams: IndexBaseResultParams = new IndexBaseResultParams();
-  public tempProgress = 0;
   public errorMessages = "";
 
   constructor(private declarationService: IndexBaseDeclarationService, private endpointService: IndexBaseEndpointService) { }
@@ -33,13 +32,6 @@ export class IndexBaseComponent implements OnInit {
 
   onFinish() {
     this.endpointService.sendIndecies(this.resultParams);
-    this.tempProgress = 1;
-    const tempInterval = setInterval(() => {
-      this.tempProgress += 2;
-      if (this.tempProgress >= 100) {
-        clearInterval(tempInterval);
-      }
-    }, 50)
   }
 
   onModelChange() {

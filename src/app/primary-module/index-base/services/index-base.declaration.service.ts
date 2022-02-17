@@ -235,7 +235,6 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
     }
 
     protected toSelectorBaseOptions(baseData: AvailableBaseIndexInfo[]): SelectorOption<string>[] {
-        console.log("!! | toSelectorBaseOptions | baseData", baseData)
         // const selectorOptions: SelectorOption<AvailableBaseIndexInfo>[] = [];
 
         // baseData.forEach(x => {
@@ -249,7 +248,6 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
         // return selectorOptions;
         const uniqYearsSet = new Set(baseData.map(x => x.year));
         const uniqYear = Array.from(uniqYearsSet);
-        console.log("!! | toSelectorBaseOptions | uniqYear", uniqYear)
         const selectorOptions: SelectorOption<string>[] = [];
 
         selectorOptions.push({

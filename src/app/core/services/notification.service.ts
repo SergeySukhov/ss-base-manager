@@ -34,13 +34,14 @@ export class NotificationService {
             messageType: NetSubTypes.notificationSub,
             isSub: true,
         });
-
         this.notificationChange = new Subject<NotificationMessage>();
         this.endpointSub.subscribe(x => {
+
             const message = x.data.message as NotificationMessage;
+            
             if (!message.timeStamp) {
                 message.timeStamp = this.datePipe.transform(Date.now(), "dd.MM | HH:mm:ss") ?? "";
-            } else {
+            } else if (Number.parseInt(message.timeStamp) > 100000) {
                 message.timeStamp = this.datePipe.transform( message.timeStamp, "dd.MM | HH:mm:ss") ?? "";
             }
 
