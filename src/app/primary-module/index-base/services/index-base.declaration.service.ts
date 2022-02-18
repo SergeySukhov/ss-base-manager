@@ -173,7 +173,7 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                             this.updateResultParams(context.resultParams);
                         }
                     },
-                    isCompleted: context.resultParams.isComplete,
+                    isCompleted: true,
                     fields: this.finalOptions,
                     actionButtonAction: context.onFinish.bind(context),
                 },

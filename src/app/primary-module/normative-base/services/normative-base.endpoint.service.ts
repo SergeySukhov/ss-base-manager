@@ -5,13 +5,12 @@ import { NormoRequestUploader } from "src/app/shared/models/server-models/server
 import { NetWorkerService } from "src/app/shared/workers-module/services/net-worker.service";
 import { v4 } from "uuid";
 import { EndpointBaseService } from "../../../core/services/base-services/endpoint-base.service";
-import { FormulaBaseEndpointService } from "../../formula-base/services/formula-base.endpoint.service";
 import { NormBaseResultParams } from "../models/norm-base.models";
 
 @Injectable()
 export class NormativeBaseEndpointService extends EndpointBaseService {
 
-    constructor(protected netWorker: NetWorkerService, private formulaUploader: FormulaBaseEndpointService) {
+    constructor(protected netWorker: NetWorkerService) {
         super(netWorker);
     }
 

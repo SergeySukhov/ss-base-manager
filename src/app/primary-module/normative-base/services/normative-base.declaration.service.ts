@@ -7,18 +7,19 @@ import { v4 } from "uuid";
 import { NormBaseResultParams } from "../models/norm-base.models";
 import { NormativeBaseComponent } from "../normative-base.component";
 import { NormativeBaseEndpointService } from "./normative-base.endpoint.service";
-import { NormativeBaseStateService } from "./normative-base.state.service";
 
 @Injectable()
 export class NormativeBaseDeclarationService extends DeclarationBaseService<AvailableBaseAdditionInfo, NormBaseResultParams> {
     additionalBase: AvailableBaseAdditionInfo;
 
-    constructor(private endpoint: NormativeBaseEndpointService, private stateService: NormativeBaseStateService) {
+    constructor(private endpoint: NormativeBaseEndpointService) {
         super();
         this.additionalBase = this.initAddAdditionalBase();
     }
 
     public getStepperModel(context: NormativeBaseComponent, avTypes: AvailableNormativeBaseType[]): StepperData {
+        console.log("!! | getStepperModel | this.baseFieldOptions", this.baseFieldOptions)
+        
         const stepperModel: StepperData = {
             isLinear: true,
             steps: [
@@ -35,7 +36,7 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
                     fields: [{
                         type: OptionType.selector,
                         fieldLabel: "Доступные НБ",
-                        startOption: this.baseFieldOptions.find(x => x.value === this.baseTypePipe.transform(context.resultParams.baseType)),
+                        startOption: this.baseStartOption, // this.baseFieldOptions.find(x => x.value === this.baseTypePipe.transform(context.resultParams.baseType)),
                         fieldOptions: this.baseFieldOptions,
                         onDataChange: (value: SelectorOption<AvailableBaseAdditionInfo>, form: StepperDataStep) => {
                             context.resultParams.baseChoice = value.data as AvailableBaseAdditionInfo;
@@ -144,10 +145,6 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
         };
 
         return stepperModel;
-    }
-
-    public update(resultParams: NormBaseResultParams) {
-        this.updateResultParams(resultParams);
     }
 
     protected toFinalData(resultParams: NormBaseResultParams): StepperLabelField[] {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalStorageService, LocalStorageConst } from 'src/app/core/services/local-storage.service';
-import { StepperData } from 'src/app/secondary-module/stepper/models/stepper-model';
-import { NormBaseResultParams } from '../normative-base/models/norm-base.models';
+import { UploadComponentBase } from 'src/app/shared/models/base-upload/base-upload-component.model';
+import { AvailableBaseIndexInfo } from 'src/app/shared/models/server-models/AvailableBaseIndexInfo';
 import { IndexBaseResultParams } from './models/index-base.model';
 import { IndexBaseDeclarationService } from './services/index-base.declaration.service';
 import { IndexBaseEndpointService } from './services/index-base.endpoint.service';
@@ -15,37 +15,23 @@ import { IndexBaseEndpointService } from './services/index-base.endpoint.service
     IndexBaseDeclarationService,
   ]
 })
-export class IndexBaseComponent implements OnInit {
+export class IndexBaseComponent extends UploadComponentBase<AvailableBaseIndexInfo, IndexBaseResultParams> implements OnInit {
 
-  public data: StepperData | null = null;
-  public resultParams: IndexBaseResultParams;
-  public errorMessages = "";
+  constructor(protected declarationService: IndexBaseDeclarationService, protected endpointService: IndexBaseEndpointService,
+    protected storageService: LocalStorageService) {
 
-  constructor(private declarationService: IndexBaseDeclarationService, private endpointService: IndexBaseEndpointService,
-    private storageService: LocalStorageService) {
-    this.resultParams = this.storageService.getItem(LocalStorageConst.resultIndexParams) ?? new IndexBaseResultParams();
+    super(declarationService, endpointService, storageService, LocalStorageConst.resultIndexParams);
+
   }
 
-  async ngOnInit() {
-    this.endpointService.getAvailableBaseTypes().then(availableBaseTypes => {
-      if (availableBaseTypes?.length) {
-        this.data = this.declarationService.getStepperModel(this, availableBaseTypes);
-      } else {
-        this.errorMessages = "!! ошибка загрузки";
-      }
-    });
-    this.declarationService.updateParamsSub.subscribe(newParams => {
-      this.resultParams = newParams;
-      this.storageService.setItem(LocalStorageConst.resultIndexParams, this.resultParams);
-    })
+  ngOnInit() {
   }
 
   onFinish() {
     this.endpointService.sendIndecies(this.resultParams);
   }
 
-  onModelChange() {
-    this.declarationService.update(this.resultParams);
+  protected loadLastParams(): IndexBaseResultParams {
+    return this.storageService.getItem(LocalStorageConst.resultIndexParams) ?? new IndexBaseResultParams();
   }
-
 }

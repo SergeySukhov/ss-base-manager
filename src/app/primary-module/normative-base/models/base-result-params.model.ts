@@ -1,16 +1,17 @@
 import { BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 
 export class ResultUploadParamsBase<TBase> {
+    needDeploy = false;
     baseTypeName: string = "";
     baseType: BaseType | null = null;
-    baseChoice: TBase | null = null;
-    needDeploy = false;
-
     mainFile: File | null = null;
+    baseChoice: TBase | null = null;
 
-    additionalCompleteCondition?: boolean = true;
+    addBase?: TBase;
 
     get isComplete(): boolean {
-        return !!(this.baseTypeName && this.baseChoice && this.mainFile && this.additionalCompleteCondition)
+        return !!((!!this.baseType && !!this.baseChoice || !!this.addBase) && this.mainFile && this.additionalCompleteCondition())
     }
+
+    additionalCompleteCondition = () => { return true };
 }

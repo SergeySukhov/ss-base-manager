@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalStorageService, LocalStorageConst } from 'src/app/core/services/local-storage.service';
-import { StepperData } from "src/app/secondary-module/stepper/models/stepper-model";
+import { UploadComponentBase } from 'src/app/shared/models/base-upload/base-upload-component.model';
+import { AvailableBaseAdditionInfo } from 'src/app/shared/models/server-models/AvailableBaseAdditionInfo';
 import { FormBaseResultParams } from "./models/form-base.models";
 import { FormulaBaseDeclarationService } from "./services/formula-base.declaration.service";
 import { FormulaBaseEndpointService } from "./services/formula-base.endpoint.service";
@@ -14,37 +15,23 @@ import { FormulaBaseEndpointService } from "./services/formula-base.endpoint.ser
     FormulaBaseEndpointService
   ]
 })
-export class FormulaBaseComponent implements OnInit {
+export class FormulaBaseComponent extends UploadComponentBase<AvailableBaseAdditionInfo, FormBaseResultParams> implements OnInit {
 
-  public data: StepperData | null = null;
-  public resultParams: FormBaseResultParams = new FormBaseResultParams();
-  public errorMessages = "";
 
-  constructor(private declarationService: FormulaBaseDeclarationService, private endpointService: FormulaBaseEndpointService,
-    private storageService: LocalStorageService) {
-    this.resultParams = this.storageService.getItem(LocalStorageConst.resultFormulaParams) ?? new FormBaseResultParams();
+  constructor(protected declarationService: FormulaBaseDeclarationService, protected endpointService: FormulaBaseEndpointService,
+    protected storageService: LocalStorageService) {
+
+    super(declarationService, endpointService, storageService, LocalStorageConst.resultFormulaParams);
   }
 
-  async ngOnInit() {
-    this.endpointService.getAvailableBaseTypes().then(availableBaseTypes => {
-      if (availableBaseTypes?.length) {
-        this.data = this.declarationService.getStepperModel(this, availableBaseTypes);
-      } else {
-        this.errorMessages = "!! ошибка загрузки";
-      }
-    });
-    this.declarationService.updateParamsSub.subscribe(newParams => {
-      this.resultParams = newParams;
-      this.storageService.setItem(LocalStorageConst.resultFormulaParams, this.resultParams);
-    });
+  ngOnInit() {
   }
 
-  onFinish() {
+  public onFinish(): void {
     this.endpointService.sendFormuls(this.resultParams);
   }
 
-  onModelChange() {
-    this.declarationService.update(this.resultParams);
+  protected loadLastParams(): FormBaseResultParams {
+    return this.storageService.getItem(LocalStorageConst.resultFormulaParams) ?? new FormBaseResultParams();
   }
-
 }

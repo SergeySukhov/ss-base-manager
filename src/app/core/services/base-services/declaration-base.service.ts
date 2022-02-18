@@ -13,6 +13,7 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
 
     /** Выбор базы (замена существующей или добавление новой) */
     protected baseFieldOptions: SelectorOption<TAvailableBase>[] = [];
+    protected baseStartOption: SelectorOption<TAvailableBase> | undefined;
 
     protected finalOptions: StepFields[] = [];
 
@@ -26,7 +27,7 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
     protected abstract toFinalData(resultParams: TResultOptions): StepFields[]
     protected abstract toSelectorBaseOptions(bases: TAvailableBase[]): SelectorOption<TAvailableBase>[]
 
-    protected updateResultParams(resultParams: TResultOptions) {
+    public updateResultParams(resultParams: TResultOptions) {
         this.finalOptions.splice(0);
         this.finalOptions.push(...this.toFinalData(resultParams));
         this.updateParamsSub.next(resultParams);
@@ -53,8 +54,7 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
 
 
     protected getBaseTypeStep(avTypes: AvailableNormativeBaseType[], resultParams: TResultOptions,
-        getDataForNexStep: (baseType: BaseType) => Promise<TAvailableBase[] | null>,
-        dataChangeAfterAction?: { action: (params?: any) => void, params?: any }): StepperDataStep {
+        getDataForNexStep: (baseType: BaseType) => Promise<TAvailableBase[] | null>): StepperDataStep {
 
         const baseTypeOptions = this.toSelectorBaseTypeOptions(avTypes);
 
@@ -69,6 +69,7 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
                 startOption: baseTypeOptions.find(x => x.value === this.baseTypePipe.transform(resultParams.baseType)),
                 fieldLabel: "Доступные виды нормативных баз",
                 onDataChange: async (value: SelectorOption<BaseTypeInfo>, form: StepperDataStep) => {
+                    console.log("!! | onDataChange: | value", value)
                     const data = value.data as BaseTypeInfo;
                     resultParams.baseType = data.type;
 
@@ -85,7 +86,6 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
                         form.nextButton.isDisable = false;
                     }
 
-                    dataChangeAfterAction?.action(dataChangeAfterAction.params);
                     this.updateResultParams(resultParams);
                 },
             }],
