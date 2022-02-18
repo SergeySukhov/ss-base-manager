@@ -6,7 +6,7 @@ export class StepperData {
 
 export class StepperDataStep {
     stepLabel: string = "";
-    
+
     isAwaiting?: boolean;
     isOptional?: boolean;
     isCompleted?: boolean;
@@ -51,7 +51,7 @@ export class StepperInputField extends StepperDataField<OptionType.input>  {
 
 export class StepperSelectorField extends StepperDataField<OptionType.selector>  {
     fieldOptions: SelectorOption<any>[] = [];
-    startOptIdx?: {value: number};
+    startOption?: SelectorOption<any>;
     onDataChange: <T>(value: SelectorOption<T>, form: StepperDataStep) => void = () => { return };
 }
 

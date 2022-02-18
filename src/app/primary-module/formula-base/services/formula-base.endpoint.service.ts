@@ -1,5 +1,6 @@
 ﻿import { Injectable } from "@angular/core";
 import { NetMessageTypes } from "src/app/shared/models/net-messages/net-worker-messages";
+import { BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { NetWorkerService } from "src/app/shared/workers-module/services/net-worker.service";
 import { EndpointBaseService } from "../../../core/services/base-services/endpoint-base.service";
 import { FormBaseResultParams } from "../models/form-base.models";
@@ -25,7 +26,7 @@ export class FormulaBaseEndpointService extends EndpointBaseService {
                 Deploy: finalData.needDeploy,
                 Guid: finalData.baseChoice.guid,
                 IsNewDatabase: false,
-                Type: finalData.baseType,
+                Type: finalData.baseType ?? BaseType.TSN_MGE,
                 SourceFile: finalData.mainFile,
                 DocumentZipFile: null,
             },

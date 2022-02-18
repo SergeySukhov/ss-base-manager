@@ -3,7 +3,10 @@ import { BaseType } from 'src/app/shared/models/server-models/AvailableNormative
 
 @Pipe({ name: 'baseTypePipe' })
 export class BaseTypePipe implements PipeTransform {
-    transform(value: BaseType): string {
+    transform(value: BaseType | null | undefined): string {
+        if (!value) {
+            return "";
+        }
         switch (value) {
             case BaseType.TSN:
                 return "ТСН";

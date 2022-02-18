@@ -2,7 +2,7 @@
     <div class="stepper-wrapper">
         <ss-stepper [data]="data" (modelChange)="onModelChange()"></ss-stepper>
     </div>
-    <div *ngIf="tempProgress > 0" class="temp-loader">
+    <!-- <div *ngIf="tempProgress > 0" class="temp-loader">
         
         <div  *ngIf="tempProgress >= 100" class="success-checkmark">
             <div class="check-icon">
@@ -18,5 +18,5 @@
         mode="determinate"
         [value]="tempProgress"
     >
-    </mat-progress-bar>
+    </mat-progress-bar> -->
 </div>

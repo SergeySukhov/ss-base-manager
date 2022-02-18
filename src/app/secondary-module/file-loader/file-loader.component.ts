@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'ss-file-loader',
@@ -21,9 +21,7 @@ export class FileLoaderComponent implements OnInit {
     if (event instanceof FileList) {
       this.prepareFilesList(event);
     }
-
   }
-
 
   fileBrowseHandler(files?: any) {
     if (!files.target?.files) {
@@ -32,12 +30,10 @@ export class FileLoaderComponent implements OnInit {
     this.prepareFilesList(files.target?.files);
   }
 
-
   deleteFile(index: number) {
     this.files.splice(index, 1);
     this.filesChanged.emit(this.files);
   }
-
 
   prepareFilesList(files: FileList) {
     // for (const item of files) {

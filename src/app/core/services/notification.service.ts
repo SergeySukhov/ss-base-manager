@@ -21,9 +21,7 @@ export class NotificationService {
         private messageService: MessageService, 
         private datePipe: DatePipe,
         protected netWorker: NetWorkerService,
-    ) {
-
-    }
+    ) {}
 
     initNotifications() {
         if (this.notificationChange !== null) {

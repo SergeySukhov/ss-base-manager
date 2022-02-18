@@ -22,17 +22,21 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
         const stepperModel: StepperData = {
             isLinear: true,
             steps: [
-                this.getBaseTypeStep(avTypes, context.resultParams,
-                    this.endpoint.getAvailableNormativeBases.bind(this.endpoint)),
+                this.getBaseTypeStep(
+                    avTypes,
+                    context.resultParams,
+                    this.endpoint.getAvailableNormativeBases.bind(this.endpoint)
+                ),
                 ////////////////////////////////////////////////////////////////////
                 {
                     stepLabel: "Выбор НБ",
                     nextButton: { needShow: true, isDisable: true },
-                    // resetButton: { needShow: true, isDisable: false },
                     backButton: { needShow: true, isDisable: false },
                     fields: [{
                         type: OptionType.selector,
                         fieldLabel: "Доступные НБ",
+                        startOption: this.baseFieldOptions.find(x => x.value === this.baseTypePipe.transform(context.resultParams.baseType)),
+                        fieldOptions: this.baseFieldOptions,
                         onDataChange: (value: SelectorOption<AvailableBaseAdditionInfo>, form: StepperDataStep) => {
                             context.resultParams.baseChoice = value.data as AvailableBaseAdditionInfo;
 
@@ -44,7 +48,6 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
                             form.isCompleted = !form.nextButton?.isDisable
                             this.updateResultParams(context.resultParams);
                         },
-                        fieldOptions: this.baseFieldOptions,
                     },
                     ],
                 },

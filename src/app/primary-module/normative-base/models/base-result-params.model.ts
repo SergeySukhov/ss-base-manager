@@ -2,7 +2,7 @@ import { BaseType } from "src/app/shared/models/server-models/AvailableNormative
 
 export class ResultUploadParamsBase<TBase> {
     baseTypeName: string = "";
-    baseType: BaseType = BaseType.TSN_MGE;
+    baseType: BaseType | null = null;
     baseChoice: TBase | null = null;
     needDeploy = false;
 

@@ -1,13 +1,15 @@
 import { Injectable } from "@angular/core";
+import { Subject } from "rxjs";
 import { BaseTypeInfo } from "src/app/primary-module/formula-base/models/form-base.models";
 import { ResultUploadParamsBase } from "src/app/primary-module/normative-base/models/base-result-params.model";
 import { OptionType, SelectorOption, StepFields, StepperData, StepperDataStep } from "src/app/secondary-module/stepper/models/stepper-model";
 import { AvailableNormativeBaseType, BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { BaseTypePipe } from "../../pipes/base-type.pipe";
-import { EndpointBaseService } from "./endpoint-base.service";
 
 @Injectable()
 export abstract class DeclarationBaseService<TAvailableBase, TResultOptions extends ResultUploadParamsBase<TAvailableBase>> {
+
+    public updateParamsSub = new Subject<TResultOptions>();
 
     /** Выбор базы (замена существующей или добавление новой) */
     protected baseFieldOptions: SelectorOption<TAvailableBase>[] = [];
@@ -27,6 +29,7 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
     protected updateResultParams(resultParams: TResultOptions) {
         this.finalOptions.splice(0);
         this.finalOptions.push(...this.toFinalData(resultParams));
+        this.updateParamsSub.next(resultParams);
     }
 
     protected setAvailableBasesOptions(dataOptions: TAvailableBase[]) {
@@ -53,29 +56,35 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
         getDataForNexStep: (baseType: BaseType) => Promise<TAvailableBase[] | null>,
         dataChangeAfterAction?: { action: (params?: any) => void, params?: any }): StepperDataStep {
 
+        const baseTypeOptions = this.toSelectorBaseTypeOptions(avTypes);
+
         const step: StepperDataStep = {
             stepLabel: "Выбор вида НБ",
-            nextButton: { needShow: true, isDisable: true },
+            nextButton: { needShow: true, isDisable: !resultParams.baseType },
+            isCompleted: !!resultParams.baseType,
             isAwaiting: false,
             fields: [{
-                fieldOptions: this.toSelectorBaseTypeOptions(avTypes),
+                fieldOptions: baseTypeOptions,
                 type: OptionType.selector,
+                startOption: baseTypeOptions.find(x => x.value === this.baseTypePipe.transform(resultParams.baseType)),
                 fieldLabel: "Доступные виды нормативных баз",
                 onDataChange: async (value: SelectorOption<BaseTypeInfo>, form: StepperDataStep) => {
                     const data = value.data as BaseTypeInfo;
-                    form.isAwaiting = true;
+                    resultParams.baseType = data.type;
 
+                    form.isAwaiting = true;
                     const availableNB = await getDataForNexStep(data.type);
                     form.isAwaiting = false;
 
-                    resultParams.baseTypeName = data.name;
                     this.setAvailableBasesOptions(availableNB ?? []);
 
                     form.isCompleted = true;
+                    resultParams.baseTypeName = data.name;
+
                     if (form.nextButton) {
                         form.nextButton.isDisable = false;
                     }
-                    
+
                     dataChangeAfterAction?.action(dataChangeAfterAction.params);
                     this.updateResultParams(resultParams);
                 },
@@ -83,6 +92,4 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
         }
         return step;
     }
-
-
 }

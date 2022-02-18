@@ -37,5 +37,7 @@ export enum LocalStorageConst {
     lastContext = "lastContext",
     userId = "userId",
     lastControlTab = "lastControlTab",
-
+    resultNormoParams = "resultNormoParams",
+    resultFormulaParams = "resultFormulaParams",
+    resultIndexParams = "resultIndexParams",
 }

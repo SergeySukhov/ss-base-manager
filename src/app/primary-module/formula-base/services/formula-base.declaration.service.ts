@@ -28,6 +28,9 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<Availa
                     fields: [{
                         type: OptionType.selector,
                         fieldLabel: "Доступные НБ",
+                        startOption: this.baseFieldOptions.find(x => x.value === this.baseTypePipe.transform(context.resultParams.baseType)),
+                        fieldOptions: this.baseFieldOptions,
+
                         onDataChange: (value: SelectorOption<AvailableBaseAdditionInfo>, form: StepperDataStep) => {
                             context.resultParams.baseChoice = value.data as AvailableBaseAdditionInfo;
 
@@ -37,7 +40,6 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<Availa
                             form.isCompleted = true;
                             this.updateResultParams(context.resultParams);
                         },
-                        fieldOptions: this.baseFieldOptions,
                     },
                     ],
                 },

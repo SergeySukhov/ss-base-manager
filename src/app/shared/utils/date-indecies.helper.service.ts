@@ -31,13 +31,14 @@ export class DateIndeciesHelper {
         return years;
     }
 
-    public static GetPeriod(index: AvailableBaseIndexInfo): string {
-        if (index.releasePeriodValue >= 0) {
-            if (index.releasePeriodType === ReleasePeriodType.Month && index.releasePeriodValue < 13) {
-                return this.GetAllMonths()[index.releasePeriodValue-1];
-            } else if (index.releasePeriodType === ReleasePeriodType.Quarter && index.releasePeriodValue < 4) {
-                return this.GetAllQuarters()[index.releasePeriodValue];
-            }
+    public static GetPeriod(index: AvailableBaseIndexInfo | null | undefined): string {
+        if (!index || index.releasePeriodValue < 0) {
+            return "";
+        }
+        if (index.releasePeriodType === ReleasePeriodType.Month && index.releasePeriodValue < 13) {
+            return this.GetAllMonths()[index.releasePeriodValue - 1];
+        } else if (index.releasePeriodType === ReleasePeriodType.Quarter && index.releasePeriodValue < 4) {
+            return this.GetAllQuarters()[index.releasePeriodValue];
         }
         return "некорректный период выпуска индекса";
     }

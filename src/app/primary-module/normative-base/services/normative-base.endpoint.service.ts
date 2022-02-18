@@ -1,5 +1,6 @@
 ﻿import { Injectable } from "@angular/core";
 import { NetMessageTypes } from "src/app/shared/models/net-messages/net-worker-messages";
+import { BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { NormoRequestUploader } from "src/app/shared/models/server-models/server-upload-request-models/NormoRequestUploader";
 import { NetWorkerService } from "src/app/shared/workers-module/services/net-worker.service";
 import { v4 } from "uuid";
@@ -28,7 +29,7 @@ export class NormativeBaseEndpointService extends EndpointBaseService {
             IsUpdate: !!finalData.addBase,
             Name: finalData.addBase?.name ?? finalData.baseChoice?.name ?? "",
             ShortName: finalData.addBase?.shortName ?? finalData.baseChoice?.shortName ?? "",
-            Type: finalData.baseType,
+            Type: finalData.baseType ?? BaseType.TSN_MGE,
             SourceFile: finalData.mainFile,
             DocumentZipFile: finalData.fileTechDocs,
         };

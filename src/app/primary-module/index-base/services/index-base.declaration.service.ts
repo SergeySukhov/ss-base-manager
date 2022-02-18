@@ -17,49 +17,24 @@ import { IndexBaseEndpointService } from "./index-base.endpoint.service";
 export class IndexBaseDeclarationService extends DeclarationBaseService<AvailableBaseIndexInfo, IndexBaseResultParams> {
 
     finalOptions: StepFields[] = [];
-    addIndexBase: AvailableBaseIndexInfo;
+    indexYearOptions: SelectorOption<string>[];
+    indexPeriodOptions: SelectorOption<string>[];
 
     constructor(private endpoint: IndexBaseEndpointService,
     ) {
         super();
-        this.addIndexBase = this.initAddIndexBase();
-
+        this.indexYearOptions = this.getYearSelectorOptions()
+        this.indexPeriodOptions = this.getPeriodSelectorOptions()
     }
 
     public getStepperModel(context: IndexBaseComponent, avTypes: AvailableNormativeBaseType[]): StepperData {
-        this.addIndexBase.guid = v4();
-        context.resultParams.addBase = this.addIndexBase;
+        context.resultParams.addBase = context.resultParams.addBase ?? this.initAddIndexBase();;
+        context.resultParams.addBase.guid = v4();
 
         const stepperModel: StepperData = {
             isLinear: true,
             steps: [
                 this.getBaseTypeStep(avTypes, context.resultParams, this.endpoint.getAvailableIndeciesBases.bind(this.endpoint)),
-                ////////////////////////////////////////////////////////////////////
-                // {
-                //     stepLabel: "Выбор года выпуска",
-                //     nextButton: { needShow: true, isDisable: true },
-                //     backButton: { needShow: true, isDisable: false },
-                //     fields: [{
-                //         type: OptionType.selector,
-                //         fieldLabel: "Установленные",
-                //         fieldOptions: this.baseFieldOptions,
-
-                //         onDataChange: (value: SelectorOption<string>, form: StepperDataStep) => {
-                //             // context.resultParams.baseChoice = value.data as AvailableBaseIndexInfo;
-
-                //             this.addIndexBase.type = context.resultParams.baseType;
-
-                //             // this.setAddBaseForm(!!value.imgSrc, context, form);
-
-                //             if (form.nextButton) {
-                //                 form.nextButton.isDisable = !context.resultParams.baseChoice && !context.resultParams.addBase;
-                //             }
-                //             form.isCompleted = !form.nextButton?.isDisable
-                //             this.updateResultParams(context.resultParams);
-                //         },
-                //     },
-                //     ],
-                // },
                 ////////////////////////////////////////////////////////////////////
                 {
                     stepLabel: "Параметры базы индексов",
@@ -68,30 +43,32 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                     isCompleted: true,
                     fields: [{
                         type: OptionType.label,
-                        text: this.addIndexBase.guid,
+                        text: context.resultParams.addBase.guid,
                         fieldLabel: "Идентификатор добаляемой базы индексов",
                         onDataChange: () => { }
                     },
                     {
                         type: OptionType.selector,
                         fieldLabel: "Год выпуска",
-                        startOptIdx: { value: this.getYearSelectorOptions().findIndex(x => x.value === "" + this.addIndexBase.year) } ?? undefined,
-                        fieldOptions: this.getYearSelectorOptions(),
+                        startOption: this.indexYearOptions.find(x => x.value === "" + context.resultParams.addBase?.year),
+                        fieldOptions: this.indexYearOptions,
                         onDataChange: (value: SelectorOption<string>, form: StepperDataStep) => {
                             if (context.resultParams.addBase && value.value) {
-                                this.addIndexBase.year = Number.parseInt(value.value)
+                                context.resultParams.addBase.year = Number.parseInt(value.value)
+                                this.updateResultParams(context.resultParams);
                             }
                         }
                     }, {
                         type: OptionType.selector,
                         fieldLabel: "Период выпуска",
-                        startOptIdx: { value: this.getPeriodSelectorOptions().findIndex(x => x.value === DateIndeciesHelper.GetPeriod(this.addIndexBase)) } ?? undefined,
-                        fieldOptions: this.getPeriodSelectorOptions(),
+                        startOption: this.indexPeriodOptions.find(x => x.value === DateIndeciesHelper.GetPeriod(context.resultParams.addBase)),
+                        fieldOptions: this.indexPeriodOptions,
                         onDataChange: (value: SelectorOption<string>, form: StepperDataStep) => {
                             if (context.resultParams.addBase && value.value) {
                                 const period = DateIndeciesHelper.toPeriodFromString(value.value);
-                                this.addIndexBase.releasePeriodType = period?.periodType ?? ReleasePeriodType.Month;
-                                this.addIndexBase.releasePeriodValue = period?.value ?? 0;
+                                context.resultParams.addBase.releasePeriodType = period?.periodType ?? ReleasePeriodType.Month;
+                                context.resultParams.addBase.releasePeriodValue = period?.value ?? 0;
+                                this.updateResultParams(context.resultParams);
                             }
                         }
                     }, {
@@ -103,6 +80,7 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                         onDataChange: (value: string) => {
                             if (value) {
                                 context.resultParams.nr = Number.parseFloat(value);
+                                this.updateResultParams(context.resultParams);
                             }
                         }
                     }, {
@@ -114,6 +92,7 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                         onDataChange: (value: string) => {
                             if (value) {
                                 context.resultParams.sp = Number.parseFloat(value);
+                                this.updateResultParams(context.resultParams);
                             }
                         }
                     }, {
@@ -121,10 +100,10 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                         inputType: "number",
                         fieldLabel: "Номер дополнения",
                         placeHolder: "",
-                        initValue: this.addIndexBase.additionNumber,
+                        initValue: context.resultParams.addBase.additionNumber,
                         onDataChange: (value: string) => {
                             if (context.resultParams.addBase && value) {
-                                this.addIndexBase.additionNumber = Number.parseInt(value);
+                                context.resultParams.addBase.additionNumber = Number.parseInt(value);
                             }
                         }
                     },
@@ -235,17 +214,6 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
     }
 
     protected toSelectorBaseOptions(baseData: AvailableBaseIndexInfo[]): SelectorOption<string>[] {
-        // const selectorOptions: SelectorOption<AvailableBaseIndexInfo>[] = [];
-
-        // baseData.forEach(x => {
-        //     selectorOptions.push({
-        //         isAvailable: true,
-        //         value: this.getIndexName(x),
-        //         data: x,
-        //         action: () => { }
-        //     });
-        // });
-        // return selectorOptions;
         const uniqYearsSet = new Set(baseData.map(x => x.year));
         const uniqYear = Array.from(uniqYearsSet);
         const selectorOptions: SelectorOption<string>[] = [];
@@ -279,7 +247,7 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
             isAvailable: true,
             isCancelled: false,
             releasePeriodType: ReleasePeriodType.Month,
-            releasePeriodValue: 0,
+            releasePeriodValue: 1,
             techDocPath: "",
             type: BaseType.TSN_MGE,
             year: 2000,
@@ -292,60 +260,6 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                 workCategory: WorkCategory.Build
             }
         }
-    }
-
-    private setAddBaseForm(needAddForm: boolean, context: IndexBaseComponent, form: StepperDataStep) {
-        if (needAddForm) {
-            this.addIndexBase.guid = v4();
-            context.resultParams.addBase = this.addIndexBase;
-            form.stepLabel = "Добавление новой базы индексов"
-            form.isCompleted = true;
-            form.fields.push({
-                type: OptionType.label,
-                text: this.addIndexBase.guid,
-                fieldLabel: "Идентификатор добаляемой базы индексов",
-                onDataChange: () => { }
-            }, {
-                type: OptionType.selector,
-                fieldLabel: "Год выпуска",
-                startOptIdx: { value: this.getYearSelectorOptions().findIndex(x => x.value === "" + this.addIndexBase.year) } ?? undefined,
-                fieldOptions: this.getYearSelectorOptions(),
-                onDataChange: (value: SelectorOption<string>, form: StepperDataStep) => {
-                    if (context.resultParams.addBase && value.value) {
-                        this.addIndexBase.year = Number.parseInt(value.value)
-                    }
-                }
-            }, {
-                type: OptionType.selector,
-                fieldLabel: "Период выпуска",
-                startOptIdx: { value: this.getPeriodSelectorOptions().findIndex(x => x.value === DateIndeciesHelper.GetPeriod(this.addIndexBase)) } ?? undefined,
-                fieldOptions: this.getPeriodSelectorOptions(),
-                onDataChange: (value: SelectorOption<string>, form: StepperDataStep) => {
-                    if (context.resultParams.addBase && value.value) {
-                        const period = DateIndeciesHelper.toPeriodFromString(value.value);
-                        this.addIndexBase.releasePeriodType = period?.periodType ?? ReleasePeriodType.Month;
-                        this.addIndexBase.releasePeriodValue = period?.value ?? 0;
-                    }
-                }
-            }, {
-                type: OptionType.input,
-                inputType: "number",
-                fieldLabel: "Номер дополнения",
-                placeHolder: "",
-                initValue: this.addIndexBase.additionNumber,
-                onDataChange: (value: string) => {
-                    if (context.resultParams.addBase && value) {
-                        this.addIndexBase.additionNumber = Number.parseInt(value);
-                    }
-                }
-            },
-            )
-        } else {
-            form.stepLabel = "Выбор базы индексов"
-            context.resultParams.addBase = undefined;
-            form.fields.splice(1);
-        }
-        return;
     }
 
     private getYearSelectorOptions(years?: number[]): SelectorOption<string>[] {
