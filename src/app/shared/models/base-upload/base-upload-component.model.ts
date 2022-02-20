@@ -33,15 +33,13 @@ export abstract class UploadComponentBase<TAvailableBase, TResultOptions extends
             this.storageService.setItem(this.storageConst, this.resultParams);
         });
         
-        // this.endpointService.getAvailableBaseTypes().then(availableBaseTypes => {
-        //     if (availableBaseTypes?.length) {
-        //         this.data = this.declarationService.getStepperModel(this, availableBaseTypes);
-        //     } else {
-        //         this.errorMessages = "!! ошибка загрузки";
-        //     }
-        // });
-
-
+        this.endpointService.getAvailableBaseTypes().then(availableBaseTypes => {
+            if (availableBaseTypes?.length) {
+                this.data = this.declarationService.getStepperModel(this, availableBaseTypes);
+            } else {
+                this.errorMessages = "!! ошибка загрузки";
+            }
+        });
     }
 
 

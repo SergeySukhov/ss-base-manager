@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { observable } from "mobx";
 import { Subject } from "rxjs";
 import { BaseTypeInfo } from "src/app/primary-module/formula-base/models/form-base.models";
 import { ResultUploadParamsBase } from "src/app/primary-module/normative-base/models/base-result-params.model";
@@ -12,8 +13,7 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
     public updateParamsSub = new Subject<TResultOptions>();
 
     /** Выбор базы (замена существующей или добавление новой) */
-    protected baseFieldOptions: SelectorOption<TAvailableBase>[] = [];
-    protected baseStartOption: SelectorOption<TAvailableBase> | undefined;
+    @observable baseFieldOptions: SelectorOption<TAvailableBase>[] = [];
 
     protected finalOptions: StepFields[] = [];
 
@@ -57,6 +57,11 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
         getDataForNexStep: (baseType: BaseType) => Promise<TAvailableBase[] | null>): StepperDataStep {
 
         const baseTypeOptions = this.toSelectorBaseTypeOptions(avTypes);
+        if (resultParams.baseType && resultParams.baseChoice) {
+            getDataForNexStep(resultParams.baseType).then(availableNB => {
+                this.setAvailableBasesOptions(availableNB ?? []);
+            });
+        }
 
         const step: StepperDataStep = {
             stepLabel: "Выбор вида НБ",
@@ -69,7 +74,6 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
                 startOption: baseTypeOptions.find(x => x.value === this.baseTypePipe.transform(resultParams.baseType)),
                 fieldLabel: "Доступные виды нормативных баз",
                 onDataChange: async (value: SelectorOption<BaseTypeInfo>, form: StepperDataStep) => {
-                    console.log("!! | onDataChange: | value", value)
                     const data = value.data as BaseTypeInfo;
                     resultParams.baseType = data.type;
 

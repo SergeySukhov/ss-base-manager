@@ -11,6 +11,7 @@ import { NormativeBaseEndpointService } from "./normative-base.endpoint.service"
 @Injectable()
 export class NormativeBaseDeclarationService extends DeclarationBaseService<AvailableBaseAdditionInfo, NormBaseResultParams> {
     additionalBase: AvailableBaseAdditionInfo;
+    isAddFormSet = false;
 
     constructor(private endpoint: NormativeBaseEndpointService) {
         super();
@@ -18,8 +19,8 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
     }
 
     public getStepperModel(context: NormativeBaseComponent, avTypes: AvailableNormativeBaseType[]): StepperData {
-        console.log("!! | getStepperModel | this.baseFieldOptions", this.baseFieldOptions)
-        
+        this.additionalBase = context.resultParams.addBase ?? this.initAddAdditionalBase();
+
         const stepperModel: StepperData = {
             isLinear: true,
             steps: [
@@ -31,21 +32,25 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
                 ////////////////////////////////////////////////////////////////////
                 {
                     stepLabel: "Выбор НБ",
-                    nextButton: { needShow: true, isDisable: true },
+                    nextButton: { needShow: true, isDisable: !context.resultParams.baseChoice && !context.resultParams.addBase },
                     backButton: { needShow: true, isDisable: false },
                     fields: [{
                         type: OptionType.selector,
                         fieldLabel: "Доступные НБ",
-                        startOption: this.baseStartOption, // this.baseFieldOptions.find(x => x.value === this.baseTypePipe.transform(context.resultParams.baseType)),
                         fieldOptions: this.baseFieldOptions,
+                        startOptionGet: (form: StepperDataStep) => {
+                            if (context.resultParams.addBase && !this.isAddFormSet) {
+                                setTimeout(() => {
+                                    this.setAddBaseForm(true, context, form);
+                                })
+                                return this.baseFieldOptions[0];
+                            }
+                            return this.baseFieldOptions.find(x => x.data.guid === context.resultParams.baseChoice?.guid)
+                        },
                         onDataChange: (value: SelectorOption<AvailableBaseAdditionInfo>, form: StepperDataStep) => {
                             context.resultParams.baseChoice = value.data as AvailableBaseAdditionInfo;
-
+        
                             this.setAddBaseForm(!!value.imgSrc, context, form);
-
-                            if (form.nextButton) {
-                                form.nextButton.isDisable = !context.resultParams.baseChoice;;
-                            }
                             form.isCompleted = !form.nextButton?.isDisable
                             this.updateResultParams(context.resultParams);
                         },
@@ -206,12 +211,15 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
             parentBaseType: undefined,
             type: BaseType.TSN_MGE,
             additionNumber: 1,
-
         }
     }
 
     private setAddBaseForm(needAddForm: boolean, context: NormativeBaseComponent, form: StepperDataStep) {
-        if (needAddForm) {
+        if (needAddForm ) {
+            if (this.isAddFormSet) {
+                return;
+            }
+            this.isAddFormSet = true;
             this.additionalBase.guid = v4();
             context.resultParams.addBase = this.additionalBase;
             form.isCompleted = true;
@@ -229,6 +237,7 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
                 placeHolder: "",
                 onDataChange: (value: string, form: StepperDataStep) => {
                     this.additionalBase.name = value;
+                    this.updateResultParams(context.resultParams);
                 }
             }, {
                 type: OptionType.input,
@@ -237,6 +246,7 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
                 initValue: this.additionalBase.shortName,
                 onDataChange: (value: string, form: StepperDataStep) => {
                     this.additionalBase.shortName = value;
+                    this.updateResultParams(context.resultParams);
                 }
             }, {
                 type: OptionType.input,
@@ -246,6 +256,7 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
                 placeHolder: "",
                 onDataChange: (value: string) => {
                     this.additionalBase.additionNumber = Number.parseInt(value) ?? 1;
+                    this.updateResultParams(context.resultParams);
                 }
 
             }, {
@@ -255,11 +266,13 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
                 placeHolder: "",
                 onDataChange: (value: string) => {
                     this.additionalBase.additionRegexp = value;
+                    this.updateResultParams(context.resultParams);
                 }
 
             },
             )
         } else {
+            this.isAddFormSet = false;
             form.stepLabel = "Выбор НБ";
             context.resultParams.addBase = undefined;
             form.fields.splice(1);

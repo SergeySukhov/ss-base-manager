@@ -21,7 +21,6 @@ export class IndexBaseComponent extends UploadComponentBase<AvailableBaseIndexIn
     protected storageService: LocalStorageService) {
 
     super(declarationService, endpointService, storageService, LocalStorageConst.resultIndexParams);
-
   }
 
   ngOnInit() {

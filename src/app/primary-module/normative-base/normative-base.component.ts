@@ -24,12 +24,6 @@ export class NormativeBaseComponent extends UploadComponentBase<AvailableBaseAdd
   }
 
   async ngOnInit() {
-    const availableBaseTypes = await this.endpointService.getAvailableBaseTypes()
-    if (availableBaseTypes?.length) {
-      this.data = this.declarationService.getStepperModel(this, availableBaseTypes);
-    } else {
-      this.errorMessages = "!! ошибка загрузки";
-    }
   }
 
   onFinish() {

@@ -56,7 +56,7 @@ export abstract class EndpointBaseService {
             const a = new Promise<AvailableBaseAdditionInfo[]>((resolve, reject) => {
                 setTimeout(() => {
                     resolve([{
-                        guid: v4(),
+                        guid: "cf987c98-7631-4929-b594-d636f29b3a49", // v4(),
                         name: "Dopolnenie idi naxuy 1",
                         additionNumber: 1,
                         additionRegexp: "",
@@ -66,7 +66,7 @@ export abstract class EndpointBaseService {
                         type: BaseType.TSN,
                         parentBaseType: BaseType.TSN,
                     }, {
-                        guid: v4(),
+                        guid: "54148634-4072-42de-a149-c8872b38f43a", // v4(),
                         name: "Dopolnenie idi naxuy 2",
                         additionNumber: 1,
                         additionRegexp: "",

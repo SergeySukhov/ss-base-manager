@@ -23,21 +23,19 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<Availa
                 ////////////////////////////////////////////////////////////////////
                 {
                     stepLabel: "Выбор НБ",
-                    nextButton: { needShow: true, isDisable: true },
+                    nextButton: { needShow: true, isDisable: !context.resultParams.baseChoice },
                     backButton: { needShow: true, isDisable: false },
+                    isCompleted: !!context.resultParams.baseChoice,
                     fields: [{
                         type: OptionType.selector,
                         fieldLabel: "Доступные НБ",
-                        startOption: this.baseFieldOptions.find(x => x.value === this.baseTypePipe.transform(context.resultParams.baseType)),
                         fieldOptions: this.baseFieldOptions,
-
+                        startOptionGet: (form: StepperDataStep) => {
+                            return this.baseFieldOptions.find(x => x.data.guid === context.resultParams.baseChoice?.guid)
+                        },
                         onDataChange: (value: SelectorOption<AvailableBaseAdditionInfo>, form: StepperDataStep) => {
                             context.resultParams.baseChoice = value.data as AvailableBaseAdditionInfo;
-
-                            if (form.nextButton) {
-                                form.nextButton.isDisable = false;
-                            }
-                            form.isCompleted = true;
+                            form.isCompleted = !form.nextButton?.isDisable
                             this.updateResultParams(context.resultParams);
                         },
                     },

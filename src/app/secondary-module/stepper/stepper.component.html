@@ -22,8 +22,8 @@
                         <mat-label>{{fieldModel.fieldLabel}}</mat-label>
 
                         <mat-select 
-                        [value]="fieldModel.startOption" 
-                        (selectionChange)="fieldModel.onDataChange($event.value, stepModel)">
+                            [value]="fieldModel.startOptionGet ? fieldModel.startOptionGet(stepModel) :  fieldModel.startOption" 
+                            (selectionChange)="fieldModel.onDataChange($event.value, stepModel)">
                             <mat-option *ngFor="let option of fieldModel.fieldOptions" [value]="option"
                                 [disabled]="!option.isAvailable" (onSelectionChange)="option.action(option, stepModel)">
                                 <img *ngIf="!!option.imgSrc" [src]="option.imgSrc" />

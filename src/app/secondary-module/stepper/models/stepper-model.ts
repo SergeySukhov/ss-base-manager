@@ -1,3 +1,4 @@
+import { computed, observable } from "mobx";
 
 export class StepperData {
     steps: StepperDataStep[] = [];
@@ -50,8 +51,10 @@ export class StepperInputField extends StepperDataField<OptionType.input>  {
 }
 
 export class StepperSelectorField extends StepperDataField<OptionType.selector>  {
+
     fieldOptions: SelectorOption<any>[] = [];
-    startOption?: SelectorOption<any>;
+    @observable startOption?: SelectorOption<any>;
+    @computed({keepAlive: true}) startOptionGet?: (form: StepperDataStep) => SelectorOption<any> | undefined;
     onDataChange: <T>(value: SelectorOption<T>, form: StepperDataStep) => void = () => { return };
 }
 
