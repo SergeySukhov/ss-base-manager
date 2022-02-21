@@ -35,7 +35,7 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<Availa
                         },
                         onDataChange: (value: SelectorOption<AvailableBaseAdditionInfo>, form: StepperDataStep) => {
                             context.resultParams.baseChoice = value.data as AvailableBaseAdditionInfo;
-                            form.isCompleted = !form.nextButton?.isDisable
+                            form.isCompleted = !!context.resultParams.baseChoice;
                             this.updateResultParams(context.resultParams);
                         },
                     },
