@@ -28,6 +28,7 @@ export class FormulaBaseComponent extends UploadComponentBase<AvailableBaseAddit
   }
 
   public onFinish(): void {
+    console.log("!! | onFinish | this.resultParams", this.resultParams)
     this.endpointService.sendFormuls(this.resultParams);
   }
 

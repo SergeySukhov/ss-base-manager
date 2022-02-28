@@ -14,6 +14,7 @@ export interface NotificationMessage {
     timeStamp?: string;
     fromService: string;
     message: string;
+    extraMessage?: string;
     imoprtance: ImoprtanceLevel,
     type: NotificationType,
     contextId?: string,

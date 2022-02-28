@@ -22,6 +22,8 @@
         display: flex;
         flex-direction: row;
         padding: 5px;
+        user-select: text !important;
+
         .time-log {
             font-weight: 400;
             padding-right: 5px;

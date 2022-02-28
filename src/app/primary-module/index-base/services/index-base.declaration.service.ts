@@ -175,7 +175,9 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                     },
                     isCompleted: true,
                     fields: this.finalOptions,
-                    actionButtonAction: context.onFinish.bind(context),
+                    actionButtonAction: () => {
+                        context.onFinish();
+                    }
                 },
                 ////////////////////////////////////////////////////////////////////
             ],

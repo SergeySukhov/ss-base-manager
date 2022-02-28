@@ -64,7 +64,7 @@
             </div>
 
             <div class="checkbox-container" *ngIf="stepModel.checkbox && stepModel.checkbox.action">
-                <mat-checkbox  class="example-margin"
+                <mat-checkbox  class="example-margin white-checkbox"
                     [disabled]="stepModel.checkbox.isDisable"
                     [checked]="stepModel.checkbox.value"
                     color="primary"
@@ -88,10 +88,12 @@
                     [disabled]="stepModel.backButton?.isDisable"
                      mat-button (click)="stepper.previous()">Назад</button>
                
-                <button class="step-button resetButton" 
+                <!-- <button class="step-button resetButton" 
                     *ngIf="stepModel.resetButton?.needShow" 
                     [disabled]="stepModel.resetButton?.isDisable"
-                    mat-button (click)="stepper.reset()">Заново</button>
+                    mat-button (click)="stepper.reset()">
+                    Заново
+                </button> -->
 
 
             </div>

@@ -34,8 +34,12 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<Availa
                             return this.baseFieldOptions.find(x => x.data.guid === context.resultParams.baseChoice?.guid)
                         },
                         onDataChange: (value: SelectorOption<AvailableBaseAdditionInfo>, form: StepperDataStep) => {
+                            console.log("!! | getStepperModel | value", value)
                             context.resultParams.baseChoice = value.data as AvailableBaseAdditionInfo;
                             form.isCompleted = !!context.resultParams.baseChoice;
+                            form.nextButton ? form.nextButton.isDisable = !form.isCompleted : console.error("!!");
+
+                            console.log("!! | getStepperModel | context.resultParams", context.resultParams)
                             this.updateResultParams(context.resultParams);
                         },
                     },
@@ -86,7 +90,9 @@ export class FormulaBaseDeclarationService extends DeclarationBaseService<Availa
                     },
                     isCompleted: context.resultParams.isComplete,
                     fields: this.finalOptions,
-                    actionButtonAction: context.onFinish.bind(context),
+                    actionButtonAction: () => {
+                        context.onFinish();
+                    }
                 },
                 ////////////////////////////////////////////////////////////////////
             ],

@@ -24,12 +24,14 @@
 
 .preview-content {
   flex: 2;
+  min-width: 300px;
 }
 
 .content-wrapper {
   display: block;
   height: 100%;
   flex: 1;
+  min-width: 400px;
 }
 
 .content-container {
