@@ -21,13 +21,13 @@ export class MainStateService {
             case ManagerContext.start:
                 return "Менеджер микросервисов баз Estimate Office";
             case ManagerContext.normbase:
-                return "Менеджер добавления нормативных баз Estimate Office";
+                return "Менеджер добавления микросервисов нормативных баз Estimate Office";
             case ManagerContext.indexes:
-                return "Менеджер добавления баз индесков Estimate Office";
+                return "Менеджер добавления микросервисов баз индесков Estimate Office";
             case ManagerContext.formula:
-                return "Менеджер добавления баз формул Estimate Office";
+                return "Менеджер добавления микросервисов баз формул Estimate Office";
             case ManagerContext.manager:
-                return "Менеджер управления баз Estimate Office";
+                return "Менеджер управления параматрами баз Estimate Office";
             case ManagerContext.logs:
                 return "Мониторинг сообщений";
             default:

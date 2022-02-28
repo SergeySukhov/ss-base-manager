@@ -48,10 +48,18 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
                             return this.baseFieldOptions.find(x => x.data.guid === context.resultParams.baseChoice?.guid)
                         },
                         onDataChange: (value: SelectorOption<AvailableBaseAdditionInfo>, form: StepperDataStep) => {
-                            context.resultParams.baseChoice = value.data as AvailableBaseAdditionInfo;
-        
+                            console.log("!! | getStepperModel | value", value)
+                            console.log("!! | getStepperModel | this.isAddFormSet", this.isAddFormSet)
+                            if (!!value.imgSrc) {
+
+                            } else {
+                                context.resultParams.baseChoice = value.data as AvailableBaseAdditionInfo;
+                            }
                             this.setAddBaseForm(!!value.imgSrc, context, form);
-                            form.isCompleted = !form.nextButton?.isDisable
+                            this.isAddFormSet = !!value.imgSrc;
+                            form.isCompleted = !!context.resultParams.addBase || !!context.resultParams.baseChoice;
+                            form.nextButton ? form.nextButton.isDisable = !form.isCompleted : console.error("!!");
+
                             this.updateResultParams(context.resultParams);
                         },
                     },
@@ -143,7 +151,9 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
                     },
                     isCompleted: context.resultParams.isComplete,
                     fields: this.finalOptions,
-                    actionButtonAction: context.onFinish.bind(context),
+                    actionButtonAction: () => {
+                        context.onFinish();
+                    }
                 },
                 ////////////////////////////////////////////////////////////////////
             ],
@@ -184,7 +194,7 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
             isAvailable: true,
             imgSrc: "assets\\icons\\add.svg",
             value: "",
-            data: {},
+            data: {value: this.additionalBase},
             action: () => {
             }
         });
@@ -206,7 +216,7 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
             isAvailable: true,
             isCancelled: false,
             additionRegexp: "",
-            name: "",
+            name: "новая база",
             shortName: "",
             parentBaseType: undefined,
             type: BaseType.TSN_MGE,

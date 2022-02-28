@@ -148,7 +148,8 @@
                 <th mat-header-cell *matHeaderCellDef> Доп. параметры </th>
                 <td mat-cell *matCellDef="let element">
                     <span *ngIf="!element.isRoot">
-                        <button mat-stroked-button (click)="$event.stopPropagation();onHandleEdit(element)"> Редактировать вручную</button>
+                        <button mat-stroked-button class="handle-edit-button"
+                         (click)="$event.stopPropagation();onHandleEdit(element)"> Редактировать вручную</button>
                     </span>
                 </td>
             </ng-container>

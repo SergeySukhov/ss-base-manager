@@ -57,7 +57,7 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
         getDataForNexStep: (baseType: BaseType) => Promise<TAvailableBase[] | null>): StepperDataStep {
 
         const baseTypeOptions = this.toSelectorBaseTypeOptions(avTypes);
-        if (resultParams.baseType && resultParams.baseChoice) {
+        if (resultParams.baseType) {
             getDataForNexStep(resultParams.baseType).then(availableNB => {
                 this.setAvailableBasesOptions(availableNB ?? []);
             });

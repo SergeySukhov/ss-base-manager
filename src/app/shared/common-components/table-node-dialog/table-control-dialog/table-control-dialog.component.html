@@ -24,13 +24,13 @@
                 </div>
             </div>
         </div>
-        <div [matTooltip]="errorTooltip" [matTooltipDisabled]="!errorTooltip"  matTooltipPosition="right"
-         class="validator-field" [ngClass]="{'validator-error': errorMessage}">
-            <img [src]="errorMessage ? 'assets/icons/cross.svg' : 'assets/icons/check.svg'" alt="">
-            {{!errorMessage ? "Корректный тип" : errorMessage}}
-        </div>
+        
     </div>
-
+    <div [matTooltip]="errorTooltip" [matTooltipDisabled]="!errorTooltip"  matTooltipPosition="right"
+    class="validator-field" [ngClass]="{'validator-error': errorMessage}">
+       <img [src]="errorMessage ? 'assets/icons/cross.svg' : 'assets/icons/check.svg'" alt="">
+       {{!errorMessage ? "Корректный тип" : errorMessage}}
+   </div>
     <div mat-dialog-actions>
         <button mat-flat-button class="accept-button" color="primary"
         [mat-dialog-close]="editingCopy" [disabled]="!!errorMessage">Принять</button>
