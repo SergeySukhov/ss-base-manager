@@ -364,7 +364,6 @@ export class ManagementSystem extends ManagementSystemBase {
     sender.timeout = 5000;
 
     sender.onreadystatechange = async () => {
-        console.log("!! | sender.onreadystatechange= | sender", sender)
         if (sender.readyState == XMLHttpRequest.DONE) {
         if (sender.status === 200) {
           this.messageHandler.toClient(response);

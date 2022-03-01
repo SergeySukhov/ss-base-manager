@@ -4,6 +4,7 @@ export interface CommonRequest
 {
     Guid: string;
     AdditionNumber: number;
+
     Deploy: boolean;
     IsNewDatabase: boolean;
     ContextId: string;

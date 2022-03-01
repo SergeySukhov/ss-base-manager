@@ -48,15 +48,12 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
                             return this.baseFieldOptions.find(x => x.data.guid === context.resultParams.baseChoice?.guid)
                         },
                         onDataChange: (value: SelectorOption<AvailableBaseAdditionInfo>, form: StepperDataStep) => {
-                            console.log("!! | getStepperModel | value", value)
-                            console.log("!! | getStepperModel | this.isAddFormSet", this.isAddFormSet)
                             if (!!value.imgSrc) {
 
                             } else {
                                 context.resultParams.baseChoice = value.data as AvailableBaseAdditionInfo;
                             }
                             this.setAddBaseForm(!!value.imgSrc, context, form);
-                            this.isAddFormSet = !!value.imgSrc;
                             form.isCompleted = !!context.resultParams.addBase || !!context.resultParams.baseChoice;
                             form.nextButton ? form.nextButton.isDisable = !form.isCompleted : console.error("!!");
 
@@ -194,7 +191,7 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
             isAvailable: true,
             imgSrc: "assets\\icons\\add.svg",
             value: "",
-            data: {value: this.additionalBase},
+            data: this.additionalBase,
             action: () => {
             }
         });

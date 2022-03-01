@@ -18,7 +18,8 @@ export class IndexBaseEndpointService extends EndpointBaseService {
             return;
         }
         const normoRequest: IndicesRequestUploader = {
-            AdditionNumber: finalData.addBase?.additionNumber ?? finalData.baseChoice?.additionNumber ?? 1,
+            AdditionNormativeGuid: finalData.additionNormativBase?.guid ?? "",
+            AdditionNumber: finalData.additionNormativBase?.additionNumber ?? 0,
             ContextId: "",
             Deploy: finalData.needDeploy,
             Guid: finalData.addBase?.guid ?? finalData.baseChoice?.guid ?? "",
@@ -31,7 +32,6 @@ export class IndexBaseEndpointService extends EndpointBaseService {
             Year: finalData.addBase?.year ?? finalData.baseChoice?.year ?? 0,
             Profit: finalData.sp,
             Overhead: finalData.sp,
-            AdditionNormativeGuid: "00000000-0000-0000-0000-000000000000",
 
         };
         const avNB = await this.netWorker.postMessageToWorkerAsync({
