@@ -32,6 +32,7 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
                 ////////////////////////////////////////////////////////////////////
                 {
                     stepLabel: "Выбор НБ",
+                    isCompleted: !!context.resultParams.addBase || !!context.resultParams.baseChoice,
                     nextButton: { needShow: true, isDisable: !context.resultParams.baseChoice && !context.resultParams.addBase },
                     backButton: { needShow: true, isDisable: false },
                     fields: [{
@@ -44,8 +45,11 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
                                     this.setAddBaseForm(true, context, form);
                                 })
                                 return this.baseFieldOptions[0];
+                            } else if (this.baseFieldOptions?.length > 1 && !!context.resultParams.baseChoice) {
+                                return this.baseFieldOptions.find(x => x.data.guid === context.resultParams.baseChoice?.guid)
+                            } else {
+                                return undefined;
                             }
-                            return this.baseFieldOptions.find(x => x.data.guid === context.resultParams.baseChoice?.guid)
                         },
                         onDataChange: (value: SelectorOption<AvailableBaseAdditionInfo>, form: StepperDataStep) => {
                             if (!!value.imgSrc) {
@@ -223,6 +227,7 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
 
     private setAddBaseForm(needAddForm: boolean, context: NormativeBaseComponent, form: StepperDataStep) {
         if (needAddForm ) {
+            context.resultParams.baseChoice = null;
             if (this.isAddFormSet) {
                 return;
             }
@@ -275,7 +280,6 @@ export class NormativeBaseDeclarationService extends DeclarationBaseService<Avai
                     this.additionalBase.additionRegexp = value;
                     this.updateResultParams(context.resultParams);
                 }
-
             },
             )
         } else {

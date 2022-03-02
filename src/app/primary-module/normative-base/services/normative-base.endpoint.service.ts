@@ -25,7 +25,7 @@ export class NormativeBaseEndpointService extends EndpointBaseService {
             AdditionalRegexp: finalData.addBase?.additionRegexp ?? finalData.baseChoice?.additionRegexp ?? "",
             Guid: finalData.addBase?.guid ?? finalData.baseChoice?.guid ?? "",
             IsNewDatabase: !!finalData.addBase,
-            IsUpdate: !!finalData.addBase,
+            IsUpdate: !finalData.addBase,
             Name: finalData.addBase?.name ?? finalData.baseChoice?.name ?? "",
             ShortName: finalData.addBase?.shortName ?? finalData.baseChoice?.shortName ?? "",
             Type: finalData.baseType ?? BaseType.TSN_MGE,
