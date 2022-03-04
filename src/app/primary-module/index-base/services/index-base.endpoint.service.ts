@@ -13,9 +13,9 @@ export class IndexBaseEndpointService extends EndpointBaseService {
         super(netWorker);
     }
 
-    public async sendIndecies(finalData: IndexBaseResultParams): Promise<void> {
+    public async sendIndecies(finalData: IndexBaseResultParams): Promise<boolean> {
         if (!finalData.mainFile) {
-            return;
+            return false;
         }
         const normoRequest: IndicesRequestUploader = {
             AdditionNormativeGuid: finalData.additionNormativBase?.guid ?? "",
@@ -39,5 +39,7 @@ export class IndexBaseEndpointService extends EndpointBaseService {
             isSub: false,
             data: normoRequest
         }, false);
+
+        return !!avNB;
     }
 }

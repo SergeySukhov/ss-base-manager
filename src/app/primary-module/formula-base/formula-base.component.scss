@@ -11,6 +11,7 @@
 .stepper-wrapper {
     width: 100%;
     height: 100%;
+    min-width: 800px;
 }
 
 .temp-loader {
@@ -18,12 +19,21 @@
 }
 
 .temp-progress {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
     height: 10px;
 }
- .success-checkmark {
-    width: 80px;
+
+.success-checkmark {
+    width: 100%;
     height: 115px;
     margin: 10px auto;
+    min-width: 800px;
+    display: flex;
+    justify-content: right;
+    padding-right: 10px;
+
     
     .check-icon {
         width: 80px;

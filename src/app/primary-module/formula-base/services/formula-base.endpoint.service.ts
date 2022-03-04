@@ -12,9 +12,9 @@ export class FormulaBaseEndpointService extends EndpointBaseService {
         super(netWorker);
     }
 
-    public async sendFormuls(finalData: FormBaseResultParams): Promise<void> {
+    public async sendFormuls(finalData: FormBaseResultParams): Promise<boolean> {
         if (!finalData.mainFile || !finalData.baseChoice) {
-            return;
+            return false;
         }
 
         const avNB = await this.netWorker.postMessageToWorkerAsync({
@@ -31,5 +31,7 @@ export class FormulaBaseEndpointService extends EndpointBaseService {
                 DocumentZipFile: null,
             },
         }, false);
+        console.log("!! | sendFormuls | avNB", avNB)
+        return !!avNB;
     }
 }

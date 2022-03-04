@@ -3,7 +3,7 @@
         [(ngModel)]="optionalLabelText"
         ngDefaultControl 
         (ngModelChange)="updateOptionalLabel()">
-</span>
+    </span>
 
     <mat-stepper #stepper orientation="vertical" [linear]="true" *ngIf="!!firstFormGroup" color="primary"
         (selectionChange)="test($event)">
@@ -75,8 +75,17 @@
             <div class="buttons-container">
                 <button class="step-button action-button" 
                     *ngIf="stepModel.actionButton?.needShow && !!stepModel.actionButtonAction" 
-                    [disabled]="stepModel.actionButton?.isDisable"
-                    mat-button (click)="stepModel.actionButtonAction()">Готово</button>
+                    [disabled]="stepModel.actionButton?.isDisable || blocked"
+                    mat-button (click)="stepModel.actionButtonAction()">
+                    <span *ngIf="!blocked">Готово</span>
+                    <span *ngIf="blocked" class="button-centered">
+                        <mat-progress-spinner
+                            [diameter]="40"
+                            mode="indeterminate"
+                            color="accent"
+                    ></mat-progress-spinner>
+                    </span>
+                </button>
                 
                 <button class="step-button" 
                     *ngIf="stepModel.nextButton?.needShow" 
@@ -102,4 +111,6 @@
         </mat-step>
     </mat-stepper>
 
+    <!-- <div *ngIf="blocked" class="block-panel">
+    </div> -->
 </div>

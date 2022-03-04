@@ -9,7 +9,7 @@ import { NormativeBaseEndpointService } from './services/normative-base.endpoint
 @Component({
   selector: 'ss-normative-base',
   templateUrl: './normative-base.component.html',
-  styleUrls: ['./normative-base.component.scss'],
+  styleUrls: ['../formula-base/formula-base.component.scss'],
   providers: [
     NormativeBaseDeclarationService,
     NormativeBaseEndpointService,
@@ -27,7 +27,15 @@ export class NormativeBaseComponent extends UploadComponentBase<AvailableBaseAdd
   }
 
   onFinish() {
-    this.endpointService.sendNormatives(this.resultParams);
+    this.isAwaiting = true;
+    this.endpointService.sendNormatives(this.resultParams).then(response => {
+      this.isSuccessSending = response;
+      this.isAwaiting = false;
+      this.showCheck = true;
+      setTimeout(() => {
+        this.showCheck = false;
+      }, 1000);
+    });
   }
 
   protected loadLastParams(): NormBaseResultParams {

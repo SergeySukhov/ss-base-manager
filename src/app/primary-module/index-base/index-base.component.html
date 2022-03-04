@@ -2,16 +2,13 @@
     <div class="stepper-wrapper">
         <ss-stepper [data]="data" (modelChange)="onModelChange()"></ss-stepper>
     </div>
-    <div  class="temp-loader">
-        
-        <div  class="success-checkmark">
-            <div class="check-icon">
-              <span class="icon-line line-tip"></span>
-              <span class="icon-line line-long"></span>
-              <div class="icon-circle"></div>
-              <div class="icon-fix"></div>
-            </div>
-          </div>
+    <mat-progress-bar *ngIf="isAwaiting" color="accent" class="temp-progress" mode="indeterminate"></mat-progress-bar>
+    <div class="success-checkmark" *ngIf="showCheck">
+        <div class="check-icon" >
+            <span class="icon-line line-tip"></span>
+            <span class="icon-line line-long"></span>
+            <div class="icon-circle"></div>
+            <div class="icon-fix"></div>
+        </div>
     </div>
-  
 </div>

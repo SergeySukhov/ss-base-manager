@@ -17,7 +17,6 @@ import { FormulaBaseEndpointService } from "./services/formula-base.endpoint.ser
 })
 export class FormulaBaseComponent extends UploadComponentBase<AvailableBaseAdditionInfo, FormBaseResultParams> implements OnInit {
 
-
   constructor(protected declarationService: FormulaBaseDeclarationService, protected endpointService: FormulaBaseEndpointService,
     protected storageService: LocalStorageService) {
 
@@ -28,7 +27,15 @@ export class FormulaBaseComponent extends UploadComponentBase<AvailableBaseAddit
   }
 
   public onFinish(): void {
-    this.endpointService.sendFormuls(this.resultParams);
+    this.isAwaiting = true;
+      this.endpointService.sendFormuls(this.resultParams).then(response => {
+        this.isSuccessSending = response;
+        this.isAwaiting = false;
+        this.showCheck = true;
+        setTimeout(() => {
+          this.showCheck = false;
+        }, 1000);
+      });
   }
 
   protected loadLastParams(): FormBaseResultParams {

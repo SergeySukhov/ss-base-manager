@@ -22,6 +22,8 @@ export class StepperIntl extends MatStepperIntl {
 export class StepperComponent implements OnInit {
 
   @Input() data: StepperData | null = null;
+
+  @Input() blocked: boolean = false;
   @Input() isLinear: boolean = false;
 
   @Output() modelChange = new EventEmitter();

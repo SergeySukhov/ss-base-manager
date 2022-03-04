@@ -286,7 +286,7 @@ export class ManagementSystem extends ManagementSystemBase {
     let requestData = new FormData();
     request.data.ContextId = this.hubService.connectionId ?? "";
     for (const [key, value] of Object.entries(request.data)) {
-        requestData.append(key, value);
+      requestData.append(key, value);
     }
 
     sender.withCredentials = false;
@@ -322,7 +322,7 @@ export class ManagementSystem extends ManagementSystemBase {
     let requestData = new FormData();
     request.data.ContextId = this.hubService.connectionId ?? "";
     for (const [key, value] of Object.entries(request.data)) {
-        requestData.append(key, value);
+      requestData.append(key, value);
     }
 
     sender.withCredentials = false;
@@ -364,7 +364,7 @@ export class ManagementSystem extends ManagementSystemBase {
     sender.timeout = 5000;
 
     sender.onreadystatechange = async () => {
-        if (sender.readyState == XMLHttpRequest.DONE) {
+      if (sender.readyState == XMLHttpRequest.DONE) {
         if (sender.status === 200) {
           this.messageHandler.toClient(response);
         } else {
@@ -376,7 +376,7 @@ export class ManagementSystem extends ManagementSystemBase {
     let requestData = new FormData();
     request.data.ContextId = this.hubService.connectionId ?? "";
     for (const [key, value] of Object.entries(request.data)) {
-        requestData.append(key, value);
+      requestData.append(key, value);
     }
 
     this.setSenderHandlers(sender, response);

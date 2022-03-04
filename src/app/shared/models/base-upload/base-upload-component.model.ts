@@ -10,6 +10,10 @@ export abstract class UploadComponentBase<TAvailableBase, TResultOptions extends
     public resultParams: TResultOptions;
     public errorMessages = "";
 
+    public isAwaiting = false;
+    public isSuccessSending = false;
+    public showCheck = false;
+
     constructor(protected declarationService: DeclarationBaseService<TAvailableBase, TResultOptions>,
         protected endpointService: EndpointBaseService,
         protected storageService: LocalStorageService,

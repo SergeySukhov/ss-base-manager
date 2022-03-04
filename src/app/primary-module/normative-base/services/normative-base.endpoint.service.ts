@@ -14,9 +14,9 @@ export class NormativeBaseEndpointService extends EndpointBaseService {
         super(netWorker);
     }
 
-    public async sendNormatives(finalData: NormBaseResultParams): Promise<void> {
+    public async sendNormatives(finalData: NormBaseResultParams): Promise<boolean> {
         if (!finalData.mainFile) {
-            return;
+            return false;
         }
         const normoRequest: NormoRequestUploader = {
             AdditionNumber: finalData.addBase?.additionNumber ?? finalData.baseChoice?.additionNumber ?? 1,
@@ -48,5 +48,6 @@ export class NormativeBaseEndpointService extends EndpointBaseService {
                 data: copyNormoReq
             }, false);
         }
+        return !!avNB;
     }
 }

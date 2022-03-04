@@ -9,7 +9,7 @@ import { IndexBaseEndpointService } from './services/index-base.endpoint.service
 @Component({
   selector: 'ss-index-base',
   templateUrl: './index-base.component.html',
-  styleUrls: ['./index-base.component.scss'],
+  styleUrls: ['../formula-base/formula-base.component.scss'],
   providers: [
     IndexBaseEndpointService,
     IndexBaseDeclarationService,
@@ -27,7 +27,15 @@ export class IndexBaseComponent extends UploadComponentBase<AvailableBaseIndexIn
   }
 
   onFinish() {
-    this.endpointService.sendIndecies(this.resultParams);
+    this.isAwaiting = true;
+    this.endpointService.sendIndecies(this.resultParams).then(response => {
+      this.isSuccessSending = response;
+      this.isAwaiting = false;
+      this.showCheck = true;
+      setTimeout(() => {
+        this.showCheck = false;
+      }, 1000);
+    });
   }
 
   protected loadLastParams(): IndexBaseResultParams {
