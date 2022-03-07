@@ -34,11 +34,6 @@ export class LogViewerComponent implements OnInit {
 
   @action openLog(guid: string) {
     this.openedLogs.set(guid, !this.openedLogs.get(guid));
-
-    // if (this.openedLogs.has(guid)) {
-    // } else {
-    //   this.openedLogs.set(guid, true);
-    // }
   }
 
 }
