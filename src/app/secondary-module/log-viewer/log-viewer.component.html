@@ -4,6 +4,12 @@
         <span class="time-log">[ {{log.timeStamp}} ]:</span>
         <span class="serv-log">{{log.fromService}}: </span>
         <span class="mess-log">{{log.message}}</span>
+        <span class="open-log" [ngClass]="{'hide-elem': !log.extraMessage}" (click)="openLog(log.guid)">
+            <img draggable="false" src="assets\icons\back.svg" class="open-log-icon" [ngClass]="{'rotate-elem': isOpened(log.guid)}" alt="">
+        </span>
+        <span class="extra-log" *ngIf="isOpened(log.guid)">
+            {{log.extraMessage}}
+        </span>
     </div>
 
 </div>

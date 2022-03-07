@@ -32,10 +32,10 @@ export class UserService {
 
     private readonly muscleSrcMap: MuscleMap = {
         none: "",
-        van: "assets\\icons\\van.jpg",
-        billy: "assets\\icons\\g.jpg",
-        danny: "assets\\icons\\danny.jpg",
-        steve: "assets\\icons\\steve.png",
+        van: "assets\\pics\\van.jpg",
+        billy: "assets\\pics\\g.jpg",
+        danny: "assets\\pics\\danny.jpg",
+        steve: "assets\\pics\\steve.png",
     };
 
     constructor(private storageService: LocalStorageService) {

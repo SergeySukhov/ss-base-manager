@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { action, observable, reaction } from 'mobx';
 import { NotificationMessage, NotificationType } from 'src/app/core/common/models/notification.models';
 
 
@@ -13,25 +14,31 @@ export class LogViewerComponent implements OnInit {
 
   @Input() logsData: NotificationMessage[] | undefined;
   @Input() oldLogsData: NotificationMessage[] | undefined;
-  // TODO: переделать
-  // get logs(): NotificationMessage[] {
-  //   if (!!this.filter && this.logsData) {
-  //     return this.logsData.reverse().filter(x => !this.filter?.serviceName || x.fromService.includes(this.filter.serviceName));
-  //   } else {
-  //     return this.logsData ?? [];
-  //   }
-  // }
 
+  @observable openedLogs = new Map<string, boolean>();
 
+  isOpened(guid: string): boolean {
+    console.log("!! guid", guid);
+    return !!this.openedLogs.get(guid);
+  }
 
   constructor() { }
 
   ngOnInit(): void {
-  }
+    }
 
   logTypeClass(log: NotificationMessage): string {
     return log.type === NotificationType.error ? "err-log"
       : log.type === NotificationType.warn ? "warn-log" : "";
+  }
+
+  @action openLog(guid: string) {
+    this.openedLogs.set(guid, !this.openedLogs.get(guid));
+
+    // if (this.openedLogs.has(guid)) {
+    // } else {
+    //   this.openedLogs.set(guid, true);
+    // }
   }
 
 }

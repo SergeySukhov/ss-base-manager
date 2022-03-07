@@ -23,15 +23,18 @@
         flex-direction: row;
         padding: 5px;
         user-select: text !important;
+        flex-wrap: wrap;
 
         .time-log {
             font-weight: 400;
             padding-right: 5px;
+            white-space: nowrap;
         }
 
         .serv-log {
             font-weight: 600;
             padding-right: 5px;
+            white-space: nowrap;
 
         }
 
@@ -42,8 +45,44 @@
         &:hover {
             background-color: #8080804b;
         }
+
+        .open-log {
+            cursor: pointer;
+            user-select: none;
+            padding: 0 10px;
+            border-radius: 20px;
+            height: 20px;
+            width: 40px;
+            display: flex;
+            justify-content: center;
+            margin: auto;
+            margin-right: 10px;
+            &:hover {
+                background-color: #afafaf4b;
+            }
+            .open-log-icon {
+                display: flex;
+                margin: auto;
+                width: 20px;
+                height: 18px;
+            }
+            
+            .rotate-elem {
+                transform: rotate(-90deg);
+            }
+        }
+
+        .extra-log {
+            flex-wrap: wrap;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            margin-left: 230px;
+        }
+        
     }
 
-
+    .hide-elem {
+        display: none;
+    }
 
 }
