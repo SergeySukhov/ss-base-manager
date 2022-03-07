@@ -66,9 +66,11 @@ export class HubConnectionService {
             this.messageHandler.toClient(netSubMessage);
         });
 
-        // setInterval(() => {
-        //     netSubMessage.data.message.imoprtance = 1;
-        //     this.messageHandler.toClient(netSubMessage);
-        // }, 1000)
+        setInterval(() => {
+            netSubMessage.data.message.imoprtance = 1;
+            netSubMessage.data.message.type = NotificationType.warn;
+
+            this.messageHandler.toClient(netSubMessage);
+        }, 5000)
     }
 }

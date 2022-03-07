@@ -1,6 +1,6 @@
 <div class="wrapper">
 
-    <div class="log" [ngClass]="logTypeClass(log)" *ngFor="let log of logs">
+    <div class="log" [ngClass]="logTypeClass(log)" *ngFor="let log of logsData">
         <span class="time-log">[ {{log.timeStamp}} ]:</span>
         <span class="serv-log">{{log.fromService}}: </span>
         <span class="mess-log">{{log.message}}</span>
