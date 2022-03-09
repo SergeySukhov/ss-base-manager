@@ -1,39 +1,29 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { action, observable, reaction } from 'mobx';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { action, observable, observe, reaction } from 'mobx';
 import { NotificationMessage, NotificationType } from 'src/app/core/common/models/notification.models';
-
+import { LogApiService } from './services/log-api.service';
 
 @Component({
   selector: 'ss-log-viewer',
   templateUrl: './log-viewer.component.html',
-  styleUrls: ['./log-viewer.component.scss']
+  styleUrls: ['./log-viewer.component.scss'],
+  providers: [LogApiService]
 })
 export class LogViewerComponent implements OnInit {
 
-  @Input() filter: { serviceName: string, time: string, message: string } | undefined;
+  @Output() api = new EventEmitter<LogApiService>();
 
-  @Input() logsData: NotificationMessage[] | undefined;
-  @Input() oldLogsData: NotificationMessage[] | undefined;
-
-  @observable openedLogs = new Map<string, boolean>();
-
-  isOpened(guid: string): boolean {
-    console.log("!! guid", guid);
-    return !!this.openedLogs.get(guid);
-  }
-
-  constructor() { }
+  constructor(public logApi: LogApiService) { }
 
   ngOnInit(): void {
-    }
-
-  logTypeClass(log: NotificationMessage): string {
-    return log.type === NotificationType.error ? "err-log"
-      : log.type === NotificationType.warn ? "warn-log" : "";
+    this.api.emit(this.logApi);
   }
 
-  @action openLog(guid: string) {
-    this.openedLogs.set(guid, !this.openedLogs.get(guid));
+  openLog(guid: string) {
+    const log = this.logApi.notificationMessageData.find(x => x.notificationMessage.guid === guid);
+    if (log) {
+      log.isOpened = !log.isOpened;
+    }
   }
 
 }

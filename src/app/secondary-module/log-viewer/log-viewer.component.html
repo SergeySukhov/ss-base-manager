@@ -1,14 +1,16 @@
 <div class="wrapper">
 
-    <div class="log" [ngClass]="logTypeClass(log)" *ngFor="let log of logsData">
-        <span class="time-log">[ {{log.timeStamp}} ]:</span>
-        <span class="serv-log">{{log.fromService}}: </span>
-        <span class="mess-log">{{log.message}}</span>
-        <span class="open-log" [ngClass]="{'hide-elem': !log.extraMessage}" (click)="openLog(log.guid)">
-            <img draggable="false" src="assets\icons\back.svg" class="open-log-icon" [ngClass]="{'rotate-elem': isOpened(log.guid)}" alt="">
+    <div class="log" [ngClass]="log.styleClass" *ngFor="let log of logApi.notificationMessageData"
+        (dblclick)="openLog(log.notificationMessage.guid);">
+        <span class="time-log">[ {{log.notificationMessage.timeStamp}} ]:</span>
+        <span class="serv-log">{{log.notificationMessage.fromService}}: </span>
+        <span class="mess-log">{{log.notificationMessage.message}}</span>
+        <span class="open-log" [ngClass]="{'hide-elem': !log.notificationMessage.extraMessage}"
+            (click)="openLog(log.notificationMessage.guid); $event.stopPropagation()">
+            <img draggable="false" src="assets\icons\back.svg" class="open-log-icon" [ngClass]="{'rotate-elem': log.isOpened}" alt="">
         </span>
-        <span class="extra-log" *ngIf="isOpened(log.guid)">
-            {{log.extraMessage}}
+        <span class="extra-log" *ngIf="log.isOpened">
+            {{log.notificationMessage.extraMessage}}
         </span>
     </div>
 
