@@ -28,16 +28,17 @@ export class BaseLogsMonitoringComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.serviceTabs.push("Все");
-  }
+    this.serviceTabs.push(... new Set<string>(this.allLogs.map(x => x.fromService)));
+    console.log("!! | ngOnInit | this.allLogs", this.allLogs)
 
-  getLogApi(api: LogApiService, tabName: string) {
-    this.logApis.set(tabName, api);
 
-    api.setLogs(this.allLogs);
 
     this.notificationService.notificationChange?.subscribe(notification => {
+      console.log("!! | ngOnInit | notification", notification)
+
       if (!this.serviceTabs.find(x => x === notification.fromService)) {
         this.serviceTabs.push(notification.fromService);
+        return;
       }
 
       this.serviceTabs.filter(x => x === "Все" || x === notification.fromService).forEach(tabName => {
@@ -47,6 +48,15 @@ export class BaseLogsMonitoringComponent implements OnInit, AfterViewInit {
         }
       });
     });
+  }
+
+  getLogApi(api: LogApiService, tabName: string) {
+    this.logApis.set(tabName, api);
+    if (tabName === "Все") {
+      api.setLogs(this.allLogs);
+    } else {
+      api.setLogs(this.allLogs.filter(log => log.fromService === tabName));
+    }
   }
   
 
