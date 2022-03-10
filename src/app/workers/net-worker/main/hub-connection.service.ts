@@ -70,6 +70,7 @@ export class HubConnectionService {
         //     netSubMessage.data.message.guid = v4();
         //     netSubMessage.data.message.imoprtance = 1;
         //     netSubMessage.data.message.type = NotificationType.warn;
+
         //     netSubMessage.data.message.extraMessage = "тест ыфЫСЖфыс ЫСыфсС смывмывм ывм ы вм ывм ывм ы вм ыв мы вм ым ыв м ывмылвмтылвмтфдлвмм ф вмфвмщл фмщлф вмыщлвм щылвм щлы вмылвм ыщвлм ыщлвм ыщлм ыщлвм лщы вмышвмл ыщлм в ывмывмымвщыщмлтвымтылвтлыщщм  ымд ымл ывщлм"
 
         //     this.messageHandler.toClient(netSubMessage);
