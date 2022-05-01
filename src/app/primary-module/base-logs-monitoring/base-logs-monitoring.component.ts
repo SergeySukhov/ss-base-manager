@@ -19,7 +19,8 @@ export class BaseLogsMonitoringComponent implements OnInit, AfterViewInit {
 
   public serviceTabs: string[] = [];
   public allLogs: NotificationMessage[] = this.notificationService.allLogs;
-  public mainTabIndex = localStorage.getItem(LocalStorageConst.monitoringMainTabIndex) ?? 0;
+
+  private allTabName = "Все";
   private logApis = new Map<string, LogApiService>();
 
   constructor(private userService: UserService, private endpointService: BaseLogMonitoringEndpointService,
@@ -29,37 +30,33 @@ export class BaseLogsMonitoringComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.serviceTabs.push("Все");
+    this.serviceTabs.push(this.allTabName);
     this.serviceTabs.push(... new Set<string>(this.allLogs.map(x => x.fromService)));
 
     this.notificationService.notificationChange?.subscribe(notification => {
+
       if (!this.serviceTabs.find(x => x === notification.fromService)) {
         this.serviceTabs.push(notification.fromService);
-        this.logApis.get("Все")?.addLog(notification);
-        return;
       }
 
-      this.serviceTabs.filter(x => x === "Все" || x === notification.fromService).forEach(tabName => {
-        const api = this.logApis.get(tabName);
-        if (api) {
-          api.addLog(notification);
-        }
-      });
+      this.serviceTabs
+        .filter(x => x === this.allTabName || x === notification.fromService)
+        .forEach(tabName => {
+          const api = this.logApis.get(tabName);
+          if (api) {
+            api.addLog(notification);
+          }
+        });
     });
   }
 
   getLogApi(api: LogApiService, tabName: string) {
     this.logApis.set(tabName, api);
-    if (tabName === "Все") {
+    if (tabName === this.allTabName) {
       api.setLogs(this.allLogs);
     } else {
       api.setLogs(this.allLogs.filter(log => log.fromService === tabName));
     }
-  }
-
-  selectedMainTabChange(event: MatTabChangeEvent) {
-    this.mainTabIndex = event.index;
-    localStorage.setItem(LocalStorageConst.monitoringMainTabIndex, "" + event.index);
   }
 
 
