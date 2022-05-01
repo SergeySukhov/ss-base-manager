@@ -5,7 +5,7 @@ import { Subject } from "rxjs";
 import { NetSubTypes, NWSubMessage, NWSubNotificationMessage } from "src/app/shared/models/net-messages/net-worker-messages";
 import { NetWorkerService } from "src/app/shared/workers-module/services/net-worker.service";
 import { v4 } from "uuid";
-import { NotificationMessage, NotificationType } from "../common/models/notification.models";
+import { ImoprtanceLevel, NotificationMessage, NotificationType } from "../common/models/notification.models";
 
 
 
@@ -18,10 +18,13 @@ export class NotificationService {
     readonly allLogs: NotificationMessage[] = [];
 
     constructor(
-        private messageService: MessageService, 
+        private messageService: MessageService,
         private datePipe: DatePipe,
         protected netWorker: NetWorkerService,
-    ) {}
+        private primengConfig: PrimeNGConfig,
+    ) {
+        this.primengConfig.ripple = true;
+     }
 
     initNotifications() {
         if (this.notificationChange !== null) {
@@ -45,9 +48,7 @@ export class NotificationService {
 
             this.allLogs.unshift(message)
             this.notificationChange?.next(x.data.message);
-            // if (x.data.message.imoprtance === ImoprtanceLevel.high) {
-            this.showNotification(x.data.message, x.data.message.type === NotificationType.error);
-            // }
+            this.showNotification(x.data.message, x.data.message.imoprtance === ImoprtanceLevel.high);
         });
     }
 
@@ -62,6 +63,7 @@ export class NotificationService {
             life: sticky ? undefined : 5000,
             closable: sticky,
             sticky,
+
         });
     }
 

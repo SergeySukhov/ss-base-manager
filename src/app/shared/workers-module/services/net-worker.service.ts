@@ -55,7 +55,7 @@ export class NetWorkerService extends BaseWorkerService<NWRequest, NWResponse> {
                 sub.unsubscribe();
                 this.responseSubs.delete(message.guid);
             } else {
-                console.warn("!! Необработанный ответ:" + message);
+                console.warn("!! Необработанный ответ:", message);
             }
             
         }

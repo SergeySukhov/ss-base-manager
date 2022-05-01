@@ -46,13 +46,17 @@ import { BaseAvailabilityManagerComponent } from './base-availability-manager/ba
 import { BaseLogsMonitoringComponent } from './base-logs-monitoring/base-logs-monitoring.component';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 import { RippleModule } from 'primeng/ripple';
 import { MessageService } from 'primeng/api';
 import {ToastModule} from 'primeng/toast';
 import { NotificationService } from '../core/services/notification.service';
 import { IndexBaseComponent } from './index-base/index-base.component';
+import { UploadProcessesMonitoringComponent } from './upload-processes-monitoring/upload-processes-monitoring.component';
+import { UploadProcessesMonitoringEndpoint } from "./upload-processes-monitoring/services/upload-processes-monitoring-endpoint.service";
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -62,6 +66,7 @@ import { IndexBaseComponent } from './index-base/index-base.component';
     BaseAvailabilityManagerComponent,
     BaseLogsMonitoringComponent,
     IndexBaseComponent,
+    UploadProcessesMonitoringComponent,
   ],
   exports: [
     MainComponent,
@@ -78,6 +83,8 @@ import { IndexBaseComponent } from './index-base/index-base.component';
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatTabsModule,
+    MatTooltipModule,
+
     ///////////////////
     MessagesModule,
     MessageModule,
@@ -94,7 +101,8 @@ import { IndexBaseComponent } from './index-base/index-base.component';
     MainStateService,
     ThemeService,
     MessageService,
-    NotificationService
+    NotificationService,
+    UploadProcessesMonitoringEndpoint,
   ]
 })
 export class PrimaryModule { }

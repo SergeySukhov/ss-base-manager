@@ -4,11 +4,11 @@ import { BaseType } from "src/app/shared/models/server-models/AvailableNormative
 import { NormoRequestUploader } from "src/app/shared/models/server-models/server-upload-request-models/NormoRequestUploader";
 import { NetWorkerService } from "src/app/shared/workers-module/services/net-worker.service";
 import { v4 } from "uuid";
-import { EndpointBaseService } from "../../../core/services/base-services/endpoint-base.service";
+import { EndpointNormoBaseService } from "../../../core/services/base-services/endpoint-normo-base.service";
 import { NormBaseResultParams } from "../models/norm-base.models";
 
 @Injectable()
-export class NormativeBaseEndpointService extends EndpointBaseService {
+export class NormativeBaseEndpointService extends EndpointNormoBaseService {
 
     constructor(protected netWorker: NetWorkerService) {
         super(netWorker);
@@ -20,7 +20,7 @@ export class NormativeBaseEndpointService extends EndpointBaseService {
         }
         const normoRequest: NormoRequestUploader = {
             AdditionNumber: finalData.addBase?.additionNumber ?? finalData.baseChoice?.additionNumber ?? 1,
-            ContextId: "",
+            UserId: "",
             Deploy: finalData.needDeploy,
             AdditionalRegexp: finalData.addBase?.additionRegexp ?? finalData.baseChoice?.additionRegexp ?? "",
             Guid: finalData.addBase?.guid ?? finalData.baseChoice?.guid ?? "",

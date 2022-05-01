@@ -1,13 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
-interface KeyValue {
-  key: string;
-  value: string;
-}
+import { KeyValueStr } from "src/app/shared/models/common/interfaces";
 
 interface ParsedObj {
-  pairs: KeyValue[];
+  pairs: KeyValueStr[];
   lvl: number;
   key: string;
   parentKey?: string;
@@ -48,7 +44,7 @@ export class TableControlDialogComponent implements OnInit {
     }
   }
 
-  getKeyValueFromObj(obj: any, lvl = 0): KeyValue[] {
+  getKeyValueFromObj(obj: any, lvl = 0): KeyValueStr[] {
     const result: { key: string, value: string }[] = [];
     for (const [key, value] of Object.entries(obj)) {
       if (value === null || value === undefined) {
@@ -97,7 +93,7 @@ export class TableControlDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  valueChange(event: KeyboardEvent, pair: KeyValue, value: string) {
+  valueChange(event: KeyboardEvent, pair: KeyValueStr, value: string) {
     if (pair.value !== value) {
       pair.value = value;
       this.toObj();

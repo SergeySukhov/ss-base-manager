@@ -4,10 +4,10 @@ import { AvailableBaseAdditionInfo } from "src/app/shared/models/server-models/A
 import { AvailableBaseIndexInfo } from "src/app/shared/models/server-models/AvailableBaseIndexInfo";
 import { AvailableNormativeBaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { NetWorkerService } from "src/app/shared/workers-module/services/net-worker.service";
-import { EndpointBaseService } from "../../../core/services/base-services/endpoint-base.service";
+import { EndpointNormoBaseService } from "../../../core/services/base-services/endpoint-normo-base.service";
 
 @Injectable()
-export class AvailabilityBaseEndpointService extends EndpointBaseService {
+export class AvailabilityBaseEndpointService extends EndpointNormoBaseService {
 
     constructor(protected netWorker: NetWorkerService) {
         super(netWorker);

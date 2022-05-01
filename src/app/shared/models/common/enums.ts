@@ -8,6 +8,7 @@ export enum ManagerContext {
     normbase = "base",
     indexes = "indexes",
     formula = "formula",
+    uploadViewer = "uploadViewer",
     manager = "manager",
     correction = "correction",
     logs = "logs",

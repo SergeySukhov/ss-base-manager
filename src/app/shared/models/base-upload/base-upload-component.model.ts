@@ -1,5 +1,5 @@
 import { DeclarationBaseService } from "src/app/core/services/base-services/declaration-base.service";
-import { EndpointBaseService } from "src/app/core/services/base-services/endpoint-base.service";
+import { EndpointNormoBaseService } from "src/app/core/services/base-services/endpoint-normo-base.service";
 import { LocalStorageService, LocalStorageConst } from "src/app/core/services/local-storage.service";
 import { ResultUploadParamsBase } from "src/app/primary-module/normative-base/models/base-result-params.model";
 import { StepperData } from "src/app/secondary-module/stepper/models/stepper-model";
@@ -8,18 +8,24 @@ export abstract class UploadComponentBase<TAvailableBase, TResultOptions extends
 
     public data: StepperData | null = null;
     public resultParams: TResultOptions;
-    public errorMessages = "";
+    public errorMessage = "";
 
     public isAwaiting = false;
+    public isError = false;
     public isSuccessSending = false;
     public showCheck = false;
 
     constructor(protected declarationService: DeclarationBaseService<TAvailableBase, TResultOptions>,
-        protected endpointService: EndpointBaseService,
+        protected endpointService: EndpointNormoBaseService,
         protected storageService: LocalStorageService,
         protected storageConst: LocalStorageConst) {
             
         this.resultParams = this.loadLastParams();
+        this.init();
+    }
+
+    public tryReload() {
+        this.isError = false;
         this.init();
     }
 
@@ -32,7 +38,11 @@ export abstract class UploadComponentBase<TAvailableBase, TResultOptions extends
     protected abstract loadLastParams(): TResultOptions;
 
     protected init() {
+        this.isAwaiting = true;
+        this.errorMessage = "";
+
         this.declarationService.updateParamsSub.subscribe(newParams => {
+            this.isAwaiting = false;
             this.resultParams = newParams;
             this.storageService.setItem(this.storageConst, this.resultParams);
         });
@@ -41,8 +51,10 @@ export abstract class UploadComponentBase<TAvailableBase, TResultOptions extends
             if (availableBaseTypes?.length) {
                 this.data = this.declarationService.getStepperModel(this, availableBaseTypes);
             } else {
-                this.errorMessages = "!! ошибка загрузки";
+                this.errorMessage = "Ошибка загрузки";
+                this.isError = true;
             }
+            this.isAwaiting = false;
         });
     }
 

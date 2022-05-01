@@ -1,0 +1,8 @@
+<div class="no-proc-pic">
+    <img src="assets\icons\layers_clear.svg" alt="">
+
+    <div> {{errorMessage}} </div>
+    <div *ngIf="needReloadButton" (click)="tryReload()" matTooltip="Перезагрузить" matTooltipPosition="below">
+        <img class="reload-button" src="assets\icons\restart.svg" alt="">
+    </div>
+ </div>

@@ -52,6 +52,9 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { UploadProcessCardComponent } from './upload-process-card/upload-process-card.component';
+import {CardModule} from 'primeng/card';
+import { NoDataComponent } from './no-data/no-data.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +70,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     AddNodeDialogComponent,
     LogViewerComponent,
     NotificationComponent,
-    TableIndeciesControlComponent
+    TableIndeciesControlComponent,
+    UploadProcessCardComponent,
+    NoDataComponent,
   ],
   exports: [
     ListSelectorComponent,
@@ -82,6 +87,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     AddNodeDialogComponent,
     LogViewerComponent,
     TableIndeciesControlComponent,
+    UploadProcessCardComponent,
+    NoDataComponent,
   ],
   imports: [
     CommonModule,
@@ -123,6 +130,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     OverlayModule,
     PortalModule,
     ScrollingModule,
+    CardModule,
 
   ],
   providers: [

@@ -1,5 +1,5 @@
 <div class="wrapper">
-    <div class="stepper-wrapper">
+    <div class="stepper-wrapper" *ngIf="!isError;else noData">
         <ss-stepper [data]="data" (modelChange)="onModelChange()"></ss-stepper>
     </div>
     <mat-progress-bar *ngIf="isAwaiting" color="accent" class="temp-progress" mode="indeterminate"></mat-progress-bar>
@@ -11,4 +11,9 @@
             <div class="icon-fix"></div>
         </div>
     </div>
+
+    <ng-template #noData>
+        <ss-no-data [errorMessage]="errorMessage" [needReloadButton]="true"
+            (reload)="tryReload()"></ss-no-data>
+     </ng-template>
 </div>

@@ -1,0 +1,26 @@
+<div class="card-wrapper">
+    <!-- <p-card [header]="procName" [subheader]="procState" class="proc-card">
+        {{procContent}}
+    </p-card> -->
+    <div class="proc-card">
+        <div class="proc-header">
+            {{ procId }}
+        </div>
+        <div class="proc-subheader">
+            {{ procStateText }}
+        </div>
+        <div class="proc-content">
+            <div *ngFor="let item of procInfoRows" class="proc-property-row">
+                <div class="prop-name">{{item.key}}</div>
+                <div class="prop-value">{{item.value}}</div>
+            </div>
+        </div>
+        <div class="proc-footer">
+            <mat-progress-bar [mode]="procStateForBar.mode" [value]="procStateForBar.value" color="green"
+            [ngClass]="procStateForBar.newClass">
+            </mat-progress-bar>
+        </div>
+
+    </div>
+
+</div>

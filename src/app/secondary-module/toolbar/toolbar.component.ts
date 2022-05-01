@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { InstructionPdf } from "src/app/shared/models/common/consts";
 import { ThemeService } from './services/theme.service';
 
 @Component({
@@ -31,11 +32,18 @@ export class ToolbarComponent implements OnInit {
     this.themeService.update(this.isDarkMode ? 'light-mode' : 'dark-mode')
   }
 
+  showProcesses() {
+  }
+
   onLogout() {
     this.logoutEvent.emit();
   }
 
   onBack() {
     this.backArrowEvent.emit();
+  }
+
+  openHelp() {
+    window.open(InstructionPdf);
   }
 }

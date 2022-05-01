@@ -2,11 +2,11 @@
 import { NetMessageTypes } from "src/app/shared/models/net-messages/net-worker-messages";
 import { BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { NetWorkerService } from "src/app/shared/workers-module/services/net-worker.service";
-import { EndpointBaseService } from "../../../core/services/base-services/endpoint-base.service";
+import { EndpointNormoBaseService } from "../../../core/services/base-services/endpoint-normo-base.service";
 import { FormBaseResultParams } from "../models/form-base.models";
 
 @Injectable()
-export class FormulaBaseEndpointService extends EndpointBaseService {
+export class FormulaBaseEndpointService extends EndpointNormoBaseService {
 
     constructor(protected netWorker: NetWorkerService) {
         super(netWorker);
@@ -22,7 +22,7 @@ export class FormulaBaseEndpointService extends EndpointBaseService {
             isSub: false,
             data: {
                 AdditionNumber: finalData.baseChoice.additionNumber,
-                ContextId: "",
+                UserId: "",
                 Deploy: finalData.needDeploy,
                 Guid: finalData.baseChoice.guid,
                 IsNewDatabase: false,
@@ -31,7 +31,6 @@ export class FormulaBaseEndpointService extends EndpointBaseService {
                 DocumentZipFile: null,
             },
         }, false);
-        console.log("!! | sendFormuls | avNB", avNB)
         return !!avNB;
     }
 }

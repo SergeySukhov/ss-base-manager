@@ -21,7 +21,7 @@ export class LogViewerComponent implements OnInit {
 
   openLog(guid: string) {
     const log = this.logApi.notificationMessageData.find(x => x.notificationMessage.guid === guid);
-    if (log) {
+    if (log && log.notificationMessage.extraMessage) {
       log.isOpened = !log.isOpened;
     }
   }

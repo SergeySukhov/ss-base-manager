@@ -25,6 +25,8 @@
     padding-bottom: 5px;
     display: flex;
     flex-direction: column;
+    user-select: text;
+    
   }
   .field-container {
     display: flex;

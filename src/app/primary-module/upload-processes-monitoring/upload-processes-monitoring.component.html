@@ -1,0 +1,16 @@
+<div class="proc-monitoring-wrapper">
+   <div class="proc-tool" *ngIf="allProcesses?.length;else noProc">
+      <div class="proc-tool-button" [matTooltip]="'Сортировка'" matTooltipPosition="below" (click)="onSortChange()">
+         <img src="assets\icons\sort.svg" class="proc-tool-icon">
+         {{sortViewData}}
+      </div>
+   </div>
+   <div *ngFor="let proc of allProcesses" class="proc-elem">
+      <ss-upload-process-card [data]="proc"></ss-upload-process-card>
+   </div>
+
+   <ng-template #noProc>
+      <ss-no-data style="width: 100%;" errorMessage="Нет отслеживаемых процессов" [needReloadButton]="false"></ss-no-data>
+   </ng-template>
+
+</div>

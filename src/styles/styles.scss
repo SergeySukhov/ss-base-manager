@@ -5,7 +5,11 @@
 @use '../app/secondary-module/toolbar/toolbar.component.scss' as toolbar;
 @use '../app/secondary-module/table-normo-control/table-normo-control.component.scss' as table-normo;
 @use '../app/secondary-module/table-indecies-control/table-indecies-control.component.scss' as table-ind;
+@use '../app/secondary-module/upload-process-card/upload-process-card.component.scss' as proc-info;
 @import "~@angular/material/theming";
+@import '~primeicons/primeicons.css';
+// @import '~primeng/resources/themes/nova-light/theme.css';
+@import '~primeng/resources/primeng.min.css';
 
 @include mat-core();
 
@@ -18,6 +22,7 @@
   @include toolbar.theme($theme);
   @include table-normo.theme($theme);
   @include table-ind.theme($theme);
+  @include proc-info.theme($theme);
 }
 
 $mat-primary-scheme: (
@@ -28,6 +33,7 @@ $mat-primary-scheme: (
   400: #9b96e2,
   500: #4f5681, // +
   700: #303f9f,
+  900: #d3d4ff, // +
   contrast: (
     100: red,
     300: whitesmoke,
@@ -61,6 +67,7 @@ $mat-primary-scheme-dark: (
   400: #4f5681,
   500: #4f5681, // +
   700: #293586,
+  900: #2e2e2e,
   contrast: (
     100: red,
     300: whitesmoke,

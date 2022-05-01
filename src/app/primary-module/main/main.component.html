@@ -3,7 +3,7 @@
         [vipImageSrc]="stateService.tooltipUserImageSrc" [hideBackArrow]="stateService.context===ManagerContext.start"
         [title]="stateService.mainTitle">
     </ss-toolbar>
-    <p-toast ></p-toast>
+    <p-toast [autoZIndex]="true" position="bottom-right"></p-toast>
 
     <div class="main-content">
         <div [ngSwitch]="stateService.context" class="content-wrapper">

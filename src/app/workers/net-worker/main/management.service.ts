@@ -10,7 +10,7 @@ import { MessageHandler } from "../message-services/message-handler.service";
 import { HubConnectionService } from "./hub-connection.service";
 
 export class ManagementSystem extends ManagementSystemBase {
-  private netWorkerEvents = new Subject<{ message: string, type: NotificationType, importance: ImoprtanceLevel }>();
+  private netWorkerEvents = new Subject<{ message: string, type: NotificationType, importance: ImoprtanceLevel, extraMessage?: string }>();
   private hubService = new HubConnectionService(this.messageHandler, this.netWorkerEvents);
 
 
@@ -30,6 +30,9 @@ export class ManagementSystem extends ManagementSystemBase {
           break;
         case NetSubTypes.closeAllSubs:
           this.netWorkerEvents.complete();
+          break;
+        case NetSubTypes.uploadProcessInfo:
+          this.hubService.createUploadInfoSub(request);
           break;
       }
     } else {
@@ -64,6 +67,12 @@ export class ManagementSystem extends ManagementSystemBase {
         case NetMessageTypes.managerEditNodes:
           this.sendManagerEditNodes(request);
           break;
+        case NetMessageTypes.setUser:
+          this.hubService.setUser(request);
+          break;
+        case NetMessageTypes.getUploadProcessInfo:
+          this.hubService.getUploadProcesses(request);
+          break;
       }
     }
 
@@ -82,7 +91,8 @@ export class ManagementSystem extends ManagementSystemBase {
             imoprtance: x.importance,
             type: x.type,
             message: x.message,
-            timeStamp: Date.now().toString()
+            timeStamp: Date.now().toString(),
+            extraMessage: x.extraMessage,
           }
         },
       }
@@ -284,7 +294,7 @@ export class ManagementSystem extends ManagementSystemBase {
     }
 
     let requestData = new FormData();
-    request.data.ContextId = this.hubService.connectionId ?? "";
+    request.data.UserId = this.hubService.userId ?? "";
     for (const [key, value] of Object.entries(request.data)) {
       requestData.append(key, value);
     }
@@ -295,7 +305,9 @@ export class ManagementSystem extends ManagementSystemBase {
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');
     sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
     sender.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-    sender.timeout = 5000;
+    sender.setRequestHeader("X-File-Name", request.data.SourceFile.name);
+    sender.setRequestHeader("X-File-Size", "" + request.data.SourceFile.size);
+    sender.timeout = 15000;
 
     sender.onreadystatechange = async () => {
       if (sender.readyState == XMLHttpRequest.DONE) {
@@ -319,19 +331,15 @@ export class ManagementSystem extends ManagementSystemBase {
       isSub: false,
     }
 
-    let requestData = new FormData();
-    request.data.ContextId = this.hubService.connectionId ?? "";
-    for (const [key, value] of Object.entries(request.data)) {
-      requestData.append(key, value);
-    }
-
     sender.withCredentials = false;
-    sender.open("POST", environment.normo + "uploader");
+    sender.open("POST", environment.normo + "uploader", true);
 
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');
     sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
     sender.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-    sender.timeout = 5000;
+    sender.setRequestHeader("X-File-Name", request.data.SourceFile.name);
+    sender.setRequestHeader("X-File-Size", "" + request.data.SourceFile.size);
+    sender.timeout = 50000;
 
     sender.onreadystatechange = async () => {
       if (sender.readyState == XMLHttpRequest.DONE) {
@@ -342,8 +350,13 @@ export class ManagementSystem extends ManagementSystemBase {
         }
       }
     }
+    let requestData = new FormData();
+    request.data.UserId = this.hubService.userId ?? "";
+    for (const [key, value] of Object.entries(request.data)) {
+      requestData.append(key, value);
+    }
 
-    this.setSenderHandlers(sender, response);
+    // this.setSenderHandlers(sender, response);
     sender.send(requestData);
   }
 
@@ -361,7 +374,9 @@ export class ManagementSystem extends ManagementSystemBase {
     sender.setRequestHeader('Access-Control-Allow-Origin', '*');
     sender.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
     sender.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-    sender.timeout = 5000;
+    sender.setRequestHeader("X-File-Name", request.data.SourceFile.name);
+    sender.setRequestHeader("X-File-Size", "" + request.data.SourceFile.size);
+    sender.timeout = 15000;
 
     sender.onreadystatechange = async () => {
       if (sender.readyState == XMLHttpRequest.DONE) {
@@ -374,7 +389,7 @@ export class ManagementSystem extends ManagementSystemBase {
     }
 
     let requestData = new FormData();
-    request.data.ContextId = this.hubService.connectionId ?? "";
+    request.data.UserId = this.hubService.userId ?? "";
     for (const [key, value] of Object.entries(request.data)) {
       requestData.append(key, value);
     }
@@ -389,16 +404,21 @@ export class ManagementSystem extends ManagementSystemBase {
       sender.abort();
     }
     sender.onerror = (e) => {
-      this.errorHandler(response)
+      this.errorHandler(response);
+      sender.abort();
     }
   }
 
   private errorHandler(response: NWResponse, errMesage?: string) {
+    console.log("!! | errorHandler | response", response, errMesage)
     response.data = {
       isSuccess: false,
       errorDescription: errMesage ?? "Нет доступа к сервисам"
     }
-    this.netWorkerEvents.next({ message: "При выполнении операции возникла ошибка", importance: ImoprtanceLevel.high, type: NotificationType.warn })
+    this.netWorkerEvents.next({
+      message: "При выполнении операции возникла ошибка",
+      importance: ImoprtanceLevel.low, type: NotificationType.warn, extraMessage: errMesage
+    })
     this.messageHandler.toClient(response);
   }
 

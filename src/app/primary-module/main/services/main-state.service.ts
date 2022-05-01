@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { action, computed, observable, reaction } from "mobx";
-import { UserService } from "src/app/core/services/user.service";
+import { UserService } from "src/app/core/services/user-services/user.service";
 import { ManagerContext } from "src/app/shared/models/common/enums";
 
 @Injectable()
@@ -26,6 +26,8 @@ export class MainStateService {
                 return "Менеджер добавления микросервисов баз индесков Estimate Office";
             case ManagerContext.formula:
                 return "Менеджер добавления микросервисов баз формул Estimate Office";
+            case ManagerContext.uploadViewer:
+                return "Мониторинг загрузок";
             case ManagerContext.manager:
                 return "Менеджер управления параматрами баз Estimate Office";
             case ManagerContext.logs:

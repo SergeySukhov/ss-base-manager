@@ -9,6 +9,14 @@ export enum NotificationType {
     info,
 }
 
+export enum UploadProcessState {
+    inited,
+    processing,
+    deploying,
+    error,
+    success,
+}
+
 export interface NotificationMessage {
     guid: string;
     timeStamp?: string;
@@ -18,4 +26,13 @@ export interface NotificationMessage {
     imoprtance: ImoprtanceLevel,
     type: NotificationType,
     contextId?: string,
+}
+
+export interface NotificationUploadProcessInfo {
+    requestGuid: string;
+    baseName: string;
+    description: string;
+    state: UploadProcessState;
+    creationTime: string;
+    lastUpdateTime: string;
 }

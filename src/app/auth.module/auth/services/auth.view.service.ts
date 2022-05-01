@@ -1,7 +1,7 @@
 ﻿import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { LocalStorageConst, LocalStorageService } from "src/app/core/services/local-storage.service";
-import { UserService } from "src/app/core/services/user.service";
+import { UserService } from "src/app/core/services/user-services/user.service";
 import { AuthEndpointService } from "./auth.endpoint.service";
 import { AuthStateService } from "./auth.state.service";
 

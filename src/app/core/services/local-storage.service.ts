@@ -40,4 +40,5 @@ export enum LocalStorageConst {
     resultNormoParams = "resultNormoParams",
     resultFormulaParams = "resultFormulaParams",
     resultIndexParams = "resultIndexParams",
+    monitoringMainTabIndex = "monitoringMainTabIndex",
 }

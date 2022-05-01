@@ -1,9 +1,21 @@
 <div class="wrapper">
+  <mat-tab-group headerPosition="below" style="height: 100% !important;"
+  [selectedIndex]="mainTabIndex"
+  (selectedTabChange)="selectedMainTabChange($event)">
 
-  <mat-tab-group>
-    <mat-tab *ngFor="let tabName of serviceTabs" [label]="tabName">
+    <mat-tab label="Логи">
+      <mat-tab-group [dynamicHeight]="false" style="height: 100% !important;">
+          <mat-tab *ngFor="let tabName of serviceTabs" [label]="tabName">
+            <div class="tab-container">
+              <ss-log-viewer (api)="getLogApi($event, tabName)"></ss-log-viewer>
+            </div>
+          </mat-tab>
+      </mat-tab-group>
+    </mat-tab>
+
+    <mat-tab label="Текущие загрузки">
       <div class="tab-container">
-        <ss-log-viewer (api)="getLogApi($event, tabName)"></ss-log-viewer>
+        <ss-upload-processes-monitoring></ss-upload-processes-monitoring>
       </div>
     </mat-tab>
   </mat-tab-group>

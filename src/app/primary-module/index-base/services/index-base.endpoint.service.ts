@@ -3,11 +3,11 @@ import { NetMessageTypes } from "src/app/shared/models/net-messages/net-worker-m
 import { BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { IndicesRequestUploader } from "src/app/shared/models/server-models/server-upload-request-models/IndeciesRequestUploader";
 import { NetWorkerService } from "src/app/shared/workers-module/services/net-worker.service";
-import { EndpointBaseService } from "../../../core/services/base-services/endpoint-base.service";
+import { EndpointNormoBaseService } from "../../../core/services/base-services/endpoint-normo-base.service";
 import { IndexBaseResultParams } from "../models/index-base.model";
 
 @Injectable()
-export class IndexBaseEndpointService extends EndpointBaseService {
+export class IndexBaseEndpointService extends EndpointNormoBaseService {
 
     constructor(protected netWorker: NetWorkerService) {
         super(netWorker);
@@ -20,7 +20,7 @@ export class IndexBaseEndpointService extends EndpointBaseService {
         const normoRequest: IndicesRequestUploader = {
             AdditionNormativeGuid: finalData.additionNormativBase?.guid ?? "",
             AdditionNumber: finalData.additionNormativBase?.additionNumber ?? 0,
-            ContextId: "",
+            UserId: "",
             Deploy: finalData.needDeploy,
             Guid: finalData.addBase?.guid ?? finalData.baseChoice?.guid ?? "",
             IsNewDatabase: !!finalData.addBase,

@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Subject } from "rxjs";
-import { NWSubMessage } from '../../models/net-messages/net-worker-messages';
 
 @Injectable()
 export abstract class BaseWorkerService<TRequest, TResponse> {
 
     protected isInit = false;
     protected worker: Worker | undefined;
-    protected timoutResponse = 8000;
+    protected timoutResponse = 12000;
 
 
     constructor() { }

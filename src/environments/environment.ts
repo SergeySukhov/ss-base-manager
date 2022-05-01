@@ -1,10 +1,9 @@
-
 export const environment = {
-  production: false,
-  normo: "http://localhost:5047/",
-  formuls: "http://localhost:5002/",
-  indecies: "http://localhost:5003/",
-  manager: "http://localhost:5001/",
-  logger: "http://localhost:5008/ntfy",
-  isTest: true
+  production: true,
+  normo:    "http://localhost:6115/",
+  formuls:  "http://localhost:6113/",
+  indecies: "http://localhost:6114/",
+  manager:  "http://localhost:6112/",
+  logger:   "http://localhost:6116/ntfy",
+  isTest: false,
 };

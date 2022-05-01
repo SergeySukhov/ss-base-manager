@@ -5,13 +5,22 @@
         </div>
         <span style="padding-left: 15px;">{{title}}</span>
         <span style="flex: 1 1 auto"></span>
+
+
+        <div *ngIf="!hideNotes" class="tool-container">
+            <img src="assets\icons\notifications.svg" alt="">
+        </div>
+        <div class="tool-container hover-toggler" (click)="showProcesses()">
+            <img src="assets\\icons\\display_settings.svg" alt="">
+        </div>
         <div class="tool-container hover-toggler" (click)="toggleDarkMode()">
             <div *ngIf="!isDarkMode" class="dark-icon"></div>
             <img [src]="isDarkMode ? 'assets\\icons\\light.svg':'assets\\icons\\dark.svg'" alt="">
         </div>
-        <div *ngIf="!hideNotes" class="tool-container">
-            <img src="assets\icons\notifications.svg" alt="">
+        <div *ngIf="!hideNotes" class="tool-container" (click)="openHelp()">
+            <img src="assets\icons\question.svg" alt="">
         </div>
+
         <div *ngIf="!hideUser" class="tool-container" (click)="onLogout()">
             <img *ngIf="!vipImageSrc" class="logout-icon" src="assets\icons\user.svg" alt="">
             <img *ngIf="vipImageSrc" class="logout-icon g-icon" style="height: 40px; width: 40px;"  

@@ -1,0 +1,28 @@
+.no-proc-pic {
+    width: 400px;
+    height: 600px;
+    margin: auto;
+    font-size: x-large;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 10px;
+
+    img {
+        height: 50%;
+        max-height: 200px;
+        margin: auto;
+        margin-bottom: 10px;
+    }
+
+    div {
+        margin: auto;
+        margin-top: 20px;
+    }
+
+    .reload-button {
+        height: 80px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+}

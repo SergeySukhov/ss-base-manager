@@ -1,7 +1,9 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { MatTabChangeEvent } from "@angular/material/tabs";
 import { NotificationMessage } from 'src/app/core/common/models/notification.models';
+import { LocalStorageConst } from "src/app/core/services/local-storage.service";
 import { NotificationService } from 'src/app/core/services/notification.service';
-import { UserService } from 'src/app/core/services/user.service';
+import { UserService } from 'src/app/core/services/user-services/user.service';
 import { LogApiService } from 'src/app/secondary-module/log-viewer/services/log-api.service';
 import { BaseLogMonitoringEndpointService } from './services/base-log-monitoring.endpoint.service';
 
@@ -17,7 +19,7 @@ export class BaseLogsMonitoringComponent implements OnInit, AfterViewInit {
 
   public serviceTabs: string[] = [];
   public allLogs: NotificationMessage[] = this.notificationService.allLogs;
-
+  public mainTabIndex = localStorage.getItem(LocalStorageConst.monitoringMainTabIndex) ?? 0;
   private logApis = new Map<string, LogApiService>();
 
   constructor(private userService: UserService, private endpointService: BaseLogMonitoringEndpointService,
@@ -29,15 +31,11 @@ export class BaseLogsMonitoringComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.serviceTabs.push("Все");
     this.serviceTabs.push(... new Set<string>(this.allLogs.map(x => x.fromService)));
-    console.log("!! | ngOnInit | this.allLogs", this.allLogs)
-
-
 
     this.notificationService.notificationChange?.subscribe(notification => {
-      console.log("!! | ngOnInit | notification", notification)
-
       if (!this.serviceTabs.find(x => x === notification.fromService)) {
         this.serviceTabs.push(notification.fromService);
+        this.logApis.get("Все")?.addLog(notification);
         return;
       }
 
@@ -58,6 +56,11 @@ export class BaseLogsMonitoringComponent implements OnInit, AfterViewInit {
       api.setLogs(this.allLogs.filter(log => log.fromService === tabName));
     }
   }
-  
+
+  selectedMainTabChange(event: MatTabChangeEvent) {
+    this.mainTabIndex = event.index;
+    localStorage.setItem(LocalStorageConst.monitoringMainTabIndex, "" + event.index);
+  }
+
 
 }

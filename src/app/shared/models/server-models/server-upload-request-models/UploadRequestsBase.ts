@@ -7,7 +7,7 @@ export interface CommonRequest
 
     Deploy: boolean;
     IsNewDatabase: boolean;
-    ContextId: string;
+    UserId: string;
     Type: BaseType;
 }
 
