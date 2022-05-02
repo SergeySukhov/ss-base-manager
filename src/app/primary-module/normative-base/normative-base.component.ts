@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalStorageConst, LocalStorageService } from 'src/app/core/services/local-storage.service';
-import { UploadComponentBase } from 'src/app/shared/models/base-upload/base-upload-component.model';
+import { UploadComponentBase } from 'src/app/shared/common-components/uploader-base/upload-base.component';
 import { AvailableBaseAdditionInfo } from 'src/app/shared/models/server-models/AvailableBaseAdditionInfo';
 import { NormBaseResultParams } from './models/norm-base.models';
 import { NormativeBaseDeclarationService } from "./services/normative-base.declaration.service";
@@ -9,7 +9,7 @@ import { NormativeBaseEndpointService } from './services/normative-base.endpoint
 @Component({
   selector: 'ss-normative-base',
   templateUrl: './normative-base.component.html',
-  styleUrls: ['../formula-base/formula-base.component.scss'],
+  styleUrls: ['./normative-base.component.scss', '../../shared/common-components/uploader-base/upload-base.component.scss'],
   providers: [
     NormativeBaseDeclarationService,
     NormativeBaseEndpointService,

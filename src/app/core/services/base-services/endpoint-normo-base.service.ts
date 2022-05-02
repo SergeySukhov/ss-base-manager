@@ -45,7 +45,6 @@ export abstract class EndpointNormoBaseService extends EndpointBaseService {
             messageType: NetMessageTypes.getAvailableBaseTypes,
             isSub: false,
         });
-        console.log("!! | getAvailableBaseTypes | avBT", avBT)
         const mappedAvailableBases = avBT?.data as AvailableNormativeBaseType[]
         if (!!mappedAvailableBases?.length) {
             return mappedAvailableBases;

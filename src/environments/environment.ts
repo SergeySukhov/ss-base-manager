@@ -5,5 +5,5 @@ export const environment = {
   indecies: "http://localhost:6114/",
   manager:  "http://localhost:6112/",
   logger:   "http://localhost:6116/ntfy",
-  isTest: false,
+  isTest: true,
 };

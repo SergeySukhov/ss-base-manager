@@ -27,6 +27,8 @@ export class HubConnectionService {
     private pUserId = "";
     private pUserName = "";
 
+    private isConnectionStateChanged = true;
+
     private hub: HubConnection | null = null;
     private hubQueue: RequestMethodPair[] = [];
 
@@ -58,6 +60,7 @@ export class HubConnectionService {
                 .withUrl(url ?? environment.logger, connectionOptions)
                 .withAutomaticReconnect(reconnectPolicy)
                 .build();
+
             this.hub.onreconnected(this.onReconnected.bind(this));
             this.hub.onreconnecting(this.onReconnecting.bind(this));
             this.hub.onclose(this.onClose.bind(this));
@@ -66,7 +69,7 @@ export class HubConnectionService {
             this.pConnectionStatus = ConnectionStatus.Connected;
 
             setInterval(async () => {
-                
+
                 if (this.hub
                     && this.connectionStatus === ConnectionStatus.Connected
                     && this.hubQueue.length) {
@@ -81,6 +84,9 @@ export class HubConnectionService {
                 this.initHub();
             }, 3000);
         }
+
+        if (!this.isConnectionStateChanged) return;
+        this.isConnectionStateChanged = false;
 
         if (this.pConnectionStatus === ConnectionStatus.Connected) {
             this.events.next({ message: "Соединение установлено", type: NotificationType.info, importance: ImoprtanceLevel.low });
@@ -151,15 +157,6 @@ export class HubConnectionService {
             netSubMessage.data.message = data;
             this.messageHandler.toClient(netSubMessage);
         });
-
-        // setInterval(() => {
-        //     netSubMessage.data.message.guid = v4();
-        //     netSubMessage.data.message.imoprtance = 1;
-        //     netSubMessage.data.message.type = NotificationType.warn;
-        //     netSubMessage.data.message.extraMessage = "тест ыфЫСЖфыс ЫСыфсС смывмывм ывм ы вм ывм ывм ы вм ыв мы вм ым ыв м ывмылвмтылвмтфдлвмм ф вмфвмщл фмщлф вмыщлвм щылвм щлы вмылвм ыщвлм ыщлвм ыщлм ыщлвм лщы вмышвмл ыщлм в ывмывмымвщыщмлтвымтылвтлыщщм  ымд ымл ывщлм"
-
-        //     this.messageHandler.toClient(netSubMessage);
-        // }, 5000)
     }
 
     createUploadInfoSub(initSubRequest: NWRequestUploadInfoSub, url?: string) {
@@ -184,7 +181,7 @@ export class HubConnectionService {
     }
 
     private onReconnected(connectionId?: string) {
-        console.info("!! | onReconnected | this.pUserId", this.pUserId)
+        this.isConnectionStateChanged = true;
         if (!this.pUserId) {
             return;
         }
@@ -194,10 +191,12 @@ export class HubConnectionService {
     }
 
     private onReconnecting(error?: Error) {
+        this.isConnectionStateChanged = true;
         this.pConnectionStatus = ConnectionStatus.Connecting;
     }
 
     private onClose(error?: Error) {
+        this.isConnectionStateChanged = true;
         // this.pUserId = "";
         // this.pUserName = "";
         this.pConnectionStatus = ConnectionStatus.Disconnected;

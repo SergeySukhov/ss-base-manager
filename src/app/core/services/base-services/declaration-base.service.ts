@@ -28,7 +28,6 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
     protected abstract toSelectorBaseOptions(bases: TAvailableBase[]): SelectorOption<TAvailableBase>[]
 
     public updateResultParams(resultParams: TResultOptions) {
-        console.log("!! | updateResultParams | resultParams", resultParams)
         this.finalOptions.splice(0);
         this.finalOptions.push(...this.toFinalData(resultParams));
         this.updateParamsSub.next(resultParams);

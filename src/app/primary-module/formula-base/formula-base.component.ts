@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalStorageService, LocalStorageConst } from 'src/app/core/services/local-storage.service';
-import { UploadComponentBase } from 'src/app/shared/models/base-upload/base-upload-component.model';
+import { UploadComponentBase } from 'src/app/shared/common-components/uploader-base/upload-base.component';
 import { AvailableBaseAdditionInfo } from 'src/app/shared/models/server-models/AvailableBaseAdditionInfo';
 import { FormBaseResultParams } from "./models/form-base.models";
 import { FormulaBaseDeclarationService } from "./services/formula-base.declaration.service";
@@ -9,7 +9,7 @@ import { FormulaBaseEndpointService } from "./services/formula-base.endpoint.ser
 @Component({
   selector: 'ss-formula-base',
   templateUrl: './formula-base.component.html',
-  styleUrls: ['./formula-base.component.scss'],
+  styleUrls: ['./formula-base.component.scss', '../../shared/common-components/uploader-base/upload-base.component.scss'],
   providers: [
     FormulaBaseDeclarationService,
     FormulaBaseEndpointService

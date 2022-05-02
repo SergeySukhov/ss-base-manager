@@ -1,7 +1,20 @@
 <div class="wrapper">
-    <div class="stepper-wrapper" *ngIf="!isError;else noData">
-        <ss-stepper [data]="data" (modelChange)="onModelChange()"></ss-stepper>
-    </div>
+    <mat-tab-group headerPosition="below" style="height: 100% !important;"
+    >
+        <mat-tab label="1">
+            <div class="tab-container">
+
+                <div class="stepper-wrapper" *ngIf="!isError;else noData">
+                    <ss-stepper [data]="data" (modelChange)="onModelChange()"></ss-stepper>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="2">
+            <div class="stepper-wrapper" *ngIf="!isError;else noData">
+                <!-- <ss-stepper [data]="data" (modelChange)="onModelChange()"></ss-stepper> -->
+            </div>
+        </mat-tab>
+    </mat-tab-group>
 
     <mat-progress-bar *ngIf="isAwaiting" color="accent" class="temp-progress" mode="indeterminate"></mat-progress-bar>
     <div class="success-checkmark" *ngIf="showCheck">
