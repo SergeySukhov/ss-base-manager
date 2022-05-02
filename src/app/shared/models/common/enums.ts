@@ -4,10 +4,11 @@ export enum UserState {
 }
 
 export enum ManagerContext {
-    start = "start", 
+    start = "start",
     normbase = "base",
     indexes = "indexes",
     formula = "formula",
+    multipleUploader = "multipleUploader",
     uploadViewer = "uploadViewer",
     manager = "manager",
     correction = "correction",

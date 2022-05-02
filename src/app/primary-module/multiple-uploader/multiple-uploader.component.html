@@ -1,5 +1,5 @@
 <div class="wrapper">
-    <div class="stepper-wrapper" *ngIf="!isError;else noData">
+    <!-- <div class="stepper-wrapper" *ngIf="!isError;else noData">
         <ss-stepper [data]="data" (modelChange)="onModelChange()"></ss-stepper>
     </div>
 
@@ -15,5 +15,5 @@
 
     <ng-template #noData>
         <ss-no-data [errorMessage]="errorMessage" [needReloadButton]="true" (reload)="tryReload()"></ss-no-data>
-    </ng-template>
+    </ng-template> -->
 </div>

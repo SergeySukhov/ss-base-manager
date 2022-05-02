@@ -26,6 +26,8 @@ export class MainStateService {
                 return "Менеджер добавления микросервисов баз индесков Estimate Office";
             case ManagerContext.formula:
                 return "Менеджер добавления микросервисов баз формул Estimate Office";
+            case ManagerContext.multipleUploader:
+                return "Менеджер множественного добавления микросервисов баз Estimate Office";
             case ManagerContext.uploadViewer:
                 return "Мониторинг загрузок";
             case ManagerContext.manager:

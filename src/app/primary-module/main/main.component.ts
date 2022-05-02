@@ -48,14 +48,14 @@ export class MainComponent implements OnInit {
       action: () => {
         this.stateService.setContext(ManagerContext.indexes)
       }
-      // }, {
-      //   name: "Базы поправок",
-      //   available: false,
-      //   level: 1,
-      //   expandable: false,
-      //   action: () => {
-      //     this.stateService.setContext(ManagerContext.correction)
-      //   }
+    }, {
+      name: "Множественная загрузка",
+      available: false,
+      level: 1,
+      expandable: false,
+      action: () => {
+        this.stateService.setContext(ManagerContext.multipleUploader)
+      }
     },]
 
   }, {

@@ -57,6 +57,7 @@ import { UploadProcessesMonitoringComponent } from './upload-processes-monitorin
 import { UploadProcessesMonitoringEndpoint } from "./upload-processes-monitoring/services/upload-processes-monitoring-endpoint.service";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MultipleUploaderComponent } from './multiple-uploader/multiple-uploader.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     BaseLogsMonitoringComponent,
     IndexBaseComponent,
     UploadProcessesMonitoringComponent,
+    MultipleUploaderComponent,
   ],
   exports: [
     MainComponent,

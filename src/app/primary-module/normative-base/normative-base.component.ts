@@ -40,6 +40,5 @@ export class NormativeBaseComponent extends UploadComponentBase<AvailableBaseAdd
 
   protected loadLastParams(): NormBaseResultParams {
     return this.storageService.getItem(LocalStorageConst.resultNormoParams) ?? new NormBaseResultParams();
-
   }
 }
