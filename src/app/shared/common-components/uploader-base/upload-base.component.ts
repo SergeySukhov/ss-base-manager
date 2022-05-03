@@ -1,7 +1,7 @@
 import { DeclarationBaseService } from "src/app/core/services/base-services/declaration-base.service";
 import { EndpointNormoBaseService } from "src/app/core/services/base-services/endpoint-normo-base.service";
 import { LocalStorageService, LocalStorageConst } from "src/app/core/services/local-storage.service";
-import { ResultUploadParamsBase } from "src/app/primary-module/normative-base/models/base-result-params.model";
+import { ResultUploadParamsBase } from "src/app/shared/common-components/uploader-base/models/base-result-params.model";
 import { StepperData } from "src/app/secondary-module/stepper/models/stepper-model";
 
 export abstract class UploadComponentBase<TAvailableBase, TResultOptions extends ResultUploadParamsBase<TAvailableBase>> {
@@ -57,7 +57,4 @@ export abstract class UploadComponentBase<TAvailableBase, TResultOptions extends
             this.isAwaiting = false;
         });
     }
-
-
-
 }

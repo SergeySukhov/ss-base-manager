@@ -80,6 +80,7 @@ export class HubConnectionService {
                 }
             }, 1000);
         } catch (ex) {
+            if (environment.isTest) return;
             setTimeout(() => {
                 this.initHub();
             }, 3000);

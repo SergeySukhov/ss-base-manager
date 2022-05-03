@@ -53,6 +53,7 @@ export class StepperInputField extends StepperDataField<OptionType.input>  {
 export class StepperSelectorField extends StepperDataField<OptionType.selector>  {
 
     fieldOptions: SelectorOption<any>[] = [];
+
     @observable startOption?: SelectorOption<any>;
     @computed({keepAlive: true}) startOptionGet?: (form: StepperDataStep) => SelectorOption<any> | undefined;
     onDataChange: <T>(value: SelectorOption<T>, form: StepperDataStep) => void = () => { return };
@@ -63,6 +64,7 @@ export class StepperDividerField extends StepperDataField<OptionType.divider>  {
 
 export class StepperFileLoaderField extends StepperDataField<OptionType.fileLoader>  {
     fileFormats?: string[];
+    isMultiple?: boolean;
     onDataChange: (value: File[], form: StepperDataStep) => void = () => { return };
 }
 

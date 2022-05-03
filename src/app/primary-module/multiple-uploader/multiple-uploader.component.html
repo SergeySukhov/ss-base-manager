@@ -1,19 +1,19 @@
 <div class="wrapper">
-    <!-- <div class="stepper-wrapper" *ngIf="!isError;else noData">
+    <div class="stepper-wrapper" *ngIf="!isError;else noData">
         <ss-stepper [data]="data" (modelChange)="onModelChange()"></ss-stepper>
     </div>
 
     <mat-progress-bar *ngIf="isAwaiting" color="accent" class="temp-progress" mode="indeterminate"></mat-progress-bar>
-    <div class="success-checkmark" *ngIf="showCheck">
+    <!-- <div class="success-checkmark" *ngIf="showCheck">
         <div class="check-icon">
             <span class="icon-line line-tip"></span>
             <span class="icon-line line-long"></span>
             <div class="icon-circle"></div>
             <div class="icon-fix"></div>
         </div>
-    </div>
+    </div> -->
 
     <ng-template #noData>
         <ss-no-data [errorMessage]="errorMessage" [needReloadButton]="true" (reload)="tryReload()"></ss-no-data>
-    </ng-template> -->
+    </ng-template> 
 </div>

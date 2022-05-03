@@ -20,7 +20,7 @@
             <div *ngSwitchCase="ManagerContext.formula" class="content-container">
                 <ss-formula-base></ss-formula-base>
             </div>
-            
+
             <div *ngSwitchCase="ManagerContext.indexes" class="content-container">
                 <ss-index-base></ss-index-base>
             </div>
@@ -33,10 +33,15 @@
                 <ss-base-logs-monitoring></ss-base-logs-monitoring>
             </div>
 
+            <div *ngSwitchCase="ManagerContext.multipleUploader" class="content-container">
+                <ss-multiple-uploader></ss-multiple-uploader>
+            </div>
+
+
         </div>
         <div *ngIf="stateService.context===ManagerContext.start" class="preview-content">
             <ss-preview></ss-preview>
         </div>
     </div>
-    
+
 </div>

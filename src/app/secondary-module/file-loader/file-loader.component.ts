@@ -8,6 +8,7 @@ import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@
 export class FileLoaderComponent implements OnInit {
 
   @Input() acceptFormats: string[] | undefined;
+  @Input() isMultiple: boolean | undefined = false;
   @Output() filesChanged = new EventEmitter<any>();
 
   public files: any[] = [];
@@ -36,12 +37,15 @@ export class FileLoaderComponent implements OnInit {
   }
 
   prepareFilesList(files: FileList) {
-    // for (const item of files) {
-    //   item.progress = 0;
-    //   this.files.push(item);
-    // }
-    this.files.unshift(files[0]);
-    this.files.splice(1);
+    if (this.isMultiple) {
+      for (let i = 0; i < files.length; i++) {
+        this.files.push(files[i]);
+      }
+    } else {
+      this.files.unshift(files[0]);
+      this.files.splice(1);
+    }
+
     this.filesChanged.emit(this.files);
   }
 

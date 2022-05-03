@@ -55,7 +55,7 @@ export class IndexBaseDeclarationService extends DeclarationBaseService<Availabl
                     onDataChange: async (value: SelectorOption<BaseTypeInfo>, form: StepperDataStep) => {
                         const data = value.data as BaseTypeInfo;
                         context.resultParams.baseType = data.type;
-
+                        
                         form.isAwaiting = true;
                         const availableNB = await this.endpoint.getAvailableNormativeBases(data.type);
                         form.isAwaiting = false;

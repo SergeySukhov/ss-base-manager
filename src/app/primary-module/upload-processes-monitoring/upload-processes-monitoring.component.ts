@@ -35,20 +35,22 @@ export class UploadProcessesMonitoringComponent implements OnInit {
 
   ngOnInit(): void {
     this.endpointService.getAllUploadProcess().then(processes => {
-      if (processes?.length) {
-        this.allProcesses.push(...processes);
+      const actualProcesses = processes?.filter(x => !!x?.requestGuid)
+      if (actualProcesses?.length) {
+        this.allProcesses.push(...actualProcesses);
         this.sortProcCard();
         this.changeDetector.markForCheck();
       }
     });
 
     this.endpointService.uploadProcessInfoSub.subscribe(updProcess => {
-      const process = this.allProcesses.find(x => x.requestGuid === updProcess.requestGuid)
-      if (process) {
-        process.description = updProcess.description;
-      } else {
-        this.allProcesses.push(updProcess);
+      if (!updProcess?.requestGuid) return;
+      const processIndex = this.allProcesses.findIndex(x => x.requestGuid === updProcess.requestGuid)
+      if (processIndex > -1) {
+        this.allProcesses.splice(processIndex);
       }
+      this.allProcesses.push(updProcess);
+
       this.sortProcCard();
       this.changeDetector.markForCheck();
     });

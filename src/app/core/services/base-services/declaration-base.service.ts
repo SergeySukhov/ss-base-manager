@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { observable } from "mobx";
 import { Subject } from "rxjs";
 import { BaseTypeInfo } from "src/app/primary-module/formula-base/models/form-base.models";
-import { ResultUploadParamsBase } from "src/app/primary-module/normative-base/models/base-result-params.model";
+import { ResultUploadParamsBase } from "src/app/shared/common-components/uploader-base/models/base-result-params.model";
 import { OptionType, SelectorOption, StepFields, StepperData, StepperDataStep } from "src/app/secondary-module/stepper/models/stepper-model";
 import { AvailableNormativeBaseType, BaseType } from "src/app/shared/models/server-models/AvailableNormativeBaseType";
 import { BaseTypePipe } from "../../pipes/base-type.pipe";
@@ -51,7 +51,6 @@ export abstract class DeclarationBaseService<TAvailableBase, TResultOptions exte
         });
         return selectorOptions;
     }
-
 
     protected getBaseTypeStep(avTypes: AvailableNormativeBaseType[], resultParams: TResultOptions,
         getDataForNexStep: (baseType: BaseType) => Promise<TAvailableBase[] | null>): StepperDataStep {

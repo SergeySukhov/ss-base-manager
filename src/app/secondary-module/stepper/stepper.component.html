@@ -22,7 +22,7 @@
                         <mat-label>{{fieldModel.fieldLabel}}</mat-label>
 
                         <mat-select 
-                            [value]="fieldModel.startOptionGet ? fieldModel.startOptionGet(stepModel) :  fieldModel.startOption" 
+                            [value]="fieldModel.startOptionGet ? fieldModel.startOptionGet(stepModel) : fieldModel.startOption" 
                             (selectionChange)="fieldModel.onDataChange($event.value, stepModel)">
                             <mat-option *ngFor="let option of fieldModel.fieldOptions" [value]="option"
                                 [disabled]="!option.isAvailable" (onSelectionChange)="option.action(option, stepModel)">
@@ -58,7 +58,8 @@
                 </div>
 
                 <div *ngIf="fieldModel.type === 'fileLoader'" class="file-loader">
-                    <ss-file-loader [acceptFormats]="fieldModel.fileFormats" (filesChanged)="fieldModel.onDataChange($event, stepModel)"></ss-file-loader>
+                    <ss-file-loader [acceptFormats]="fieldModel.fileFormats" [isMultiple]="fieldModel.isMultiple"
+                     (filesChanged)="fieldModel.onDataChange($event, stepModel)"></ss-file-loader>
                     <mat-spinner *ngIf="stepModel.isAwaiting" mode="indeterminate" color="accent" [diameter]="40"></mat-spinner>
                 </div>
             </div>
@@ -86,16 +87,16 @@
                     ></mat-progress-spinner>
                     </span>
                 </button>
+                                
+                <button class="step-button" 
+                    *ngIf="stepModel.backButton?.needShow" 
+                    [disabled]="stepModel.backButton?.isDisable"
+                     mat-button (click)="stepper.previous()">Назад</button>
                 
                 <button class="step-button" 
                     *ngIf="stepModel.nextButton?.needShow" 
                     [disabled]="stepModel.nextButton?.isDisable"
                      mat-button (click)="stepper.next()">Вперед</button>
-                
-                <button class="step-button" 
-                    *ngIf="stepModel.backButton?.needShow" 
-                    [disabled]="stepModel.backButton?.isDisable"
-                     mat-button (click)="stepper.previous()">Назад</button>
                
                 <!-- <button class="step-button resetButton" 
                     *ngIf="stepModel.resetButton?.needShow" 
